@@ -1,0 +1,117 @@
+***********************************************
+Begin time: 29-Mar-2016 23:42:05
+*********************************************Commands: YinEigen( 16,106,1048576,0,105,10,5,1,0,0,0,1)***********************************************
+Begin time: 29-Mar-2016 23:53:28
+*********************************************Commands: YinEigen( 16,106,1048576,0,105,10,5,1,0,0,0,1)***********************************************
+Begin time: 29-Mar-2016 23:58:18
+*********************************************Commands: YinEigen( 16,106,1048576,0,105,10,5,1,0,0,0,1)Iteration 1 Alluxio_Row_mv_version2 takes: 89.8514
+Now saving lz_vpath to global file ... 
+Saving lz_vpath to global file takes: 0.29514s
+Saving lz_vpath to local machines ...
+Saving lz_vpath to local machines takes 65.2838s
+***********************************************
+Begin time: 30-Mar-2016 00:07:02
+*********************************************Commands: YinEigen( 16,106,1048576,0,105,10,5,1,0,0,0,1)***********************************************
+Begin time: 30-Mar-2016 00:20:43
+*********************************************Commands: YinEigen( 16,106,1048576,0,105,10,5,1,0,0,0,1)***********************************************
+Begin time: 30-Mar-2016 00:26:57
+*********************************************Commands: YinEigen( 16,106,1048576,0,105,10,5,1,0,0,0,1)***********************************************
+Begin time: 30-Mar-2016 00:35:33
+*********************************************Commands: YinEigen( 16,106,1048576,0,105,10,5,1,0,0,0,1)***********************************************
+Begin time: 30-Mar-2016 00:43:43
+*********************************************Commands: YinEigen( 16,106,1048576,0,105,10,5,1,0,0,0,1)Saving vector to global file costs 6.5871sMachine copy vector costs 72.132s***********************************************
+Begin time: 30-Mar-2016 00:56:47
+*********************************************Commands: YinEigen( 16,106,1048576,0,105,10,5,1,0,0,0,1)Saving vector to global file costs 6.6279sMachine copy vector costs 70.9916sSaving partial vector i: 95.15s
+Iteration 1 Alluxio_Row_mv_version2 takes: 108.0993
+Now saving lz_vpath to global file ... 
+Saving lz_vpath to global file takes: 0.25707s
+Saving lz_vpath to local machines ...
+Saving lz_vpath to local machines takes 65.3721s
+***********************************************
+Begin time: 31-Mar-2016 14:57:39
+*********************************************Commands: YinEigen( 16,106,1048576,0,105,10,5,1,0,0,0,1)Saving vector to global file costs 6.5675sMachine copy vector costs 71.0798sSaving partial vector i: 91.153s
+Iteration 1 Alluxio_Row_mv_version2 takes: 106.9338
+Now saving lz_vpath to global file ... 
+Saving lz_vpath to global file takes: 0.28616s
+Saving lz_vpath to local machines ...
+Saving lz_vpath to local machines takes 64.4935s
+***********************************************
+Begin time: 31-Mar-2016 15:22:18
+*********************************************Commands: YinEigen( 16,106,1048576,0,105,10,5,1,0,0,0,1)Saving vector to global file costs 6.4366sMachine copy vector costs 70.9925sSaving partial vector i: 91.8315s
+Iteration 1 Alluxio_Row_mv_version2 takes: 107.6261
+Now saving lz_vpath to global file ... 
+Saving lz_vpath to global file takes: 0.25896s
+Saving lz_vpath to local machines ...
+Saving lz_vpath to local machines takes 65.0641s
+***********************************************
+Begin time: 31-Mar-2016 15:44:22
+*********************************************Commands: YinEigen( 16,106,1048576,0,105,10,5,1,0,0,0,1)Saving vector to global file costs 6.6143sMachine copy vector costs 92.983sSaving partial vector i: 92.1135s
+Iteration 1 Alluxio_Row_mv_version2 takes: 108.3451
+Now saving lz_vpath to global file ... 
+Saving lz_vpath to global file takes: 0.2633s
+Saving lz_vpath to local machines ...
+Saving lz_vpath to local machines takes 64.877s
+Iteration 1 Calculating alpha takes: 109.6618
+Iteration 1 onetime_saxv: 110.7706
+Iteration 1 beta takes: 111.9726
+***********************************************
+Begin time: 31-Mar-2016 16:07:11
+*********************************************Commands: YinEigen( 16,106,1048576,0,105,10,5,1,0,0,0,1)***********************************************
+Begin time: 31-Mar-2016 16:07:31
+*********************************************Commands: YinEigen( 16,106,1048576,0,105,10,5,1,0,0,0,1)Saving vector to global file costs 6.6646sMachine copy vector costs 70.756sSaving partial vector i: 94.0056s
+Iteration 1 Alluxio_Row_mv_version2 takes: 108.4394
+Now saving lz_vpath to global file ... 
+Saving lz_vpath to global file takes: 0.31168s
+Saving lz_vpath to local machines ...
+Saving lz_vpath to local machines takes 64.695s
+Iteration 1 Calculating alpha takes: 115.0717
+***********************************************
+Begin time: 31-Mar-2016 16:19:24
+*********************************************Commands: YinEigen( 16,106,1048576,0,105,10,5,1,0,0,0,1)Saving vector to global file costs 6.4352sMachine copy vector costs 117.9816sSaving partial vector i: 92.643s
+Iteration 1 Alluxio_Row_mv_version2 takes: 112.004
+Now saving lz_vpath to global file ... 
+Saving lz_vpath to global file takes: 0.43398s
+Saving lz_vpath to local machines ...
+Saving lz_vpath to local machines takes 68.9789s
+Iteration 1 Calculating alpha takes: 112.8069
+Iteration 1 onetime_saxv: 110.9193
+Iteration 1 beta takes: 110.0431
+***********************************************
+Begin time: 31-Mar-2016 16:34:44
+*********************************************Commands: YinEigen( 16,106,1048576,0,105,10,5,1,0,0,0,1)Saving vector to global file costs 6.399sMachine copy vector costs 70.9754sSaving partial vector i: 93.3155s
+Iteration 1 Alluxio_Row_mv_version2 takes: 110.2973
+Now saving lz_vpath to global file ... 
+Saving lz_vpath to global file takes: 0.27911s
+Saving lz_vpath to local machines ...
+Saving lz_vpath to local machines takes 64.4503s
+p1 costs 91.8251s
+p2 costs 0.080232s
+Iteration 1 Calculating alpha takes: 91.9118
+Iteration 1 onetime_saxv: 111.6459
+Iteration 1 beta takes: 116.1085
+***********************************************
+Begin time: 31-Mar-2016 16:59:36
+*********************************************Commands: YinEigen( 16,106,1048576,0,105,10,5,1,0,0,0,1)Saving vector to global file costs 6.5444sMachine copy vector costs 71.0293sSaving partial vector i: 90.7253s
+Iteration 1 Alluxio_Row_mv_version2 takes: 107.6144
+Now saving lz_vpath to global file ... 
+Saving lz_vpath to global file takes: 0.29472s
+Saving lz_vpath to local machines ...
+Saving lz_vpath to local machines takes 64.4332s
+p1 costs 91.9111s
+p2 costs 0.079539s
+Iteration 1 Calculating alpha takes: 91.9978
+Iteration 1 onetime_saxv: 108.9938
+Iteration 1 beta takes: 103.7328
+***********************************************
+Begin time: 31-Mar-2016 17:24:20
+*********************************************Commands: YinEigen( 16,106,1048576,0,105,10,5,1,0,0,0,1)Saving vector to global file costs 6.4656sMachine copy vector costs 92.7424sSaving partial vector i: 89.9157s
+Iteration 1 Alluxio_Row_mv_version2 takes: 108.9183
+Now saving lz_vpath to global file ... 
+Saving lz_vpath to global file takes: 0.3144s
+Saving lz_vpath to local machines ...
+Saving lz_vpath to local machines takes 64.1274s
+p1 costs 92.2634s
+p2 costs 0.080803s
+Iteration 1 Calculating alpha takes: 92.3515
+Iteration 1 onetime_saxv: 109.9245
+Iteration 1 beta takes: 109.7318

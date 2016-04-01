@@ -1,0 +1,845 @@
+TFS is 1
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: alphaDB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: betaDB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: alpha_sax_tempDB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: beta_sax_tempDB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: lz_norm_v1048576_tempDB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: lz_norm_B1048576_tempDB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: so_rpathDB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: cur_loop_jDB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: rtv_tempDB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: so_rrtvDB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: 1048576lz_vpathDB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: mv_tempDB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: dot_tempDB.user: rootDB.type: Accumulo
+Creating alpha in n117.bluewave.umbc.edu:2181 Accumulo
+Creating beta in n117.bluewave.umbc.edu:2181 Accumulo
+Creating alpha_sax_temp in n117.bluewave.umbc.edu:2181 Accumulo
+Creating beta_sax_temp in n117.bluewave.umbc.edu:2181 Accumulo
+Creating lz_norm_v1048576_temp in n117.bluewave.umbc.edu:2181 Accumulo
+Creating lz_norm_B1048576_temp in n117.bluewave.umbc.edu:2181 Accumulo
+Creating so_rpath in n117.bluewave.umbc.edu:2181 Accumulo
+Creating cur_loop_j in n117.bluewave.umbc.edu:2181 Accumulo
+Creating rtv_temp in n117.bluewave.umbc.edu:2181 Accumulo
+Creating so_rrtv in n117.bluewave.umbc.edu:2181 Accumulo
+Creating dot_temp in n117.bluewave.umbc.edu:2181 Accumulo
+Creating 1048576lz_vpath in n117.bluewave.umbc.edu:2181 Accumulo
+INGEST time (sec) = 0.378
+INGEST time (sec) = 0.161
+INGEST time (sec) = 0.219
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: 1048576lz_q2DB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: 1048576lz_q3DB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: 1048576lz_q4DB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: 1048576lz_q5DB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: 1048576lz_q6DB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: 1048576lz_q7DB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: 1048576lz_q8DB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: 1048576lz_q9DB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: 1048576lz_q10DB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: 1048576lz_q11DB.user: rootDB.type: Accumulo
+Creating 1048576lz_q2 in n117.bluewave.umbc.edu:2181 Accumulo
+Creating 1048576lz_q3 in n117.bluewave.umbc.edu:2181 Accumulo
+Creating 1048576lz_q4 in n117.bluewave.umbc.edu:2181 Accumulo
+Creating 1048576lz_q5 in n117.bluewave.umbc.edu:2181 Accumulo
+Creating 1048576lz_q6 in n117.bluewave.umbc.edu:2181 Accumulo
+Creating 1048576lz_q7 in n117.bluewave.umbc.edu:2181 Accumulo
+Creating 1048576lz_q8 in n117.bluewave.umbc.edu:2181 Accumulo
+Creating 1048576lz_q9 in n117.bluewave.umbc.edu:2181 Accumulo
+Creating 1048576lz_q10 in n117.bluewave.umbc.edu:2181 Accumulo
+Creating 1048576lz_q11 in n117.bluewave.umbc.edu:2181 Accumulo
+	Running YinEigen with the following configuration:
+
+  Columns 1 through 7
+
+    '16'    'machines:'    'n117'    'n118'    'n119'    'n120'    'n121'
+
+  Columns 8 through 14
+
+    'n122'    'n123'    'n124'    'n125'    'n126'    'n127'    'n128'
+
+  Columns 15 through 19
+
+    'n129'    'n130'    'n131'    'n132'    [1x1 char]
+
+121 processors	
+1048576 nodes	
+10 max iterations	
+5 top eigen values
+Initializing the random vector b in table B1048576
+Submitting storeDataToTFS on 121 processor(s).
+ ssh n118 -n  'kill -9 10854'
+bash: line 0: kill: (10854) - No such process
+ ssh n118 -n  'kill -9 10871'
+bash: line 0: kill: (10871) - No such process
+ ssh n118 -n  'kill -9 10910'
+bash: line 0: kill: (10910) - No such process
+ ssh n118 -n  'kill -9 10954'
+bash: line 0: kill: (10954) - No such process
+ ssh n118 -n  'kill -9 10992'
+bash: line 0: kill: (10992) - No such process
+ ssh n118 -n  'kill -9 11079'
+bash: line 0: kill: (11079) - No such process
+ ssh n118 -n  'kill -9 11124'
+bash: line 0: kill: (11124) - No such process
+ ssh n118 -n  'kill -9 11168'
+bash: line 0: kill: (11168) - No such process
+ ssh n119 -n  'kill -9 3475'
+bash: line 0: kill: (3475) - No such process
+ ssh n119 -n  'kill -9 3478'
+ ssh n119 -n  'kill -9 3494'
+bash: line 0: kill: (3494) - No such process
+ ssh n119 -n  'kill -9 3524'
+bash: line 0: kill: (3524) - No such process
+ ssh n119 -n  'kill -9 3586'
+bash: line 0: kill: (3586) - No such process
+ ssh n119 -n  'kill -9 3652'
+bash: line 0: kill: (3652) - No such process
+ ssh n119 -n  'kill -9 3703'
+bash: line 0: kill: (3703) - No such process
+ ssh n119 -n  'kill -9 3754'
+bash: line 0: kill: (3754) - No such process
+ ssh n119 -n  'kill -9 3800'
+bash: line 0: kill: (3800) - No such process
+ ssh n120 -n  'kill -9 30779'
+bash: line 0: kill: (30779) - No such process
+ ssh n120 -n  'kill -9 30796'
+bash: line 0: kill: (30796) - No such process
+ ssh n120 -n  'kill -9 30841'
+bash: line 0: kill: (30841) - No such process
+ ssh n120 -n  'kill -9 30886'
+bash: line 0: kill: (30886) - No such process
+ ssh n120 -n  'kill -9 30919'
+bash: line 0: kill: (30919) - No such process
+ ssh n120 -n  'kill -9 30967'
+bash: line 0: kill: (30967) - No such process
+ ssh n120 -n  'kill -9 31023'
+bash: line 0: kill: (31023) - No such process
+ ssh n120 -n  'kill -9 31065'
+bash: line 0: kill: (31065) - No such process
+ ssh n120 -n  'kill -9 31124'
+bash: line 0: kill: (31124) - No such process
+ ssh n121 -n  'kill -9 1267'
+bash: line 0: kill: (1267) - No such process
+ ssh n121 -n  'kill -9 1291'
+bash: line 0: kill: (1291) - No such process
+ ssh n121 -n  'kill -9 1322'
+bash: line 0: kill: (1322) - No such process
+ ssh n121 -n  'kill -9 1369'
+bash: line 0: kill: (1369) - No such process
+ ssh n121 -n  'kill -9 1434'
+bash: line 0: kill: (1434) - No such process
+ ssh n121 -n  'kill -9 1517'
+bash: line 0: kill: (1517) - No such process
+ ssh n121 -n  'kill -9 1564'
+bash: line 0: kill: (1564) - No such process
+ ssh n121 -n  'kill -9 1596'
+bash: line 0: kill: (1596) - No such process
+ ssh n121 -n  'kill -9 1627'
+bash: line 0: kill: (1627) - No such process
+ ssh n122 -n  'kill -9 27575'
+bash: line 0: kill: (27575) - No such process
+ ssh n122 -n  'kill -9 27598'
+bash: line 0: kill: (27598) - No such process
+ ssh n122 -n  'kill -9 27625'
+bash: line 0: kill: (27625) - No such process
+ ssh n122 -n  'kill -9 27665'
+bash: line 0: kill: (27665) - No such process
+ ssh n122 -n  'kill -9 27712'
+bash: line 0: kill: (27712) - No such process
+ ssh n122 -n  'kill -9 27759'
+bash: line 0: kill: (27759) - No such process
+ ssh n122 -n  'kill -9 27808'
+bash: line 0: kill: (27808) - No such process
+ ssh n122 -n  'kill -9 27873'
+bash: line 0: kill: (27873) - No such process
+ ssh n122 -n  'kill -9 27907'
+bash: line 0: kill: (27907) - No such process
+ ssh n123 -n  'kill -9 18752'
+bash: line 0: kill: (18752) - No such process
+ ssh n123 -n  'kill -9 18783'
+bash: line 0: kill: (18783) - No such process
+ ssh n123 -n  'kill -9 18808'
+bash: line 0: kill: (18808) - No such process
+ ssh n123 -n  'kill -9 18845'
+bash: line 0: kill: (18845) - No such process
+ ssh n123 -n  'kill -9 18890'
+bash: line 0: kill: (18890) - No such process
+ ssh n123 -n  'kill -9 18935'
+bash: line 0: kill: (18935) - No such process
+ ssh n123 -n  'kill -9 19010'
+bash: line 0: kill: (19010) - No such process
+ ssh n123 -n  'kill -9 19039'
+bash: line 0: kill: (19039) - No such process
+ ssh n123 -n  'kill -9 19079'
+bash: line 0: kill: (19079) - No such process
+ ssh n124 -n  'kill -9 27184'
+bash: line 0: kill: (27184) - No such process
+ ssh n124 -n  'kill -9 27212'
+bash: line 0: kill: (27212) - No such process
+ ssh n124 -n  'kill -9 27250'
+bash: line 0: kill: (27250) - No such process
+ ssh n124 -n  'kill -9 27282'
+bash: line 0: kill: (27282) - No such process
+ ssh n124 -n  'kill -9 27323'
+bash: line 0: kill: (27323) - No such process
+ ssh n124 -n  'kill -9 27369'
+bash: line 0: kill: (27369) - No such process
+ ssh n124 -n  'kill -9 27413'
+bash: line 0: kill: (27413) - No such process
+ ssh n124 -n  'kill -9 27462'
+bash: line 0: kill: (27462) - No such process
+ ssh n124 -n  'kill -9 27507'
+bash: line 0: kill: (27507) - No such process
+ ssh n125 -n  'kill -9 23950'
+bash: line 0: kill: (23950) - No such process
+ ssh n125 -n  'kill -9 23973'
+bash: line 0: kill: (23973) - No such process
+ ssh n125 -n  'kill -9 24001'
+bash: line 0: kill: (24001) - No such process
+ ssh n125 -n  'kill -9 24041'
+bash: line 0: kill: (24041) - No such process
+ ssh n125 -n  'kill -9 24101'
+bash: line 0: kill: (24101) - No such process
+ ssh n125 -n  'kill -9 24138'
+bash: line 0: kill: (24138) - No such process
+ ssh n125 -n  'kill -9 24190'
+bash: line 0: kill: (24190) - No such process
+ ssh n125 -n  'kill -9 24234'
+bash: line 0: kill: (24234) - No such process
+ ssh n125 -n  'kill -9 24282'
+bash: line 0: kill: (24282) - No such process
+ ssh n126 -n  'kill -9 8584'
+bash: line 0: kill: (8584) - No such process
+ ssh n126 -n  'kill -9 8601'
+bash: line 0: kill: (8601) - No such process
+ ssh n126 -n  'kill -9 8638'
+bash: line 0: kill: (8638) - No such process
+ ssh n126 -n  'kill -9 8679'
+bash: line 0: kill: (8679) - No such process
+ ssh n126 -n  'kill -9 8724'
+bash: line 0: kill: (8724) - No such process
+ ssh n126 -n  'kill -9 8769'
+bash: line 0: kill: (8769) - No such process
+ ssh n126 -n  'kill -9 8814'
+bash: line 0: kill: (8814) - No such process
+ ssh n126 -n  'kill -9 8861'
+bash: line 0: kill: (8861) - No such process
+ ssh n127 -n  'kill -9 17925'
+bash: line 0: kill: (17925) - No such process
+ ssh n127 -n  'kill -9 17948'
+bash: line 0: kill: (17948) - No such process
+ ssh n127 -n  'kill -9 18016'
+bash: line 0: kill: (18016) - No such process
+ ssh n127 -n  'kill -9 18052'
+bash: line 0: kill: (18052) - No such process
+ ssh n127 -n  'kill -9 18148'
+bash: line 0: kill: (18148) - No such process
+ ssh n127 -n  'kill -9 18266'
+bash: line 0: kill: (18266) - No such process
+ ssh n127 -n  'kill -9 18302'
+bash: line 0: kill: (18302) - No such process
+ ssh n127 -n  'kill -9 18347'
+bash: line 0: kill: (18347) - No such process
+ ssh n128 -n  'kill -9 7710'
+bash: line 0: kill: (7710) - No such process
+ ssh n128 -n  'kill -9 7733'
+bash: line 0: kill: (7733) - No such process
+ ssh n128 -n  'kill -9 7760'
+bash: line 0: kill: (7760) - No such process
+ ssh n128 -n  'kill -9 7800'
+bash: line 0: kill: (7800) - No such process
+ ssh n128 -n  'kill -9 7844'
+bash: line 0: kill: (7844) - No such process
+ ssh n128 -n  'kill -9 7893'
+bash: line 0: kill: (7893) - No such process
+ ssh n128 -n  'kill -9 7938'
+bash: line 0: kill: (7938) - No such process
+ ssh n128 -n  'kill -9 7985'
+bash: line 0: kill: (7985) - No such process
+ ssh n129 -n  'kill -9 15133'
+bash: line 0: kill: (15133) - No such process
+ ssh n129 -n  'kill -9 15178'
+bash: line 0: kill: (15178) - No such process
+ ssh n129 -n  'kill -9 15206'
+bash: line 0: kill: (15206) - No such process
+ ssh n129 -n  'kill -9 15239'
+bash: line 0: kill: (15239) - No such process
+ ssh n129 -n  'kill -9 15313'
+bash: line 0: kill: (15313) - No such process
+ ssh n129 -n  'kill -9 15348'
+bash: line 0: kill: (15348) - No such process
+ ssh n129 -n  'kill -9 15391'
+bash: line 0: kill: (15391) - No such process
+ ssh n129 -n  'kill -9 15449'
+bash: line 0: kill: (15449) - No such process
+ ssh n130 -n  'kill -9 7757'
+bash: line 0: kill: (7757) - No such process
+ ssh n130 -n  'kill -9 7781'
+bash: line 0: kill: (7781) - No such process
+ ssh n130 -n  'kill -9 7812'
+bash: line 0: kill: (7812) - No such process
+ ssh n130 -n  'kill -9 7850'
+bash: line 0: kill: (7850) - No such process
+ ssh n130 -n  'kill -9 7896'
+bash: line 0: kill: (7896) - No such process
+ ssh n130 -n  'kill -9 7947'
+bash: line 0: kill: (7947) - No such process
+ ssh n130 -n  'kill -9 7990'
+bash: line 0: kill: (7990) - No such process
+ ssh n130 -n  'kill -9 8037'
+bash: line 0: kill: (8037) - No such process
+ ssh n131 -n  'kill -9 32454'
+bash: line 0: kill: (32454) - No such process
+ ssh n131 -n  'kill -9 32465'
+bash: line 0: kill: (32465) - No such process
+ ssh n131 -n  'kill -9 32488'
+bash: line 0: kill: (32488) - No such process
+ ssh n131 -n  'kill -9 32535'
+bash: line 0: kill: (32535) - No such process
+ ssh n131 -n  'kill -9 32566'
+bash: line 0: kill: (32566) - No such process
+ ssh n131 -n  'kill -9 32597'
+bash: line 0: kill: (32597) - No such process
+ ssh n131 -n  'kill -9 32646'
+bash: line 0: kill: (32646) - No such process
+ ssh n131 -n  'kill -9 32726'
+bash: line 0: kill: (32726) - No such process
+ ssh n132 -n  'kill -9 20457'
+bash: line 0: kill: (20457) - No such process
+ ssh n132 -n  'kill -9 20474'
+bash: line 0: kill: (20474) - No such process
+ ssh n132 -n  'kill -9 20503'
+bash: line 0: kill: (20503) - No such process
+ ssh n132 -n  'kill -9 20545'
+bash: line 0: kill: (20545) - No such process
+ ssh n132 -n  'kill -9 20616'
+bash: line 0: kill: (20616) - No such process
+ ssh n132 -n  'kill -9 20655'
+bash: line 0: kill: (20655) - No such process
+ ssh n132 -n  'kill -9 20695'
+bash: line 0: kill: (20695) - No such process
+ ssh n132 -n  'kill -9 20748'
+bash: line 0: kill: (20748) - No such process
+Launching MPI rank: 120 on: n132
+Launching MPI rank: 119 on: n132
+Launching MPI rank: 118 on: n132
+Launching MPI rank: 117 on: n132
+Launching MPI rank: 116 on: n132
+Launching MPI rank: 115 on: n132
+Launching MPI rank: 114 on: n132
+Launching MPI rank: 113 on: n132
+ ssh n132 -n 'cd /home/yhuang9/my_workspace/AlluxioEigenSolver; /bin/sh ./MatMPI/Unix_Commands.n132.113.sh  ' 2>>./MatMPI/remote.out & echo "executing n132" >>./MatMPI/n132.out;
+
+file_name is: pRUN_Parallel_Wrapper.113.out
+Launching MPI rank: 112 on: n131
+Launching MPI rank: 111 on: n131
+Launching MPI rank: 110 on: n131
+Launching MPI rank: 109 on: n131
+Launching MPI rank: 108 on: n131
+Launching MPI rank: 107 on: n131
+Launching MPI rank: 106 on: n131
+Launching MPI rank: 105 on: n131
+ ssh n131 -n 'cd /home/yhuang9/my_workspace/AlluxioEigenSolver; /bin/sh ./MatMPI/Unix_Commands.n131.105.sh  ' 2>>./MatMPI/remote.out & echo "executing n131" >>./MatMPI/n131.out;
+
+file_name is: pRUN_Parallel_Wrapper.105.out
+Launching MPI rank: 104 on: n130
+Launching MPI rank: 103 on: n130
+Launching MPI rank: 102 on: n130
+Launching MPI rank: 101 on: n130
+Launching MPI rank: 100 on: n130
+Launching MPI rank: 99 on: n130
+Launching MPI rank: 98 on: n130
+Launching MPI rank: 97 on: n130
+ ssh n130 -n 'cd /home/yhuang9/my_workspace/AlluxioEigenSolver; /bin/sh ./MatMPI/Unix_Commands.n130.97.sh  ' 2>>./MatMPI/remote.out & echo "executing n130" >>./MatMPI/n130.out;
+
+file_name is: pRUN_Parallel_Wrapper.97.out
+Launching MPI rank: 96 on: n129
+Launching MPI rank: 95 on: n129
+Launching MPI rank: 94 on: n129
+Launching MPI rank: 93 on: n129
+Launching MPI rank: 92 on: n129
+Launching MPI rank: 91 on: n129
+Launching MPI rank: 90 on: n129
+Launching MPI rank: 89 on: n129
+ ssh n129 -n 'cd /home/yhuang9/my_workspace/AlluxioEigenSolver; /bin/sh ./MatMPI/Unix_Commands.n129.89.sh  ' 2>>./MatMPI/remote.out & echo "executing n129" >>./MatMPI/n129.out;
+
+file_name is: pRUN_Parallel_Wrapper.89.out
+Launching MPI rank: 88 on: n128
+Launching MPI rank: 87 on: n128
+Launching MPI rank: 86 on: n128
+Launching MPI rank: 85 on: n128
+Launching MPI rank: 84 on: n128
+Launching MPI rank: 83 on: n128
+Launching MPI rank: 82 on: n128
+Launching MPI rank: 81 on: n128
+ ssh n128 -n 'cd /home/yhuang9/my_workspace/AlluxioEigenSolver; /bin/sh ./MatMPI/Unix_Commands.n128.81.sh  ' 2>>./MatMPI/remote.out & echo "executing n128" >>./MatMPI/n128.out;
+
+file_name is: pRUN_Parallel_Wrapper.81.out
+Launching MPI rank: 80 on: n127
+Launching MPI rank: 79 on: n127
+Launching MPI rank: 78 on: n127
+Launching MPI rank: 77 on: n127
+Launching MPI rank: 76 on: n127
+Launching MPI rank: 75 on: n127
+Launching MPI rank: 74 on: n127
+Launching MPI rank: 73 on: n127
+ ssh n127 -n 'cd /home/yhuang9/my_workspace/AlluxioEigenSolver; /bin/sh ./MatMPI/Unix_Commands.n127.73.sh  ' 2>>./MatMPI/remote.out & echo "executing n127" >>./MatMPI/n127.out;
+
+file_name is: pRUN_Parallel_Wrapper.73.out
+Launching MPI rank: 72 on: n126
+Launching MPI rank: 71 on: n126
+Launching MPI rank: 70 on: n126
+Launching MPI rank: 69 on: n126
+Launching MPI rank: 68 on: n126
+Launching MPI rank: 67 on: n126
+Launching MPI rank: 66 on: n126
+Launching MPI rank: 65 on: n126
+ ssh n126 -n 'cd /home/yhuang9/my_workspace/AlluxioEigenSolver; /bin/sh ./MatMPI/Unix_Commands.n126.65.sh  ' 2>>./MatMPI/remote.out & echo "executing n126" >>./MatMPI/n126.out;
+
+file_name is: pRUN_Parallel_Wrapper.65.out
+Launching MPI rank: 64 on: n125
+Launching MPI rank: 63 on: n125
+Launching MPI rank: 62 on: n125
+Launching MPI rank: 61 on: n125
+Launching MPI rank: 60 on: n125
+Launching MPI rank: 59 on: n125
+Launching MPI rank: 58 on: n125
+Launching MPI rank: 57 on: n125
+ ssh n125 -n 'cd /home/yhuang9/my_workspace/AlluxioEigenSolver; /bin/sh ./MatMPI/Unix_Commands.n125.57.sh  ' 2>>./MatMPI/remote.out & echo "executing n125" >>./MatMPI/n125.out;
+
+file_name is: pRUN_Parallel_Wrapper.57.out
+Launching MPI rank: 56 on: n124
+Launching MPI rank: 55 on: n124
+Launching MPI rank: 54 on: n124
+Launching MPI rank: 53 on: n124
+Launching MPI rank: 52 on: n124
+Launching MPI rank: 51 on: n124
+Launching MPI rank: 50 on: n124
+Launching MPI rank: 49 on: n124
+ ssh n124 -n 'cd /home/yhuang9/my_workspace/AlluxioEigenSolver; /bin/sh ./MatMPI/Unix_Commands.n124.49.sh  ' 2>>./MatMPI/remote.out & echo "executing n124" >>./MatMPI/n124.out;
+
+file_name is: pRUN_Parallel_Wrapper.49.out
+Launching MPI rank: 48 on: n123
+Launching MPI rank: 47 on: n123
+Launching MPI rank: 46 on: n123
+Launching MPI rank: 45 on: n123
+Launching MPI rank: 44 on: n123
+Launching MPI rank: 43 on: n123
+Launching MPI rank: 42 on: n123
+Launching MPI rank: 41 on: n123
+ ssh n123 -n 'cd /home/yhuang9/my_workspace/AlluxioEigenSolver; /bin/sh ./MatMPI/Unix_Commands.n123.41.sh  ' 2>>./MatMPI/remote.out & echo "executing n123" >>./MatMPI/n123.out;
+
+file_name is: pRUN_Parallel_Wrapper.41.out
+Launching MPI rank: 40 on: n122
+Launching MPI rank: 39 on: n122
+Launching MPI rank: 38 on: n122
+Launching MPI rank: 37 on: n122
+Launching MPI rank: 36 on: n122
+Launching MPI rank: 35 on: n122
+Launching MPI rank: 34 on: n122
+Launching MPI rank: 33 on: n122
+ ssh n122 -n 'cd /home/yhuang9/my_workspace/AlluxioEigenSolver; /bin/sh ./MatMPI/Unix_Commands.n122.33.sh  ' 2>>./MatMPI/remote.out & echo "executing n122" >>./MatMPI/n122.out;
+
+file_name is: pRUN_Parallel_Wrapper.33.out
+Launching MPI rank: 32 on: n121
+Launching MPI rank: 31 on: n121
+Launching MPI rank: 30 on: n121
+Launching MPI rank: 29 on: n121
+Launching MPI rank: 28 on: n121
+Launching MPI rank: 27 on: n121
+Launching MPI rank: 26 on: n121
+Launching MPI rank: 25 on: n121
+ ssh n121 -n 'cd /home/yhuang9/my_workspace/AlluxioEigenSolver; /bin/sh ./MatMPI/Unix_Commands.n121.25.sh  ' 2>>./MatMPI/remote.out & echo "executing n121" >>./MatMPI/n121.out;
+
+file_name is: pRUN_Parallel_Wrapper.25.out
+Launching MPI rank: 24 on: n120
+Launching MPI rank: 23 on: n120
+Launching MPI rank: 22 on: n120
+Launching MPI rank: 21 on: n120
+Launching MPI rank: 20 on: n120
+Launching MPI rank: 19 on: n120
+Launching MPI rank: 18 on: n120
+Launching MPI rank: 17 on: n120
+ ssh n120 -n 'cd /home/yhuang9/my_workspace/AlluxioEigenSolver; /bin/sh ./MatMPI/Unix_Commands.n120.17.sh  ' 2>>./MatMPI/remote.out & echo "executing n120" >>./MatMPI/n120.out;
+
+file_name is: pRUN_Parallel_Wrapper.17.out
+Launching MPI rank: 16 on: n119
+Launching MPI rank: 15 on: n119
+Launching MPI rank: 14 on: n119
+Launching MPI rank: 13 on: n119
+Launching MPI rank: 12 on: n119
+Launching MPI rank: 11 on: n119
+Launching MPI rank: 10 on: n119
+Launching MPI rank: 9 on: n119
+ ssh n119 -n 'cd /home/yhuang9/my_workspace/AlluxioEigenSolver; /bin/sh ./MatMPI/Unix_Commands.n119.9.sh  ' 2>>./MatMPI/remote.out & echo "executing n119" >>./MatMPI/n119.out;
+
+file_name is: pRUN_Parallel_Wrapper.9.out
+Launching MPI rank: 8 on: n118
+Launching MPI rank: 7 on: n118
+Launching MPI rank: 6 on: n118
+Launching MPI rank: 5 on: n118
+Launching MPI rank: 4 on: n118
+Launching MPI rank: 3 on: n118
+Launching MPI rank: 2 on: n118
+Launching MPI rank: 1 on: n118
+ ssh n118 -n 'cd /home/yhuang9/my_workspace/AlluxioEigenSolver; /bin/sh ./MatMPI/Unix_Commands.n118.1.sh  ' 2>>./MatMPI/remote.out & echo "executing n118" >>./MatMPI/n118.out;
+
+file_name is: pRUN_Parallel_Wrapper.1.out
+Launching MPI rank: 0 on: n117
+/bin/sh ./MatMPI/Unix_Commands.n117.0.sh &
+
+file_name is: pRUN_Parallel_Wrapper.0.out
+I am just waiting as process 1!
+{??? Attempted to access gridIndex(122,1); index out of bounds because
+size(gridIndex)=[121,2].
+
+Error in ==> findGridIndex at 9
+   i = gridIndex(myRank+1,1);
+
+Error in ==> dmat.agg at 137
+                      [i j] = findGridIndex(d.dim,fromRank+imsg-1,gridIndex);
+
+Error in ==> storeDataToTFS at 120
+agg(w);
+
+Error in ==> pRUN_Parallel_Wrapper at 13
+eval(m_file);
+
+Error in ==> YinEigen at 235
+    eval(pRUN('storeDataToTFS',NumOfProcessors,machines));
+} 
+TFS is 1
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: alphaDB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: betaDB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: alpha_sax_tempDB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: beta_sax_tempDB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: lz_norm_v1048576_tempDB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: lz_norm_B1048576_tempDB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: so_rpathDB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: cur_loop_jDB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: rtv_tempDB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: so_rrtvDB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: 1048576lz_vpathDB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: mv_tempDB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: dot_tempDB.user: rootDB.type: Accumulo
+Creating alpha in n117.bluewave.umbc.edu:2181 Accumulo
+Creating beta in n117.bluewave.umbc.edu:2181 Accumulo
+Creating alpha_sax_temp in n117.bluewave.umbc.edu:2181 Accumulo
+Creating beta_sax_temp in n117.bluewave.umbc.edu:2181 Accumulo
+Creating lz_norm_v1048576_temp in n117.bluewave.umbc.edu:2181 Accumulo
+Creating lz_norm_B1048576_temp in n117.bluewave.umbc.edu:2181 Accumulo
+Creating so_rpath in n117.bluewave.umbc.edu:2181 Accumulo
+Creating cur_loop_j in n117.bluewave.umbc.edu:2181 Accumulo
+Creating rtv_temp in n117.bluewave.umbc.edu:2181 Accumulo
+Creating so_rrtv in n117.bluewave.umbc.edu:2181 Accumulo
+Creating dot_temp in n117.bluewave.umbc.edu:2181 Accumulo
+Creating 1048576lz_vpath in n117.bluewave.umbc.edu:2181 Accumulo
+INGEST time (sec) = 0.35
+INGEST time (sec) = 0.143
+INGEST time (sec) = 0.146
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: 1048576lz_q2DB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: 1048576lz_q3DB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: 1048576lz_q4DB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: 1048576lz_q5DB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: 1048576lz_q6DB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: 1048576lz_q7DB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: 1048576lz_q8DB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: 1048576lz_q9DB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: 1048576lz_q10DB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: 1048576lz_q11DB.user: rootDB.type: Accumulo
+Creating 1048576lz_q2 in n117.bluewave.umbc.edu:2181 Accumulo
+Creating 1048576lz_q3 in n117.bluewave.umbc.edu:2181 Accumulo
+Creating 1048576lz_q4 in n117.bluewave.umbc.edu:2181 Accumulo
+Creating 1048576lz_q5 in n117.bluewave.umbc.edu:2181 Accumulo
+Creating 1048576lz_q6 in n117.bluewave.umbc.edu:2181 Accumulo
+Creating 1048576lz_q7 in n117.bluewave.umbc.edu:2181 Accumulo
+Creating 1048576lz_q8 in n117.bluewave.umbc.edu:2181 Accumulo
+Creating 1048576lz_q9 in n117.bluewave.umbc.edu:2181 Accumulo
+Creating 1048576lz_q10 in n117.bluewave.umbc.edu:2181 Accumulo
+Creating 1048576lz_q11 in n117.bluewave.umbc.edu:2181 Accumulo
+	Running YinEigen with the following configuration:
+
+  Columns 1 through 7
+
+    '16'    'machines:'    'n117'    'n118'    'n119'    'n120'    'n121'
+
+  Columns 8 through 14
+
+    'n122'    'n123'    'n124'    'n125'    'n126'    'n127'    'n128'
+
+  Columns 15 through 19
+
+    'n129'    'n130'    'n131'    'n132'    [1x1 char]
+
+121 processors	
+1048576 nodes	
+10 max iterations	
+5 top eigen values
+KeepB yes?no: 1
+Run_schedule yes?no: 0
+StoreTFS yes?no: 0
+StoreLHD yes?no: 0
+TFS yes?no: 1
+Initializing the random vector b in table B1048576
+**************myEigen iterations***********************
+computing v=Aq 1 ...
+INGEST time (sec) = 0.225
+Creating mv_temp in n117.bluewave.umbc.edu:2181 Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: mv_tempDB.user: rootDB.type: Accumulo
+Creating mv_temp in n117.bluewave.umbc.edu:2181 Accumulo
+Running TFS version of matrix multipilcation
+Submitting Alluxio_Row_mv on 121 processor(s).
+ ssh n118 -n  'kill -9 12649'
+bash: line 0: kill: (12649) - No such process
+ ssh n118 -n  'kill -9 12672'
+bash: line 0: kill: (12672) - No such process
+ ssh n118 -n  'kill -9 12701'
+bash: line 0: kill: (12701) - No such process
+ ssh n118 -n  'kill -9 12740'
+bash: line 0: kill: (12740) - No such process
+ ssh n118 -n  'kill -9 12787'
+bash: line 0: kill: (12787) - No such process
+ ssh n118 -n  'kill -9 12837'
+bash: line 0: kill: (12837) - No such process
+ ssh n118 -n  'kill -9 12883'
+bash: line 0: kill: (12883) - No such process
+ ssh n118 -n  'kill -9 12929'
+bash: line 0: kill: (12929) - No such process
+ ssh n119 -n  'kill -9 18863'
+bash: line 0: kill: (18863) - No such process
+ ssh n119 -n  'kill -9 18891'
+bash: line 0: kill: (18891) - No such process
+ ssh n119 -n  'kill -9 18920'
+bash: line 0: kill: (18920) - No such process
+ ssh n119 -n  'kill -9 18953'
+bash: line 0: kill: (18953) - No such process
+ ssh n119 -n  'kill -9 19002'
+bash: line 0: kill: (19002) - No such process
+ ssh n119 -n  'kill -9 19051'
+bash: line 0: kill: (19051) - No such process
+ ssh n119 -n  'kill -9 19097'
+bash: line 0: kill: (19097) - No such process
+ ssh n119 -n  'kill -9 19151'
+bash: line 0: kill: (19151) - No such process
+ ssh n120 -n  'kill -9 23181'
+bash: line 0: kill: (23181) - No such process
+ ssh n120 -n  'kill -9 23198'
+bash: line 0: kill: (23198) - No such process
+ ssh n120 -n  'kill -9 23262'
+bash: line 0: kill: (23262) - No such process
+ ssh n120 -n  'kill -9 23287'
+bash: line 0: kill: (23287) - No such process
+ ssh n120 -n  'kill -9 23321'
+bash: line 0: kill: (23321) - No such process
+ ssh n120 -n  'kill -9 23366'
+bash: line 0: kill: (23366) - No such process
+ ssh n120 -n  'kill -9 23415'
+bash: line 0: kill: (23415) - No such process
+ ssh n120 -n  'kill -9 23469'
+bash: line 0: kill: (23469) - No such process
+ ssh n121 -n  'kill -9 16461'
+bash: line 0: kill: (16461) - No such process
+ ssh n121 -n  'kill -9 16484'
+bash: line 0: kill: (16484) - No such process
+ ssh n121 -n  'kill -9 16515'
+bash: line 0: kill: (16515) - No such process
+ ssh n121 -n  'kill -9 16568'
+bash: line 0: kill: (16568) - No such process
+ ssh n121 -n  'kill -9 16604'
+bash: line 0: kill: (16604) - No such process
+ ssh n121 -n  'kill -9 16649'
+bash: line 0: kill: (16649) - No such process
+ ssh n121 -n  'kill -9 16717'
+bash: line 0: kill: (16717) - No such process
+ ssh n121 -n  'kill -9 16749'
+bash: line 0: kill: (16749) - No such process
+ ssh n122 -n  'kill -9 2671'
+bash: line 0: kill: (2671) - No such process
+ ssh n122 -n  'kill -9 2694'
+bash: line 0: kill: (2694) - No such process
+ ssh n122 -n  'kill -9 2740'
+bash: line 0: kill: (2740) - No such process
+ ssh n122 -n  'kill -9 2771'
+bash: line 0: kill: (2771) - No such process
+ ssh n122 -n  'kill -9 2815'
+bash: line 0: kill: (2815) - No such process
+ ssh n122 -n  'kill -9 2863'
+bash: line 0: kill: (2863) - No such process
+ ssh n122 -n  'kill -9 2925'
+bash: line 0: kill: (2925) - No such process
+ ssh n122 -n  'kill -9 2970'
+bash: line 0: kill: (2970) - No such process
+ ssh n123 -n  'kill -9 29326'
+bash: line 0: kill: (29326) - No such process
+ ssh n123 -n  'kill -9 29349'
+bash: line 0: kill: (29349) - No such process
+ ssh n123 -n  'kill -9 29375'
+bash: line 0: kill: (29375) - No such process
+ ssh n123 -n  'kill -9 29416'
+bash: line 0: kill: (29416) - No such process
+ ssh n123 -n  'kill -9 29464'
+bash: line 0: kill: (29464) - No such process
+ ssh n123 -n  'kill -9 29514'
+bash: line 0: kill: (29514) - No such process
+ ssh n123 -n  'kill -9 29568'
+bash: line 0: kill: (29568) - No such process
+ ssh n123 -n  'kill -9 29616'
+bash: line 0: kill: (29616) - No such process
+ ssh n124 -n  'kill -9 1948'
+bash: line 0: kill: (1948) - No such process
+ ssh n124 -n  'kill -9 1987'
+bash: line 0: kill: (1987) - No such process
+ ssh n124 -n  'kill -9 2017'
+bash: line 0: kill: (2017) - No such process
+ ssh n124 -n  'kill -9 2074'
+bash: line 0: kill: (2074) - No such process
+ ssh n124 -n  'kill -9 2126'
+bash: line 0: kill: (2126) - No such process
+ ssh n124 -n  'kill -9 2187'
+bash: line 0: kill: (2187) - No such process
+ ssh n124 -n  'kill -9 2248'
+bash: line 0: kill: (2248) - No such process
+ ssh n124 -n  'kill -9 2300'
+bash: line 0: kill: (2300) - No such process
+ ssh n125 -n  'kill -9 20023'
+bash: line 0: kill: (20023) - No such process
+ ssh n125 -n  'kill -9 20049'
+bash: line 0: kill: (20049) - No such process
+ ssh n125 -n  'kill -9 20078'
+bash: line 0: kill: (20078) - No such process
+ ssh n125 -n  'kill -9 20114'
+bash: line 0: kill: (20114) - No such process
+ ssh n125 -n  'kill -9 20166'
+bash: line 0: kill: (20166) - No such process
+ ssh n125 -n  'kill -9 20211'
+bash: line 0: kill: (20211) - No such process
+ ssh n125 -n  'kill -9 20262'
+bash: line 0: kill: (20262) - No such process
+ ssh n125 -n  'kill -9 20303'
+bash: line 0: kill: (20303) - No such process
+ ssh n126 -n  'kill -9 15517'
+bash: line 0: kill: (15517) - No such process
+ ssh n126 -n  'kill -9 15542'
+bash: line 0: kill: (15542) - No such process
+ ssh n126 -n  'kill -9 15573'
+bash: line 0: kill: (15573) - No such process
+ ssh n126 -n  'kill -9 15612'
+bash: line 0: kill: (15612) - No such process
+ ssh n126 -n  'kill -9 15661'
+bash: line 0: kill: (15661) - No such process
+ ssh n126 -n  'kill -9 15715'
+bash: line 0: kill: (15715) - No such process
+ ssh n126 -n  'kill -9 15778'
+bash: line 0: kill: (15778) - No such process
+ ssh n126 -n  'kill -9 15813'
+bash: line 0: kill: (15813) - No such process
+ ssh n127 -n  'kill -9 24939'
+bash: line 0: kill: (24939) - No such process
+ ssh n127 -n  'kill -9 24963'
+bash: line 0: kill: (24963) - No such process
+ ssh n127 -n  'kill -9 25001'
+bash: line 0: kill: (25001) - No such process
+ ssh n127 -n  'kill -9 25034'
+bash: line 0: kill: (25034) - No such process
+ ssh n127 -n  'kill -9 25082'
+bash: line 0: kill: (25082) - No such process
+ ssh n127 -n  'kill -9 25129'
+bash: line 0: kill: (25129) - No such process
+ ssh n127 -n  'kill -9 25182'
+bash: line 0: kill: (25182) - No such process
+ ssh n127 -n  'kill -9 25227'
+bash: line 0: kill: (25227) - No such process
+ ssh n128 -n  'kill -9 15107'
+bash: line 0: kill: (15107) - No such process
+ ssh n128 -n  'kill -9 15130'
+bash: line 0: kill: (15130) - No such process
+ ssh n128 -n  'kill -9 15159'
+bash: line 0: kill: (15159) - No such process
+ ssh n128 -n  'kill -9 15197'
+bash: line 0: kill: (15197) - No such process
+ ssh n128 -n  'kill -9 15246'
+bash: line 0: kill: (15246) - No such process
+ ssh n128 -n  'kill -9 15294'
+bash: line 0: kill: (15294) - No such process
+ ssh n128 -n  'kill -9 15349'
+bash: line 0: kill: (15349) - No such process
+ ssh n128 -n  'kill -9 15394'
+bash: line 0: kill: (15394) - No such process
+ ssh n129 -n  'kill -9 19947'
+bash: line 0: kill: (19947) - No such process
+ ssh n129 -n  'kill -9 19970'
+bash: line 0: kill: (19970) - No such process
+ ssh n129 -n  'kill -9 19997'
+bash: line 0: kill: (19997) - No such process
+ ssh n129 -n  'kill -9 20040'
+bash: line 0: kill: (20040) - No such process
+ ssh n129 -n  'kill -9 20084'
+bash: line 0: kill: (20084) - No such process
+ ssh n129 -n  'kill -9 20131'
+bash: line 0: kill: (20131) - No such process
+ ssh n129 -n  'kill -9 20180'
+bash: line 0: kill: (20180) - No such process
+ ssh n129 -n  'kill -9 20225'
+bash: line 0: kill: (20225) - No such process
+ ssh n130 -n  'kill -9 15819'
+bash: line 0: kill: (15819) - No such process
+ ssh n130 -n  'kill -9 15842'
+bash: line 0: kill: (15842) - No such process
+ ssh n130 -n  'kill -9 15874'
+bash: line 0: kill: (15874) - No such process
+ ssh n130 -n  'kill -9 15911'
+bash: line 0: kill: (15911) - No such process
+ ssh n130 -n  'kill -9 15960'
+bash: line 0: kill: (15960) - No such process
+ ssh n130 -n  'kill -9 16007'
+bash: line 0: kill: (16007) - No such process
+ ssh n130 -n  'kill -9 16062'
+bash: line 0: kill: (16062) - No such process
+ ssh n130 -n  'kill -9 16106'
+bash: line 0: kill: (16106) - No such process
+ ssh n131 -n  'kill -9 27295'
+bash: line 0: kill: (27295) - No such process
+ ssh n131 -n  'kill -9 27318'
+bash: line 0: kill: (27318) - No such process
+ ssh n131 -n  'kill -9 27345'
+bash: line 0: kill: (27345) - No such process
+ ssh n131 -n  'kill -9 27385'
+bash: line 0: kill: (27385) - No such process
+ ssh n131 -n  'kill -9 27432'
+bash: line 0: kill: (27432) - No such process
+ ssh n131 -n  'kill -9 27482'
+bash: line 0: kill: (27482) - No such process
+ ssh n131 -n  'kill -9 27527'
+bash: line 0: kill: (27527) - No such process
+ ssh n131 -n  'kill -9 27573'
+bash: line 0: kill: (27573) - No such process
+ ssh n132 -n  'kill -9 28000'
+bash: line 0: kill: (28000) - No such process
+ ssh n132 -n  'kill -9 28030'
+bash: line 0: kill: (28030) - No such process
+ ssh n132 -n  'kill -9 28059'
+bash: line 0: kill: (28059) - No such process
+ ssh n132 -n  'kill -9 28097'
+bash: line 0: kill: (28097) - No such process
+ ssh n132 -n  'kill -9 28147'
+bash: line 0: kill: (28147) - No such process
+ ssh n132 -n  'kill -9 28195'
+bash: line 0: kill: (28195) - No such process
+ ssh n132 -n  'kill -9 28251'
+bash: line 0: kill: (28251) - No such process
+ ssh n132 -n  'kill -9 28297'
+bash: line 0: kill: (28297) - No such process
+{??? Error using ==> rmdir
+/home/yhuang9/my_workspace/AlluxioEigenSolver/MatMPI could not be removed.
+
+
+Error in ==> MatMPI_Delete_all at 54
+  rmdir(['.' dir_sep 'MatMPI'],'s');
+
+Error in ==> pRUN at 37
+      MatMPI_Delete_all;
+
+Error in ==> YinEigen at 276
+    	eval(pRUN('Alluxio_Row_mv',NumOfProcessors,machines));
+} 
+

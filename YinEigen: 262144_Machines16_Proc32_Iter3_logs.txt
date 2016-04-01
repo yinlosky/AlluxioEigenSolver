@@ -1,0 +1,340 @@
+Creating dot_temp in n117.bluewave.umbc.edu:2181 Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: alphaDB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: betaDB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: alpha_sax_tempDB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: beta_sax_tempDB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: lz_norm_v262144_tempDB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: lz_norm_B262144_tempDB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: so_rpathDB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: cur_loop_jDB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: rtv_tempDB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: so_rrtvDB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: 262144lz_vpathDB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: mv_tempDB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: dot_tempDB.user: rootDB.type: Accumulo
+Creating alpha in n117.bluewave.umbc.edu:2181 Accumulo
+Creating beta in n117.bluewave.umbc.edu:2181 Accumulo
+Creating alpha_sax_temp in n117.bluewave.umbc.edu:2181 Accumulo
+Creating beta_sax_temp in n117.bluewave.umbc.edu:2181 Accumulo
+Creating lz_norm_v262144_temp in n117.bluewave.umbc.edu:2181 Accumulo
+Creating lz_norm_B262144_temp in n117.bluewave.umbc.edu:2181 Accumulo
+Creating so_rpath in n117.bluewave.umbc.edu:2181 Accumulo
+Creating cur_loop_j in n117.bluewave.umbc.edu:2181 Accumulo
+Creating rtv_temp in n117.bluewave.umbc.edu:2181 Accumulo
+Creating so_rrtv in n117.bluewave.umbc.edu:2181 Accumulo
+Creating dot_temp in n117.bluewave.umbc.edu:2181 Accumulo
+Creating 262144lz_vpath in n117.bluewave.umbc.edu:2181 Accumulo
+INGEST time (sec) = 0.315
+INGEST time (sec) = 0.135
+INGEST time (sec) = 0.166
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: 262144lz_q2DB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: 262144lz_q3DB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: 262144lz_q4DB.user: rootDB.type: Accumulo
+Creating 262144lz_q2 in n117.bluewave.umbc.edu:2181 Accumulo
+Creating 262144lz_q3 in n117.bluewave.umbc.edu:2181 Accumulo
+Creating 262144lz_q4 in n117.bluewave.umbc.edu:2181 Accumulo
+	Running YinEigen with the following configuration:
+
+  Columns 1 through 15
+
+    '16'    'machines:'    'n117'    'n118'    'n119'    'n120'    'n121'    'n122'    'n123'    'n124'    'n125'    'n126'    'n127'    'n128'    'n129'
+
+  Columns 16 through 19
+
+    'n130'    'n131'    'n132'    [1x1 char]
+
+32 processors	
+262144 nodes	
+3 max iterations	
+3 top eigen values
+Initializing the random vector b in table B262144
+**************myEigen iterations***********************
+computing v=Aq 1 ...
+INGEST time (sec) = 0.238
+Creating mv_temp in n117.bluewave.umbc.edu:2181 Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: mv_tempDB.user: rootDB.type: Accumulo
+Creating mv_temp in n117.bluewave.umbc.edu:2181 Accumulo
+Running TFS version of matrix multipilcation
+Submitting Alluxio_Row_mv on 32 processor(s).
+ ssh n119 -n  'kill -9 26596'
+bash: line 0: kill: (26596) - No such process
+ ssh n119 -n  'kill -9 26641'
+bash: line 0: kill: (26641) - No such process
+ ssh n119 -n  'kill -9 26675'
+bash: line 0: kill: (26675) - No such process
+ ssh n120 -n  'kill -9 28027'
+bash: line 0: kill: (28027) - No such process
+ ssh n120 -n  'kill -9 28072'
+bash: line 0: kill: (28072) - No such process
+ ssh n122 -n  'kill -9 3550'
+bash: line 0: kill: (3550) - No such process
+ ssh n122 -n  'kill -9 3592'
+bash: line 0: kill: (3592) - No such process
+ ssh n124 -n  'kill -9 22906'
+bash: line 0: kill: (22906) - No such process
+ ssh n124 -n  'kill -9 22951'
+bash: line 0: kill: (22951) - No such process
+ ssh n126 -n  'kill -9 6610'
+bash: line 0: kill: (6610) - No such process
+ ssh n126 -n  'kill -9 6646'
+bash: line 0: kill: (6646) - No such process
+ ssh n127 -n  'kill -9 2740'
+bash: line 0: kill: (2740) - No such process
+ ssh n127 -n  'kill -9 2785'
+bash: line 0: kill: (2785) - No such process
+ ssh n128 -n  'kill -9 29989'
+bash: line 0: kill: (29989) - No such process
+ ssh n128 -n  'kill -9 30025'
+bash: line 0: kill: (30025) - No such process
+ ssh n130 -n  'kill -9 20104'
+bash: line 0: kill: (20104) - No such process
+ ssh n130 -n  'kill -9 20145'
+bash: line 0: kill: (20145) - No such process
+ ssh n131 -n  'kill -9 5968'
+bash: line 0: kill: (5968) - No such process
+ ssh n131 -n  'kill -9 5991'
+bash: line 0: kill: (5991) - No such process
+ ssh n132 -n  'kill -9 2136'
+bash: line 0: kill: (2136) - No such process
+ ssh n132 -n  'kill -9 2163'
+bash: line 0: kill: (2163) - No such process
+{??? Error: File: /home/yhuang9/pMatlab/MatlabMPI/src/MPI_Run.m Line: 160 Column: 33
+"q" was previously used as a variable,
+ conflicting with its use here as the name of a function or command.
+ See MATLAB Programming, "How MATLAB Recognizes Function Calls That Use Command Syntax" for details.
+
+Error in ==> pRUN at 44
+      defscommands = MPI_Run(pRUN_Parallel_Wrapper_file, n_proc, machines);
+
+Error in ==> YinEigen at 250
+    	eval(pRUN('Alluxio_Row_mv',NumOfProcessors,machines));
+} 
+YinEigen(16,32,2^18,3,3,1,0,0,0,1)
+Start time: 
+
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: alphaDB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: betaDB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: alpha_sax_tempDB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: beta_sax_tempDB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: lz_norm_v262144_tempDB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: lz_norm_B262144_tempDB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: so_rpathDB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: cur_loop_jDB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: rtv_tempDB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: so_rrtvDB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: 262144lz_vpathDB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: mv_tempDB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: dot_tempDB.user: rootDB.type: Accumulo
+Creating alpha in n117.bluewave.umbc.edu:2181 Accumulo
+Creating beta in n117.bluewave.umbc.edu:2181 Accumulo
+Creating alpha_sax_temp in n117.bluewave.umbc.edu:2181 Accumulo
+Creating beta_sax_temp in n117.bluewave.umbc.edu:2181 Accumulo
+Creating lz_norm_v262144_temp in n117.bluewave.umbc.edu:2181 Accumulo
+Creating lz_norm_B262144_temp in n117.bluewave.umbc.edu:2181 Accumulo
+Creating so_rpath in n117.bluewave.umbc.edu:2181 Accumulo
+Creating cur_loop_j in n117.bluewave.umbc.edu:2181 Accumulo
+Creating rtv_temp in n117.bluewave.umbc.edu:2181 Accumulo
+Creating so_rrtv in n117.bluewave.umbc.edu:2181 Accumulo
+Creating dot_temp in n117.bluewave.umbc.edu:2181 Accumulo
+Creating 262144lz_vpath in n117.bluewave.umbc.edu:2181 Accumulo
+INGEST time (sec) = 0.137
+INGEST time (sec) = 0.076
+INGEST time (sec) = 0.093
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: 262144lz_q2DB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: 262144lz_q3DB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: 262144lz_q4DB.user: rootDB.type: Accumulo
+Creating 262144lz_q2 in n117.bluewave.umbc.edu:2181 Accumulo
+Creating 262144lz_q3 in n117.bluewave.umbc.edu:2181 Accumulo
+Creating 262144lz_q4 in n117.bluewave.umbc.edu:2181 Accumulo
+	Running YinEigen with the following configuration:
+
+  Columns 1 through 15
+
+    '16'    'machines:'    'n117'    'n118'    'n119'    'n120'    'n121'    'n122'    'n123'    'n124'    'n125'    'n126'    'n127'    'n128'    'n129'
+
+  Columns 16 through 19
+
+    'n130'    'n131'    'n132'    [1x1 char]
+
+32 processors	
+262144 nodes	
+3 max iterations	
+3 top eigen values
+Initializing the random vector b in table B262144
+**************myEigen iterations***********************
+computing v=Aq 1 ...
+INGEST time (sec) = 0.084
+Creating mv_temp in n117.bluewave.umbc.edu:2181 Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: mv_tempDB.user: rootDB.type: Accumulo
+Creating mv_temp in n117.bluewave.umbc.edu:2181 Accumulo
+Running TFS version of matrix multipilcation
+Submitting Alluxio_Row_mv on 32 processor(s).
+No pid files found
+Nothing to delete.
+Launching MPI rank: 31 on: n132
+Launching MPI rank: 30 on: n132
+{??? Error using ==> vertcat
+CAT arguments dimensions are not consistent.
+
+Error in ==> MPI_Run at 157
+            unix_launch_i_m = [remote_launch machine remote_flags ...
+
+Error in ==> pRUN at 44
+      defscommands = MPI_Run(pRUN_Parallel_Wrapper_file, n_proc, machines);
+
+Error in ==> YinEigen at 250
+    	eval(pRUN('Alluxio_Row_mv',NumOfProcessors,machines));
+} 
+YinEigen(16,32,2^18,3,3,1,0,0,0,1)
+Start time: 
+
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: alphaDB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: betaDB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: alpha_sax_tempDB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: beta_sax_tempDB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: lz_norm_v262144_tempDB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: lz_norm_B262144_tempDB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: so_rpathDB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: cur_loop_jDB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: rtv_tempDB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: so_rrtvDB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: 262144lz_vpathDB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: mv_tempDB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: dot_tempDB.user: rootDB.type: Accumulo
+Creating alpha in n117.bluewave.umbc.edu:2181 Accumulo
+Creating beta in n117.bluewave.umbc.edu:2181 Accumulo
+Creating alpha_sax_temp in n117.bluewave.umbc.edu:2181 Accumulo
+Creating beta_sax_temp in n117.bluewave.umbc.edu:2181 Accumulo
+Creating lz_norm_v262144_temp in n117.bluewave.umbc.edu:2181 Accumulo
+Creating lz_norm_B262144_temp in n117.bluewave.umbc.edu:2181 Accumulo
+Creating so_rpath in n117.bluewave.umbc.edu:2181 Accumulo
+Creating cur_loop_j in n117.bluewave.umbc.edu:2181 Accumulo
+Creating rtv_temp in n117.bluewave.umbc.edu:2181 Accumulo
+Creating so_rrtv in n117.bluewave.umbc.edu:2181 Accumulo
+Creating dot_temp in n117.bluewave.umbc.edu:2181 Accumulo
+Creating 262144lz_vpath in n117.bluewave.umbc.edu:2181 Accumulo
+INGEST time (sec) = 0.146
+INGEST time (sec) = 0.071
+INGEST time (sec) = 0.079
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: 262144lz_q2DB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: 262144lz_q3DB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: 262144lz_q4DB.user: rootDB.type: Accumulo
+Creating 262144lz_q2 in n117.bluewave.umbc.edu:2181 Accumulo
+Creating 262144lz_q3 in n117.bluewave.umbc.edu:2181 Accumulo
+Creating 262144lz_q4 in n117.bluewave.umbc.edu:2181 Accumulo
+	Running YinEigen with the following configuration:
+
+  Columns 1 through 15
+
+    '16'    'machines:'    'n117'    'n118'    'n119'    'n120'    'n121'    'n122'    'n123'    'n124'    'n125'    'n126'    'n127'    'n128'    'n129'
+
+  Columns 16 through 19
+
+    'n130'    'n131'    'n132'    [1x1 char]
+
+32 processors	
+262144 nodes	
+3 max iterations	
+3 top eigen values
+Initializing the random vector b in table B262144
+**************myEigen iterations***********************
+computing v=Aq 1 ...
+INGEST time (sec) = 0.072
+Creating mv_temp in n117.bluewave.umbc.edu:2181 Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: mv_tempDB.user: rootDB.type: Accumulo
+Creating mv_temp in n117.bluewave.umbc.edu:2181 Accumulo
+Running TFS version of matrix multipilcation
+Submitting Alluxio_Row_mv on 32 processor(s).
+No pid files found
+Launching MPI rank: 31 on: n132
+Launching MPI rank: 30 on: n132
+{??? Error using ==> vertcat
+CAT arguments dimensions are not consistent.
+
+Error in ==> MPI_Run at 157
+            unix_launch_i_m = [remote_launch machine remote_flags ...
+
+Error in ==> pRUN at 44
+      defscommands = MPI_Run(pRUN_Parallel_Wrapper_file, n_proc, machines);
+
+Error in ==> YinEigen at 250
+    	eval(pRUN('Alluxio_Row_mv',NumOfProcessors,machines));
+} 
+YinEigen(16,32,2^18,3,3,1,0,0,0,1)
+Start time: 
+
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: alphaDB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: betaDB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: alpha_sax_tempDB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: beta_sax_tempDB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: lz_norm_v262144_tempDB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: lz_norm_B262144_tempDB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: so_rpathDB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: cur_loop_jDB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: rtv_tempDB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: so_rrtvDB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: 262144lz_vpathDB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: mv_tempDB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: dot_tempDB.user: rootDB.type: Accumulo
+Creating alpha in n117.bluewave.umbc.edu:2181 Accumulo
+Creating beta in n117.bluewave.umbc.edu:2181 Accumulo
+Creating alpha_sax_temp in n117.bluewave.umbc.edu:2181 Accumulo
+Creating beta_sax_temp in n117.bluewave.umbc.edu:2181 Accumulo
+Creating lz_norm_v262144_temp in n117.bluewave.umbc.edu:2181 Accumulo
+Creating lz_norm_B262144_temp in n117.bluewave.umbc.edu:2181 Accumulo
+Creating so_rpath in n117.bluewave.umbc.edu:2181 Accumulo
+Creating cur_loop_j in n117.bluewave.umbc.edu:2181 Accumulo
+Creating rtv_temp in n117.bluewave.umbc.edu:2181 Accumulo
+Creating so_rrtv in n117.bluewave.umbc.edu:2181 Accumulo
+Creating dot_temp in n117.bluewave.umbc.edu:2181 Accumulo
+Creating 262144lz_vpath in n117.bluewave.umbc.edu:2181 Accumulo
+INGEST time (sec) = 0.132
+INGEST time (sec) = 0.084
+INGEST time (sec) = 0.076
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: 262144lz_q2DB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: 262144lz_q3DB.user: rootDB.type: Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: 262144lz_q4DB.user: rootDB.type: Accumulo
+Creating 262144lz_q2 in n117.bluewave.umbc.edu:2181 Accumulo
+Creating 262144lz_q3 in n117.bluewave.umbc.edu:2181 Accumulo
+Creating 262144lz_q4 in n117.bluewave.umbc.edu:2181 Accumulo
+	Running YinEigen with the following configuration:
+
+  Columns 1 through 15
+
+    '16'    'machines:'    'n117'    'n118'    'n119'    'n120'    'n121'    'n122'    'n123'    'n124'    'n125'    'n126'    'n127'    'n128'    'n129'
+
+  Columns 16 through 19
+
+    'n130'    'n131'    'n132'    [1x1 char]
+
+32 processors	
+262144 nodes	
+3 max iterations	
+3 top eigen values
+Initializing the random vector b in table B262144
+**************myEigen iterations***********************
+computing v=Aq 1 ...
+INGEST time (sec) = 0.094
+Creating mv_temp in n117.bluewave.umbc.edu:2181 Accumulo
+DB.instanceName: myaccumuloDB.host: n117.bluewave.umbc.edu:2181Table Name to be deleted: mv_tempDB.user: rootDB.type: Accumulo
+Creating mv_temp in n117.bluewave.umbc.edu:2181 Accumulo
+Running TFS version of matrix multipilcation
+Submitting Alluxio_Row_mv on 32 processor(s).
+No pid files found
+Launching MPI rank: 31 on: n132
+Launching MPI rank: 30 on: n132
+{??? Error using ==> vertcat
+CAT arguments dimensions are not consistent.
+
+Error in ==> MPI_Run at 157
+            unix_launch_i_m = [remote_launch machine remote_flags ...
+
+Error in ==> pRUN at 44
+      defscommands = MPI_Run(pRUN_Parallel_Wrapper_file, n_proc, machines);
+
+Error in ==> YinEigen at 250
+    	eval(pRUN('Alluxio_Row_mv',NumOfProcessors,machines));
+} 
+YinEigen(16,32,2^18,3,3,1,0,0,0,1)
+Start time: 
+

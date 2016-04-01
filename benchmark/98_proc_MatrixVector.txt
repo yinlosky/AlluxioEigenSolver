@@ -1,0 +1,1 @@
+Before agg total time is: 4.3798sAfter agg total time is: 4.551s

@@ -1,0 +1,136 @@
+Warning: No display specified.  You will not be able to display graphics on the screen.
+[?1h=Warning: No window system found.  Java option 'MWT' ignored
+
+                                                                                   < M A T L A B (R) >
+                                                                         Copyright 1984-2012 The MathWorks, Inc.
+                                                               Version 7.11.2.1031 (R2010b) Service Pack 2 64-bit (glnxa64)
+                                                                                      March 2, 2012
+
+ 
+  To get started, type one of these: helpwin, helpdesk, or demo.
+  For product information, visit www.mathworks.com.
+ 
+INGEST time (sec) = 0.177
+INGEST time (sec) = 0.081
+
+machines = 
+
+    'n117'    'n118'    'n119'    'n120'    'n121'    'n122'    'n123'    'n124'    'n125'    'n126'    'n127'    'n128'    'n129'    'n130'    'n131'    'n132'
+
+Start parallel computaion part
+Submitting parallelReading on 32 processor(s).
+[?1h= ssh n118 -n  'kill -9 25937'
+bash: line 0: kill: (25937) - No such process
+[?1h= ssh n118 -n  'kill -9 25961'
+bash: line 0: kill: (25961) - No such process
+[?1h= ssh n119 -n  'kill -9 16478'
+bash: line 0: kill: (16478) - No such process
+[?1h= ssh n119 -n  'kill -9 16495'
+bash: line 0: kill: (16495) - No such process
+[?1h= ssh n119 -n  'kill -9 16542'
+bash: line 0: kill: (16542) - No such process
+[?1h= ssh n120 -n  'kill -9 31920'
+bash: line 0: kill: (31920) - No such process
+[?1h= ssh n120 -n  'kill -9 31922'
+bash: line 0: kill: (31922) - No such process
+[?1h= ssh n121 -n  'kill -9 17999'
+bash: line 0: kill: (17999) - No such process
+[?1h= ssh n121 -n  'kill -9 18017'
+bash: line 0: kill: (18017) - No such process
+[?1h= ssh n122 -n  'kill -9 5251'
+bash: line 0: kill: (5251) - No such process
+[?1h= ssh n122 -n  'kill -9 5268'
+bash: line 0: kill: (5268) - No such process
+[?1h= ssh n123 -n  'kill -9 27619'
+bash: line 0: kill: (27619) - No such process
+[?1h= ssh n123 -n  'kill -9 27636'
+bash: line 0: kill: (27636) - No such process
+[?1h= ssh n124 -n  'kill -9 17736'
+bash: line 0: kill: (17736) - No such process
+[?1h= ssh n124 -n  'kill -9 17753'
+bash: line 0: kill: (17753) - No such process
+[?1h= ssh n125 -n  'kill -9 7018'
+bash: line 0: kill: (7018) - No such process
+[?1h= ssh n125 -n  'kill -9 7035'
+bash: line 0: kill: (7035) - No such process
+[?1h= ssh n126 -n  'kill -9 6515'
+bash: line 0: kill: (6515) - No such process
+[?1h= ssh n126 -n  'kill -9 6528'
+bash: line 0: kill: (6528) - No such process
+[?1h= ssh n127 -n  'kill -9 9405'
+bash: line 0: kill: (9405) - No such process
+[?1h= ssh n127 -n  'kill -9 9422'
+bash: line 0: kill: (9422) - No such process
+[?1h= ssh n128 -n  'kill -9 25763'
+bash: line 0: kill: (25763) - No such process
+[?1h= ssh n128 -n  'kill -9 25780'
+bash: line 0: kill: (25780) - No such process
+[?1h= ssh n129 -n  'kill -9 26018'
+bash: line 0: kill: (26018) - No such process
+[?1h= ssh n129 -n  'kill -9 26035'
+bash: line 0: kill: (26035) - No such process
+[?1h= ssh n130 -n  'kill -9 20765'
+bash: line 0: kill: (20765) - No such process
+[?1h= ssh n130 -n  'kill -9 20782'
+bash: line 0: kill: (20782) - No such process
+[?1h= ssh n131 -n  'kill -9 18405'
+bash: line 0: kill: (18405) - No such process
+[?1h= ssh n131 -n  'kill -9 18422'
+bash: line 0: kill: (18422) - No such process
+[?1h= ssh n132 -n  'kill -9 27751'
+bash: line 0: kill: (27751) - No such process
+[?1h= ssh n132 -n  'kill -9 27768'
+bash: line 0: kill: (27768) - No such process
+[?1h=[?1h=[?1h=[?1h=Launching MPI rank: 31 on: n132
+[?1h=Launching MPI rank: 30 on: n132
+[?1h=Launching MPI rank: 29 on: n131
+[?1h=Launching MPI rank: 28 on: n131
+[?1h=Launching MPI rank: 27 on: n130
+[?1h=Launching MPI rank: 26 on: n130
+[?1h=Launching MPI rank: 25 on: n129
+[?1h=Launching MPI rank: 24 on: n129
+[?1h=Launching MPI rank: 23 on: n128
+[?1h=Launching MPI rank: 22 on: n128
+[?1h=Launching MPI rank: 21 on: n127
+[?1h=Launching MPI rank: 20 on: n127
+[?1h=Launching MPI rank: 19 on: n126
+[?1h=Launching MPI rank: 18 on: n126
+[?1h=Launching MPI rank: 17 on: n125
+[?1h=Launching MPI rank: 16 on: n125
+[?1h=Launching MPI rank: 15 on: n124
+[?1h=Launching MPI rank: 14 on: n124
+[?1h=Launching MPI rank: 13 on: n123
+[?1h=Launching MPI rank: 12 on: n123
+[?1h=Launching MPI rank: 11 on: n122
+[?1h=Launching MPI rank: 10 on: n122
+[?1h=Launching MPI rank: 9 on: n121
+[?1h=Launching MPI rank: 8 on: n121
+[?1h=Launching MPI rank: 7 on: n120
+[?1h=Launching MPI rank: 6 on: n120
+[?1h=Launching MPI rank: 5 on: n119
+[?1h=Launching MPI rank: 4 on: n119
+[?1h=Launching MPI rank: 3 on: n119
+[?1h=Launching MPI rank: 2 on: n118
+[?1h=Launching MPI rank: 1 on: n118
+[?1h=Launching MPI rank: 0 on: n117
+
+unix_launch =
+
+ ssh n132 -n 'cd /home/yhuang9/my_workspace/TachyonEigenSolver; /bin/sh ./MatMPI/Unix_Commands.n132.30.sh  ' 2>>./MatMPI/remote.out &
+ ssh n131 -n 'cd /home/yhuang9/my_workspace/TachyonEigenSolver; /bin/sh ./MatMPI/Unix_Commands.n131.28.sh  ' 2>>./MatMPI/remote.out &
+ ssh n130 -n 'cd /home/yhuang9/my_workspace/TachyonEigenSolver; /bin/sh ./MatMPI/Unix_Commands.n130.26.sh  ' 2>>./MatMPI/remote.out &
+ ssh n129 -n 'cd /home/yhuang9/my_workspace/TachyonEigenSolver; /bin/sh ./MatMPI/Unix_Commands.n129.24.sh  ' 2>>./MatMPI/remote.out &
+ ssh n128 -n 'cd /home/yhuang9/my_workspace/TachyonEigenSolver; /bin/sh ./MatMPI/Unix_Commands.n128.22.sh  ' 2>>./MatMPI/remote.out &
+ ssh n127 -n 'cd /home/yhuang9/my_workspace/TachyonEigenSolver; /bin/sh ./MatMPI/Unix_Commands.n127.20.sh  ' 2>>./MatMPI/remote.out &
+ ssh n126 -n 'cd /home/yhuang9/my_workspace/TachyonEigenSolver; /bin/sh ./MatMPI/Unix_Commands.n126.18.sh  ' 2>>./MatMPI/remote.out &
+ ssh n125 -n 'cd /home/yhuang9/my_workspace/TachyonEigenSolver; /bin/sh ./MatMPI/Unix_Commands.n125.16.sh  ' 2>>./MatMPI/remote.out &
+ ssh n124 -n 'cd /home/yhuang9/my_workspace/TachyonEigenSolver; /bin/sh ./MatMPI/Unix_Commands.n124.14.sh  ' 2>>./MatMPI/remote.out &
+ ssh n123 -n 'cd /home/yhuang9/my_workspace/TachyonEigenSolver; /bin/sh ./MatMPI/Unix_Commands.n123.12.sh  ' 2>>./MatMPI/remote.out &
+ ssh n122 -n 'cd /home/yhuang9/my_workspace/TachyonEigenSolver; /bin/sh ./MatMPI/Unix_Commands.n122.10.sh  ' 2>>./MatMPI/remote.out &
+ ssh n121 -n 'cd /home/yhuang9/my_workspace/TachyonEigenSolver; /bin/sh ./MatMPI/Unix_Commands.n121.8.sh  ' 2>>./MatMPI/remote.out &
+ ssh n120 -n 'cd /home/yhuang9/my_workspace/TachyonEigenSolver; /bin/sh ./MatMPI/Unix_Commands.n120.6.sh  ' 2>>./MatMPI/remote.out &
+ ssh n119 -n 'cd /home/yhuang9/my_workspace/TachyonEigenSolver; /bin/sh ./MatMPI/Unix_Commands.n119.3.sh  ' 2>>./MatMPI/remote.out &
+ ssh n118 -n 'cd /home/yhuang9/my_workspace/TachyonEigenSolver; /bin/sh ./MatMPI/Unix_Commands.n118.1.sh  ' 2>>./MatMPI/remote.out &
+/bin/sh ./MatMPI/Unix_Commands.n117.0.sh &
+
+

@@ -75,7 +75,7 @@ if(my_rank == leader)
                  output(:,recvCounter) = MPI_Recv(dest, leader_tag, comm);
                  str = (['Received data packet number ' num2str(recvCounter)]);
                  disp(str);fwrite(fbug,str);
-                 recvCounter = recvCounter + 1;
+                 recvCounter = recvCounter - 1;
              end
           else % recvCounter  == leader
               done =1;

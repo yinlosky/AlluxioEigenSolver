@@ -229,10 +229,10 @@ filePathPre = '/mytest';
 		outputPath = [outputFilePathPre '/vpath' num2str(it) '_' num2str(NumOfNodes) 'nodes_' num2str(NumOfProcessors) 'proc_' num2str(i) '_id'];
 		%%%%
 		%% create the object to write to Alluxio
+		str = (['Start writing result back to local lz_vpath alluxio ...  ']);
+		disp(str);fwrite(fstat,str);
 		myobject_r = AlluxioWriteRead(['alluxio://n117.bluewave.umbc.edu:19998|' outputPath '_r' '|CACHE|CACHE_THROUGH']);
         	myobject_v = AlluxioWriteRead(['alluxio://n117.bluewave.umbc.edu:19998|' outputPath '_v' '|CACHE|CACHE_THROUGH']);
-		str = (['Start writing result back to local lz_vpath alluxio ...  ']);	
-		disp(str);fwrite(fstat,str);
 		this = tic;
 		str_r = sprintf('%d,',start_col:end_col);
 		str_v = sprintf('%.15f,',full(myresult));

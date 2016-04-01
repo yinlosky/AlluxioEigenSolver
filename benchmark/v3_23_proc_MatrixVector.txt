@@ -1,0 +1,8 @@
+Start_col : end_col 16900 : 17716
+My rank id is: 22and My machine is: n121
+Now reading vector from Alluxio
+Read vector takes: 0.23756s
+Now constructing the vectorConstruction of vector done! It takes 0.41884s
+Read processor id: 23 from file costs: 0.07656s	Construct sparse: 0.25968s
+Multiplication: 0.010933s	Start writing result back to local lz_vpath alluxio ...  3983s
+Done

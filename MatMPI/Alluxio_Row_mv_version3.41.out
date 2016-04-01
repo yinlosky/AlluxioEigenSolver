@@ -1,0 +1,100 @@
+Java HotSpot(TM) 64-Bit Server VM warning: ignoring option MaxPermSize=128m; support was removed in 8.0
+Warning: No window system found.  Java option 'MWT' ignored
+
+                            < M A T L A B (R) >
+                  Copyright 1984-2012 The MathWorks, Inc.
+        Version 7.11.2.1031 (R2010b) Service Pack 2 64-bit (glnxa64)
+                               March 2, 2012
+
+Encountered unexpected end-of-file (line 0) while loading toolbox cache.
+Error occurred loading: /home/yhuang9/.matlab/R2>> >> >> >> my_rank: 41
+Start_col : end_col 69636 : 71688
+
+My rank id is: 41and My machine is: n123
+
+Now reading vector from Alluxio
+
+alluxio://n117.bluewave.umbc.edu:19998
+/mytest/1v_1048576nodes_106proc_n123_r
+CAStart_col : end_col 69636 : 71688
+
+My rank id is: 41and My machine is: n123
+
+Now reading vector from Alluxio
+
+alluxio://n117.bluewave.umbc.edu:19998
+/mytest/1v_1048576nodes_106proc_n123_r
+CACHE
+CACHE_THROUGH
+CACHE
+alluxio://n117.bluewave.umbc.edu:19998
+/mytest/1v_1048576nodes_106proc_n123_v
+CACHE
+CACHE_THROUGH
+CACHE
+Read vector takes: 0.19091s
+
+Now constructing the vector
+Construction of vector done! It takes 0.46333s
+
+alluxio://n117.bluewave.umbc.edu:19998
+/mytest/mydata1048576_42_r
+CACHE
+CACHE_THROUGH
+CACHE
+alluxio://n117.bluewave.umbc.edu:19998
+/mytest/mydata1048576_42_c
+CACHE
+CACHE_THROUGH
+CACHE
+alluxio://n117.bluewave.umbc.edu:19998
+/mytest/mydata1048576_42_v
+CACHE
+CACHE_THROUGH
+CACHE
+Read processor id: 42 from file costs: 0.11589s	
+
+str =
+
+Construct sparse: 0.28763s
+
+
+Construct sparse: 0.28763s
+
+Multiplication: 0.023371s	
+Start writing result back to local lz_vpath alluxio ...  
+alluxio://n117.bluewave.umbc.edu:19998
+/mytest/vpath1_1048576nodes_106proc_42_id_r
+CACHE
+CACHE_THROUGH
+CACHE
+alluxio://n117.bluewave.umbc.edu:19998
+/mytest/vpath1_1048576nodes_106proc_42_id_v
+CACHE
+CACHE_THROUGH
+CACHE
+{??? Error using ==> javaMethod
+Java exception occurred:
+alluxio.exception.FileAlreadyExistsException:
+/mytest/vpath1_1048576nodes_106proc_42_id_r already exists
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native
+        Method)
+	at
+        sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
+        	at
+        sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+        	at
+        java.lang.reflect.Constructor.newInstance(Constructor.java:422)
+	at alluxio.exception.AlluxioException.from(AlluxioException.java:72)
+	at alluxio.AbstractClient.retryRPC(AbstractClient.java:324)
+	at
+        alluxio.client.file.FileSystemMasterClient.createFile(FileSystemMasterClient.java:111)
+        	at
+        alluxio.client.file.BaseFileSystem.createFile(BaseFileSystem.java:91)
+	at
+        yhuang9.testAlluxio.AlluxioWriteRead.writeFile(AlluxioWriteRead.java:132)
+        
+Error in ==> Alluxio_Row_mv_version3 at 239
+	        javaMethod('writeFile',myobject_r,str_r);
+} 
+>> 

@@ -1,0 +1,7 @@
+Staring test v3 ...Staring test v3 ...Staring test v3 ...Staring test v3 ...Staring test v3 ...Staring test v3 ...costs: 85.2251s
+Staring test v3 ...Staring test v3 ...costs: 85.5615s
+Staring test v3 ...costs: 0.004185s
+Staring test v3 ...
+costs: 0.005757s
+Staring test v3 ...
+Test costs: 94.2903s

@@ -1,14 +1,98 @@
-%%%%%%%%%%%%%%%Filename: Alluxio_Row_mv_version2.m%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%Filename: Alluxio_Row_mv_version3.m%%%%%%%%%%%%%%%%%%%%%%%%%
+%% This function is used to be made with MPI_RUN to be used in multiple processes in the cluster
+%% eval(MPI_Run('Alluxio_Row_mv_version3', Np, machines{}))
+%%
+%% Each process will be identified by the rank which starts from 0
+%% The leading process will wait for working processes' done signal, once everything is completed, 
+%% the leading process will proceed to the following section of the algorithm
+
+%% Same as Row_mv_version2, each process will process corresponding matrix part and vector part
+%% and this is identified by my_rank
+
+%% once each working process is done, it will send a finish signal to the leading process
+%% I am using an output array which will save the process rank to indicate the completion of 
+%% each working process
+
+%%
 %% Function: This file will read rows of matrix from Alluxio and multiply the vector {NumOfNodes}lz_q{cur_it}
 %% Result will be saved at [outputFilePathPre '/vpath' num2str(it) '_' num2str(NumOfNodes) 'nodes_' num3str(NumOfProcessors) 'proc_' myprocessid '_id' {_r _v} ];
 
 %%
 %% {NumOfNodes}lz_vpath = matrix * {NumOfNodes}lz_q{cur_it}
 %% %% Version 2 will read vector from Alluxio as well to see how much faster we can get 
-%% Date: Mar-25-2016
+%% Date: Apr-1-2016
+
 totaltic = tic;
+%disp(['****************** Now Running Alluxio_Row_mv_version3.m ***********************']);
+
+
+%%% Below is for MPI related %%%%%%%%%%%%%%%%%%%%%%
+% Initialize MPI.
+MPI_Init;
+
+% Create communicator.
+comm = MPI_COMM_WORLD;
+
+% Get size and rank.
+comm_size = MPI_Comm_size(comm);
+my_rank = MPI_Comm_rank(comm);
+
+% Since the leader only manages, there must be at least 2 processes
+if comm_size <= 1
+    error('Cannot be run with only one process');
+end
+
+disp(['my_rank: ',num2str(my_rank)]);
+% Set who is leader.
+leader = 0;
+% Create a unique tag id for this message (very important in Matlab MPI!).
+output_tag = 10000; %% this tag is used as a synchronization message.
+
+fbug = fopen(['benchmark/v3_' num2str(my_rank+1) '_proc_MatrixVector.txt'],'w+');
+
+% Leader: just waiting to receive all signals from working processes
+if(my_rank == leader)
+    %flag for beding done with all processing  
+    
+    leader_begin_time = tic;
+    done = 0;
+    %leader will receive comm_size-1 signals
+    output = zeros(1,comm_size-1); 
+%% Instead of using for loops, use counters to indicate how many processes have
+%% completed their tasks.
+
+%% we are doing backwards because in MPI_RUN the highest rank process
+%% will be spawned first and it is more likely to complete earlier
+    recvCounter = comm_size-1;
+    while ~done
+          % leader receives all the results.
+          if recvCounter > leader
+              %% dest is who sent this message
+              dest = recvCounter;
+              leader_tag = output_tag + recvCounter;
+             [message_ranks, message_tags] = MPI_Probe( dest, leader_tag, comm );
+             if ~isempty(message_ranks)
+                 output(:,recvCounter) = MPI_Recv(dest, leader_tag, comm);
+                 str = (['Received data packet number ' num2str(recvCounter)]);
+                 disp(str);fwrite(fbug,str);
+                 recvCounter = recvCounter + 1;
+             end
+          else % recvCounter  == leader
+              done =1;
+          end
+    end %% end of leader process while
+    output
+    leader_total_time = toc(leader_begin_time);
+    str = (['Leader process runs: ' num2str(leader_total_time) sprintf('\n')]);
+    disp(str); fwrite(fbug, str);
+    fclose(fbug);
+else %% working processes
+%%%%%%%%%%
+%%%%%%%%%%
+%%%%%%%%%%
+ %%%%%%%%%%%%%%%%%%%%%%
+
 myDB; %% connect to DB and return a binding named DB.
-disp(['****************** Now Running Alluxio_Row_mv_version2.m ***********************']);
 
 %% Import my Java code for R/W in-memory files
 import yhuang9.testAlluxio.* ;
@@ -25,71 +109,38 @@ proc_t = DB('NumOfProcessors');
 NumOfMachines = str2num(Val(machines_t('1,','1,')));
 NumOfNodes = str2num(Val(nodes_t('1,','1,')));
 NumOfProcessors = str2num(Val(proc_t('1,','1,')));
-%vector = [num2str(NumOfNodes) 'lz_q' num2str(str2num(Val(cur_it('1,','1,'))))];
+
 it = str2num(Val(cur_it('1,','1,')));
 m = DB(['M' num2str(NumOfNodes)]);
 cut_t = DB(['Cut' num2str(NumOfNodes)]);   %% Cut table assigns the tasks to the processors
-%output = DB([num2str(NumOfNodes) 'lz_vpath']);
-%v = DB(vector);
+
 num = DB(['Entries' num2str(NumOfNodes)]);  %% This table stores the elements for each column
-
-w = zeros(Np,1,map([Np 1],{},0:Np-1));
-
-myProc = global_ind(w); %Parallel
 
 %% path to where the Alluxio files are stored
 filePathPre = '/mytest';
 
- %%% TO log the performance%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%           if(~exist([root '/timing'],'dir'))
- %               mkdir([root '/timing']);
-  %         else
-   %             rmdir([root '/timing'],'s')
-    %            mkdir([root '/timing']);
-     %       end
-
-        %fname = ([root '/timing' '/stat.txt']);
-        %fstat = fopen(fname,'a+');
 
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-for i = myProc
-        if(i>1)
-
-                disp(['My i is: ' num2str(i)]);
-                        if(i==2)
+ i = my_rank+1;  %% my_rank starts from 0 to comm_size-1; 
+	    fstat = fopen(['benchmark/v3_' num2str(i) '_proc_MatrixVector.txt'],'w+');
+               %% rank 0 is leader process; i ranges from 1 to comm_size-1;
+        if(i==2)
         start_col = 1;
         end_col = str2num(Val(cut_t(sprintf('%d,',i-1),:)));
         else
-                if(i<Np)
+                if(i<NumOfProcessors)
                         start_col = str2num(Val(cut_t(sprintf('%d,',i-2),:)))+1;
                         end_col = str2num(Val(cut_t(sprintf('%d,',i-1),:)));
                 end
         end
-        if(i==Np)
+        if(i==NumOfProcessors)
         start_col = str2num(Val(cut_t(sprintf('%d,',i-2),:)))+1;
         end_col = NumOfNodes;
         end
-        disp(['Start_col : end_col ' num2str(start_col) ' : ' num2str(end_col)]);
-        fname = ([root '/timing/v2_' num2str(i)  '_stat_Alluxio.txt']);
-        fstat = fopen(fname,'w+');
-	fbug = fopen(['benchmark/' num2str(i) '_proc_MatrixVector.txt'],'w+');
+        str = (['Start_col : end_col ' num2str(start_col) ' : ' num2str(end_col) sprintf('\n')]);
+        disp(str); fwrite(fstat,str);
+        
 
-                            %% Read the vector Version 1 reading from Accumulo table (XXXX) too slow.
-			%{
-		   disp(['Now reading vector']);
-  		   fwrite(fstat, ['Now reading vector']);
-                        this = tic;
-                        [vecr,vecc,vecv] = v(:,'1,');
-                        vecr = str2num(vecr);
-                        vecc = str2num(vecc);
-                        vecv = str2num(vecv);
-                        myVector = sparse(vecr,vecc,vecv,NumOfNodes,1);
-                        readv = toc(this);
-			disp(['Read vector: ' num2str(readv) 's' sprintf('\t')]);
-                         fwrite(fstat, ['Read vector: ' num2str(readv) 's' sprintf('\t') ]);
-                        %%%%%
-			%}
-	
 	%% version 2: reading vector from Alluxio, each process should know which machine it belongs to.
 	%%
 	%% TO determine which machine each process belongs to,
@@ -97,7 +148,7 @@ for i = myProc
 	%% else procID belongs to the machines(rem+1);
                [idum, my_machine] = system('hostname'); 
                my_machine = strtrim(my_machine);
-		 str = ['My process id is: ' num2str(i) 'and My machine is: ' my_machine sprintf('\n')];
+		 str = ['My rank id is: ' num2str(i-1) 'and My machine is: ' my_machine sprintf('\n')];
                 disp(str); fwrite(fstat, str);		
 		
 %%%%%%%%%%%%%%%% After setting the machine number, we know where to read the vector from.
@@ -108,7 +159,7 @@ for i = myProc
 		inputFilePath=[inputFilePathPre '/' num2str(it) 'v_' num2str(NumOfNodes) 'nodes_' num2str(NumOfProcessors) 'proc_' my_machine];
 		
 		inputobject_r = AlluxioWriteRead(['alluxio://n117.bluewave.umbc.edu:19998|' inputFilePath '_r' '|CACHE|CACHE_THROUGH']);
-       		inputobject_v = AlluxioWriteRead(['alluxio://n117.bluewave.umbc.edu:19998|' inputFilePath '_v' '|CACHE|CACHE_THROUGH']);
+       	inputobject_v = AlluxioWriteRead(['alluxio://n117.bluewave.umbc.edu:19998|' inputFilePath '_v' '|CACHE|CACHE_THROUGH']);
 		this = tic;
 		my_row = javaMethod('readFile',inputobject_r);
 		my_val = javaMethod('readFile',inputobject_v);
@@ -129,7 +180,7 @@ for i = myProc
                        % if(exist([root '/mydata' num2str(NumOfNodes) '/' num2str(i) '.txt']))  %% We have one row to multiply
             
                        %% According to the way we write the files the file name is: filePathPre/mydata{NumOfNodes}_{ProcessId}_{r,c,v}
-                filePath = ([filePathPre '/mydata' num2str(NumOfNodes) '_' num2str(i) ]);
+        filePath = ([filePathPre '/mydata' num2str(NumOfNodes) '_' num2str(i) ]);
                 
                  	%% Create the following three objects for writing strings
         myobject_r = AlluxioWriteRead(['alluxio://n117.bluewave.umbc.edu:19998|' filePath '_r' '|CACHE|CACHE_THROUGH']);
@@ -142,7 +193,7 @@ for i = myProc
 
         myVal = javaMethod('readFile',myobject_v);
         readlocal = toc(this);
-	disp(['Read processor id: ' num2str(i) ' from file costs: ' num2str(readlocal) 's' sprintf('\t')]);
+	    disp(['Read processor id: ' num2str(i) ' from file costs: ' num2str(readlocal) 's' sprintf('\t')]);
         fwrite(fstat, ['Read processor id: ' num2str(i) ' from file costs: ' num2str(readlocal) 's' sprintf('\t') ]);
         %% COnvert the Assoc into Matrix format....             
         %% convert java string to matlab char
@@ -188,23 +239,28 @@ for i = myProc
 		str = ([num2str(writeTime) 's' sprintf('\n')]);
 		disp(str); fwrite(fstat,str);
 		
-                 %  end
-         %       end
                     fwrite(fstat, ['Done' ]);
                     fclose(fstat);
-        else
-        disp(['I am just waiting!']);
-	fbug = fopen(['benchmark/' num2str(i) '_proc_MatrixVector.txt'],'w+');
-        end
+         leader_tag = output_tag + my_rank;
+         MPI_Send(leader, leader_tag, comm,my_rank);
+                   
+%%%%%%%%%%%
+%%%%%%%%%%
 end
-beforeTime = toc(totaltic);
-str = (['Before agg total time is: ' num2str(beforeTime) 's']);
-disp(str); fwrite(fbug, str);
-agg(w);
-afterTime = toc(totaltic);
-str = (['After agg total time is: ' num2str(afterTime) 's']);
-disp(str); fwrite(fbug, str);
-fclose(fbug);
+
+disp('Success');
+
+MPI_Finalize;
+
+
+
+
+%% function MPI_Send( dest, tag, comm, varargin )
+%% function varargout = MPI_Recv( source, tag, comm )
+
+
+
+
 
 
 %disp('Sending to agg');

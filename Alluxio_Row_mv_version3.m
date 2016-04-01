@@ -204,12 +204,14 @@ filePathPre = '/mytest';
         %onerowofmatrix = sparse(inputData(:,1),inputData(:,2),inputData(:,3),1,NumOfNodes);
                         onepartofmatrix = sparse(myRow-start_col+1,myCol,myVal,end_col-start_col+1,NumOfNodes);
                         const = toc(this);
-                         fwrite(fstat, ['Construct sparse: ' num2str(const) 's' sprintf('\n') ]);
+                        	str = ['Construct sparse: ' num2str(const) 's' sprintf('\n') ]
+                         disp(str);fwrite(fstat, str);
 
                         this = tic;
                         myresult = onepartofmatrix * myVector;
                         multt = toc(this);
-                         fwrite(fstat, ['Multiplication: ' num2str(multt) 's' sprintf('\t') ]);
+                        str= ['Multiplication: ' num2str(multt) 's' sprintf('\t') ];
+                        disp(str); fwrite(fstat,str );
 		
 		%% below commented: writing result back to the Accumulo 
 		%{
@@ -230,6 +232,7 @@ filePathPre = '/mytest';
 		myobject_r = AlluxioWriteRead(['alluxio://n117.bluewave.umbc.edu:19998|' outputPath '_r' '|CACHE|CACHE_THROUGH']);
         	myobject_v = AlluxioWriteRead(['alluxio://n117.bluewave.umbc.edu:19998|' outputPath '_v' '|CACHE|CACHE_THROUGH']);
 		str = (['Start writing result back to local lz_vpath alluxio ...  ']);	
+		disp(str);fwrite(fstat,str);
 		this = tic;
 		str_r = sprintf('%d,',start_col:end_col);
 		str_v = sprintf('%.15f,',full(myresult));
@@ -249,9 +252,10 @@ filePathPre = '/mytest';
 end
 
 disp('Success');
-
+this = tic;
 MPI_Finalize;
-
+that = toc(this);
+disp(['Finalization costs: ' num2str(that) 's']);
 
 
 

@@ -231,7 +231,7 @@ filePathPre = '/mytest';
         	myobject_v = AlluxioWriteRead(['alluxio://n117.bluewave.umbc.edu:19998|' outputPath '_v' '|CACHE|CACHE_THROUGH']);
 		str = (['Start writing result back to local lz_vpath alluxio ...  ']);	
 		this = tic;
-		str_r = sprintf('%,',start_col:end_col);
+		str_r = sprintf('%d,',start_col:end_col);
 		str_v = sprintf('%.15f,',full(myresult));
 	        javaMethod('writeFile',myobject_r,str_r);
         	javaMethod('writeFile',myobject_v,str_v);

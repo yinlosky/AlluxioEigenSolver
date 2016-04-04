@@ -25,6 +25,31 @@
 totaltic = tic;
 %disp(['****************** Now Running Alluxio_Row_mv_version3.m ***********************']);
 
+myDB; %% connect to DB and return a binding named DB.
+
+%% Import my Java code for R/W in-memory files
+import yhuang9.testAlluxio.* ;
+
+%% create a mydata folder in the installation directory of matlab
+
+root = matlabroot;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+machines_t = DB('NumOfMachines');
+nodes_t = DB('NumOfNodes');
+cur_it= DB('cur_it');
+proc_t = DB('NumOfProcessors');
+dot_temp = DB('dot_temp');
+
+NumOfMachines = str2num(Val(machines_t('1,','1,')));
+NumOfNodes = str2num(Val(nodes_t('1,','1,')));
+NumOfProcessors = str2num(Val(proc_t('1,','1,')));
+
+it = str2num(Val(cur_it('1,','1,')));
+m = DB(['M' num2str(NumOfNodes)]);
+cut_t = DB(['Cut' num2str(NumOfNodes)]);   %% Cut table assigns the tasks to the processors
+
+num = DB(['Entries' num2str(NumOfNodes)]);  %% This table stores the elements for each column
+
 
 %%% Below is for MPI related %%%%%%%%%%%%%%%%%%%%%%
 % Initialize MPI.
@@ -90,6 +115,28 @@ if(my_rank == leader)
     leader_total_time = toc(leader_begin_time);
     str = (['Leader process for matrix*vector runs: ' num2str(leader_total_time) sprintf('\n')]);
     disp(str); fwrite(fbug, str);
+    
+    str = (['Leader process now calculates the value of alpha[it]' sprintf('\n')]);
+    disp(str); fwrite(fbug, str);
+    [tRow,tCol,tVal] = dot_temp(sprintf('%d,',1:NumOfProcessors),:); %% This range query works for rows not for cols so this is fine.
+
+    if(~isempty(tVal))
+%tVal = str2num(tVal);
+    tVal=sscanf(tVal,'%f');
+    it_alpha = sum(tVal);
+    else 
+    it_alpha = 0;
+    end
+    	this = tic;
+        alpha(it) = it_alpha;
+        that = toc(this);
+        str = (['Calculation alpha costs ' num2str(that) 's' sprintf('\n')]);
+        disp(str); fwrite(fstat,str);
+        delete(dot_temp);
+     alpha_temp_Assoc = Assoc(sprintf('%d,',it),'1,',sprintf('%.15f,',alpha(it)));
+        put(alpha_t, alpha_temp_Assoc);
+        disp(['Result of alpha[' num2str(it) '] =' num2str(alpha(it)) ' is saved.']);
+    
     %fclose(fbug);
     %%%%%%%%%% Done with Matrix * vector %%%%%%%%%%%%
  
@@ -144,30 +191,8 @@ else %% working processes
 %%%%%%%%%%
  %%%%%%%%%%%%%%%%%%%%%%
 
-myDB; %% connect to DB and return a binding named DB.
 
-%% Import my Java code for R/W in-memory files
-import yhuang9.testAlluxio.* ;
 
-%% create a mydata folder in the installation directory of matlab
-
-root = matlabroot;
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-machines_t = DB('NumOfMachines');
-nodes_t = DB('NumOfNodes');
-cur_it= DB('cur_it');
-proc_t = DB('NumOfProcessors');
-temp = DB('dot_temp');
-
-NumOfMachines = str2num(Val(machines_t('1,','1,')));
-NumOfNodes = str2num(Val(nodes_t('1,','1,')));
-NumOfProcessors = str2num(Val(proc_t('1,','1,')));
-
-it = str2num(Val(cur_it('1,','1,')));
-m = DB(['M' num2str(NumOfNodes)]);
-cut_t = DB(['Cut' num2str(NumOfNodes)]);   %% Cut table assigns the tasks to the processors
-
-num = DB(['Entries' num2str(NumOfNodes)]);  %% This table stores the elements for each column
 
 %% path to where the Alluxio files are stored
 filePathPre = '/mytest';

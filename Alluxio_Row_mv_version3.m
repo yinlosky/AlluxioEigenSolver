@@ -311,7 +311,7 @@ filePathPre = '/mytest';
         str = (['Now writing result back to Accumulo ...' sprintf('\n')]);
 		disp(str);fwrite(fstat,str);
 		this = tic;
-        newAssoc = Assoc(sprintf('%d,',(i-1),'1,',sprintf('%.15f,',part_alpha)));
+        newAssoc = Assoc(sprintf('%d,',(i-1)),'1,',sprintf('%.15f,',part_alpha));
         wb_t = toc(this);
 		str= (['Writing back: ' num2str(wb_t) 's' sprintf('\n')]);
 		disp(str);fwrite(fstat,str);

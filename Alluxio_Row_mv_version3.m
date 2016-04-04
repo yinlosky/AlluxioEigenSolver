@@ -297,15 +297,17 @@ filePathPre = '/mytest';
         %% part of v below:
         str = 'Now start calculating vi * v';
         disp(str); fwrite(fstat,str);
+       % str_r = sprintf('%d,',start_col:end_col);
+	   % str_v = sprintf('%.15f,',full(myresult));
           v_val = full(myresult);
-          p_v_val = v_val(start_col:end_col);
+         % p_v_val = v_val(start_col:end_col);
             
         %% total vi is below: 
         myVi = full(myVector);
         %% construct part of vi from start_col:end_col;
         part_myVi = myVi(start_col:end_col);
         
-        part_alpha = part_myVi'*p_v_val;
+        part_alpha = part_myVi'*v_val;
         str = (['Now writing result back to Accumulo ...' sprintf('\n')]);
 		disp(str);fwrite(fstat,str);
 		this = tic;

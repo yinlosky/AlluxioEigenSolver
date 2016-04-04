@@ -134,7 +134,7 @@ for i = myProc
 %%
  	%% first set up the debug info location 
 	fname = ([root '/timing/vectorv2_' num2str(i)  '_stat_Alluxio.txt']);
-        fstat = fopen(fname,'w+');
+    fstat = fopen(fname,'w+');
 	str = ['Now reading vector and vi from Alluxio ...'];
 	disp(str); fwrite(fstat, str);
 	

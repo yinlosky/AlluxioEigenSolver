@@ -309,7 +309,7 @@ for it = 1:max_iteration
         %% Version 1: when vector not stored in Alluxio
         %% eval(pRUN('Alluxio_Row_mv',NumOfProcessors,machines));
         %% Version 2: when vector saved in Alluxio
-	system(['alluxio fs rmr /mytest/vpath' num2str(it) '*']);
+	%system(['alluxio fs rmr /mytest/vpath' num2str(it) '*']);
         eval(pRUN('Alluxio_Row_mv_version2',NumOfProcessors,machines));
         that = toc(this);
         fstat = fopen(fname,'a+');

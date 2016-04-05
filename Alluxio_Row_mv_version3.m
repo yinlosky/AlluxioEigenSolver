@@ -202,7 +202,7 @@ if(my_rank == leader)
     
     %% leader process calculate beta p2
     str = ['Leader process Computing beta[' num2str(it) ']...'];
-    disp(str); fwrite(fbug)
+    disp(str); fwrite(fbug,str)
     this = tic;
 	%parallel_lz_norm_v_p2; %% scalar_v is written to beta_i in the table beta_t('i,','1,')
 	 [temp_t_Row,temp_t_Col,temp_t_Val] = norm_v_temp(sprintf('%d,',1:NumOfProcessors),:);
@@ -216,8 +216,9 @@ scalar_v = sqrt(scalar_v);
     put(beta_t, scalar_v_assoc);
     
     that = toc(this);
-	disp(['Iteration ' num2str(it) ' beta takes: '  num2str(that)]);
-	fwrite(fstat,['Iteration ' num2str(it) ' beta takes: '  num2str(that) sprintf('\n')]);	
+    str = ['Iteration ' num2str(it) ' beta takes: '  num2str(that) sprintf('\n')];
+	disp(str); fwrite(fbug, str);
+
 	bet(it) = scalar_v;
 	delete(norm_v_temp);
 	disp(['beta[' num2str(it) '] = ' num2str(bet(it))]);
@@ -473,15 +474,13 @@ filePathPre = '/mytest';
         
           %% v_vector is from result: v_val (dimension: n*1) 
         resultVector = v_val - vi_vector - vi1_mul_beta_vector;
-        
-        %% meanwhile we calculate norm of resultVector
+
+     end %% end for calculating onetime_saxv
+      %% meanwhile we calculate norm of resultVector
             %%!!!!!!!!!! To be filled with 
          
          norm_result_vector = norm(resultVector)^2;
          put(norm_v_temp,Assoc(sprintf('%d,',i-1),'1,',sprintf('%.15f,',norm_result_vector)));
-            
-            
-     end %% end for calculating onetime_saxv
      
      %% Done with onetime_saxv send signal back to leader process
      MPI_Send(leader, leader_tag, comm,my_rank);

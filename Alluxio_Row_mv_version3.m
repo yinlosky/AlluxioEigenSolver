@@ -34,21 +34,32 @@ import yhuang9.testAlluxio.* ;
 
 root = matlabroot;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+alpha_t = DB('alpha');
+beta_t = DB('beta');
 machines_t = DB('NumOfMachines');
 nodes_t = DB('NumOfNodes');
 cur_it= DB('cur_it');
 proc_t = DB('NumOfProcessors');
 dot_temp = DB('dot_temp');
 
+
 NumOfMachines = str2num(Val(machines_t('1,','1,')));
 NumOfNodes = str2num(Val(nodes_t('1,','1,')));
 NumOfProcessors = str2num(Val(proc_t('1,','1,')));
 
-it = str2num(Val(cur_it('1,','1,')));
+norm_v_temp = (['lz_norm_v' num2str(NumOfNodes) '_temp']);
+
+it = str2num(Val(cur_it('1,','1,')));  %% current iteration
 m = DB(['M' num2str(NumOfNodes)]);
 cut_t = DB(['Cut' num2str(NumOfNodes)]);   %% Cut table assigns the tasks to the processors
 
 num = DB(['Entries' num2str(NumOfNodes)]);  %% This table stores the elements for each column
+
+%%  initialize alpha() and beta()
+
+alpha = zeros(1,10);
+bet = zeros(1,10);
+
 
 
 %%% Below is for MPI related %%%%%%%%%%%%%%%%%%%%%%
@@ -115,6 +126,10 @@ if(my_rank == leader)
     leader_total_time = toc(leader_begin_time);
     str = (['Leader process for matrix*vector runs: ' num2str(leader_total_time) sprintf('\n')]);
     disp(str); fwrite(fbug, str);
+    %fclose(fbug); %% debug for matrix * vector done
+    
+    %%%
+    
     
     str = (['Leader process now calculates the value of alpha[it]' sprintf('\n')]);
     disp(str); fwrite(fbug, str);
@@ -131,16 +146,19 @@ if(my_rank == leader)
         alpha(it) = it_alpha;
         that = toc(this);
         str = (['Calculation alpha costs ' num2str(that) 's' sprintf('\n')]);
-        disp(str); fwrite(fstat,str);
+        disp(str); fwrite(fbug,str);
         delete(dot_temp);
      alpha_temp_Assoc = Assoc(sprintf('%d,',it),'1,',sprintf('%.15f,',alpha(it)));
         put(alpha_t, alpha_temp_Assoc);
-        disp(['Result of alpha[' num2str(it) '] =' num2str(alpha(it)) ' is saved.']);
+        str = ['Result of alpha[' num2str(it) '] =' num2str(alpha(it)) ' is saved.'
+            sprintf('\n') 'Now continuing to onetimesaxv ...'];
+        disp(str); fwrite(fbug,str);
     
     %fclose(fbug);
-    %%%%%%%%%% Done with Matrix * vector %%%%%%%%%%%%
+    %%%%%%%%%% Done with Matrix * vector and calculating the alpha %%%%%%%%%%%%
  
- %{   
+   
+    %%%%%% Now begin to calculate onetime_saxv
     %1. leader broadcast a signal to proceed with vi*v for all working
     %processes
     
@@ -179,11 +197,35 @@ if(my_rank == leader)
     end %% end of leader process while
     output
     leader_total_time = toc(leader_begin_time);
-    str = (['Leader process for vi*v runs: ' num2str(leader_total_time) sprintf('\n')]);
+    str = (['Leader process for onetimesaxv runs: ' num2str(leader_total_time) sprintf('\n')]);
     disp(str); fwrite(fbug, str);
     %fclose(fbug);
     
-    %}
+    %% leader process calculate beta p2
+    str = ['Leader process Computing beta[' num2str(it) ']...'];
+    disp(str); fwrite(fbug)
+    this = tic;
+	%parallel_lz_norm_v_p2; %% scalar_v is written to beta_i in the table beta_t('i,','1,')
+	 [temp_t_Row,temp_t_Col,temp_t_Val] = norm_v_temp(sprintf('%d,',1:NumOfProcessors),:);
+ if(isempty(temp_t_Val))
+	scalar_v = 0;
+ else scalar_v = sum(str2num(temp_t_Val));
+ end   %%% Calcualate the total sum of the values	
+%disp(['Before sqrt: ' sprintf('%.15f,', scalar_v)]);
+scalar_v = sqrt(scalar_v);
+    scalar_v_assoc = Assoc(sprintf('%d,',it),'1,',sprintf('%.15f,',scalar_v));
+    put(beta_t, scalar_v_assoc);
+    
+    that = toc(this);
+	disp(['Iteration ' num2str(it) ' beta takes: '  num2str(that)]);
+	fwrite(fstat,['Iteration ' num2str(it) ' beta takes: '  num2str(that) sprintf('\n')]);	
+	bet(it) = scalar_v;
+	delete(norm_v_temp);
+	disp(['beta[' num2str(it) '] = ' num2str(bet(it))]);
+    
+    
+    %% beta p2 done.
+    
     
 else %% working processes
 %%%%%%%%%%
@@ -340,14 +382,14 @@ filePathPre = '/mytest';
         wb_t = toc(this);
 		str= (['Writing back: ' num2str(wb_t) 's' sprintf('\n')]);
 		disp(str);fwrite(fstat,str);
-        put(temp,newAssoc);
+        put(dot_temp,newAssoc);
         
      
         
         
         %%%%%%%%%%%%
              
-          fclose(fstat);
+          %fclose(fstat);
          %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
          
          %% done with matrix* vector
@@ -358,11 +400,97 @@ filePathPre = '/mytest';
          %%% now start next parallel 
          %%
          %% working process receive the leader's broadcast msg
-         %con = MPI_Recv( leader, con_tag, comm );
+         con = MPI_Recv( leader, con_tag, comm );
+         str = (['Received the con signal from leader process now calculating onetime_saxv']);
+         disp(str); fwrite(fstat, str);
          
+         %%%
+         %%%
+         % v = v - beta_sax_temp - alpha_sax_temp ; if it>1 in one function
+%%		   v = v - alpha_sax_temp; if i==1
+
+        % first we get alpha
+         [alphaR,alphaC,alphaV]= alpha_t(sprintf('%d,',it),:);
+		 if (isempty(alphaV))
+        	alpha_value = 0;
+         else
+        	alpha_value = str2num(alphaV);
+         end
+         
+         
+         %% construct part of vi from start_col:end_col;
+         %part_myVi = myVi(start_col:end_col);  n*1 dimension
+         vi_vector = part_myVi .* alpha_value;
+         
+     if(it == 1)%%  v = v - alpha_sax_temp; if i==1
+            
+            %% v_vector is from result: v_val (dimension: n*1)
+            resultVector = v_val - vi_vector; 
+
+      else %%v = v - beta_sax_temp - alpha_sax_temp ; if it>1
+             % v is v_val : n*1 dimension
+             %% we get beta_i-1
+            [betaRow,betaCol,betaVal]=beta_t(sprintf('%d,',it-1),:);
+        	if(~isempty(betaVal))
+                beta_value = str2num(betaVal);
+            else
+                beta_value = 0;
+            end
+            %%% we get beta_i-1
+            
+            %%now we read from Alluxio v_i-1  ATTENTION: at the end we need
+            %%aggregate all partial vi into a global copy and each machine
+            %%obtain one copy
+            str = (['Now reading vector i-1 from Alluxio' sprintf('\n')]);
+		disp(str); fwrite(fstat, str);
+		
+		inputFilePathPre = '/mytest';
+		inputFilePath=[inputFilePathPre '/' num2str(it-1) 'v_' num2str(NumOfNodes) 'nodes_' num2str(NumOfProcessors) 'proc_' my_machine];
+		
+		inputobject_r = AlluxioWriteRead(['alluxio://n117.bluewave.umbc.edu:19998|' inputFilePath '_r' '|CACHE|CACHE_THROUGH']);
+       	inputobject_v = AlluxioWriteRead(['alluxio://n117.bluewave.umbc.edu:19998|' inputFilePath '_v' '|CACHE|CACHE_THROUGH']);
+		this = tic;
+		vi_row = javaMethod('readFile',inputobject_r);
+		vi_val = javaMethod('readFile',inputobject_v);
+		readv=toc(this);
+		str = ['Read vector i-1 takes: ' num2str(readv) 's' sprintf('\n')];
+		disp(str); fwrite(fstat, str);
+		
+		str = ['Now constructing the vector i-1'];
+		this = tic;
+		disp(str); fwrite(fstat, str);
+		my_row = char(vi_row); my_val = char(vi_val);
+		my_row = sscanf(my_row, '%d'); my_val = sscanf(my_val,'%f'); 	
+		myVectorMinus1 = sparse(my_row, 1, my_val, NumOfNodes, 1);
+        myVectorMinus1 = full(myVectorMinus1);
+		transV = toc(this);	
+		str = ['Construction of vector done! It takes ' num2str(transV) 's' sprintf('\n')];
+		disp(str); fwrite(fstat, str);
+        %%
+        
+        %% get part vi_1 into vi1_vector
+        vi1_vector = myVectorMinus1(start_col:end_col);
+        vi1_mul_beta_vector = vi1_vector .* beta_value;
+        
+          %% v_vector is from result: v_val (dimension: n*1) 
+        resultVector = v_val - vi_vector - vi1_mul_beta_vector;
+        
+        %% meanwhile we calculate norm of resultVector
+            %%!!!!!!!!!! To be filled with 
+         
+         norm_result_vector = norm(resultVector)^2;
+         put(norm_v_temp,Assoc(sprintf('%d,',i-1),'1,',sprintf('%.15f,',norm_result_vector)));
+            
+            
+     end %% end for calculating onetime_saxv
+     
+     %% Done with onetime_saxv send signal back to leader process
+     MPI_Send(leader, leader_tag, comm,my_rank);
+     
+     
 %%%%%%%%%%%
 %%%%%%%%%%
-end
+         end %% end for all working processes
 
 disp('Success');
 this = tic;

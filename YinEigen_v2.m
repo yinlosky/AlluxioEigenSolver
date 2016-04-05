@@ -461,13 +461,7 @@ for it = 1:max_iteration
 	bet(it) = scalar_v;
 	delete(parallel_lz_norm_v_tempt);
 	disp(['beta[' num2str(it) '] = ' num2str(bet(it))]);
-		disp(['Recomputing beta[' num2str(it) ']']);
-		 parallel_lz_norm_v_tempt = DB(['lz_norm_v' num2str(NumOfNodes) '_temp']);
-		eval(pRUN('parallel_lz_norm_v_p1',NumOfProcessors,machines));
-		parallel_lz_norm_v_p2; %% scalar_v is written to beta_i in the table beta_t('i,','1,')
-		bet(it) = scalar_v;
-		disp(['beta[' num2str(it) ']=' num2str(bet(it))]);
-		delete(parallel_lz_norm_v_tempt);
+		
 	
 
 	if(num_ortho > it - 1)

@@ -47,7 +47,7 @@ NumOfMachines = str2num(Val(machines_t('1,','1,')));
 NumOfNodes = str2num(Val(nodes_t('1,','1,')));
 NumOfProcessors = str2num(Val(proc_t('1,','1,')));
 
-norm_v_temp = (['lz_norm_v' num2str(NumOfNodes) '_temp']);
+norm_v_temp = DB(['lz_norm_v' num2str(NumOfNodes) '_temp']);
 
 it = str2num(Val(cur_it('1,','1,')));  %% current iteration
 m = DB(['M' num2str(NumOfNodes)]);
@@ -162,9 +162,9 @@ if(my_rank == leader)
     %processes
     
      % Broadcast coefficients to everyone else.
-    MPI_Bcast( leader, con_tag, comm, con );
+    MPI_Bcast(leader, con_tag, comm, con );
     
-    
+   % con = MPI_Recv(leader, con_tag, comm );
     %%%%%%% start next step in the algorithm
     leader_begin_time = tic;
     done = 0;
@@ -401,7 +401,8 @@ filePathPre = '/mytest';
          %%
          %% working process receive the leader's broadcast msg
          str = (['Waiting for leader ... ' sprintf('\n')]);
-         con = MPI_Recv( leader, con_tag, comm );
+         disp(str); fwrite(fstat, str);
+         con = MPI_Recv(leader, con_tag, comm );
          str = (['Received the con signal from leader process now calculating onetime_saxv']);
          disp(str); fwrite(fstat, str);
          

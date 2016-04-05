@@ -481,7 +481,7 @@ filePathPre = '/mytest';
             %%!!!!!!!!!! To be filled with 
          
          norm_result_vector = norm(resultVector)^2;
-         put(norm_v_temp,num2str(Assoc(sprintf('%d,',i-1),'1,',sprintf('%.15f,',norm_result_vector))));
+         put(norm_v_temp,Assoc(sprintf('%d,',i-1),'1,',sprintf('%.15f,',norm_result_vector)));
      
      %% Done with onetime_saxv send signal back to leader process
      MPI_Send(leader, leader_tag, comm,my_rank);

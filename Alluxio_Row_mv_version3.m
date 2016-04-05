@@ -150,8 +150,7 @@ if(my_rank == leader)
         delete(dot_temp);
      alpha_temp_Assoc = Assoc(sprintf('%d,',it),'1,',sprintf('%.15f,',alpha(it)));
         put(alpha_t, alpha_temp_Assoc);
-        str = ['Result of alpha[' num2str(it) '] =' num2str(alpha(it)) ' is saved.'
-            sprintf('\n') 'Now continuing to onetimesaxv ...'];
+        str = ['Result of alpha[' num2str(it) '] =' num2str(alpha(it)) ' is saved. Now continuing to onetimesaxv ...'];
         disp(str); fwrite(fbug,str);
     
     %fclose(fbug);

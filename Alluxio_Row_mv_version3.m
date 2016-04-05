@@ -400,6 +400,7 @@ filePathPre = '/mytest';
          %%% now start next parallel 
          %%
          %% working process receive the leader's broadcast msg
+         str = (['Waiting for leader ... ' sprintf('\n')]);
          con = MPI_Recv( leader, con_tag, comm );
          str = (['Received the con signal from leader process now calculating onetime_saxv']);
          disp(str); fwrite(fstat, str);
@@ -414,7 +415,7 @@ filePathPre = '/mytest';
 		 if (isempty(alphaV))
         	alpha_value = 0;
          else
-        	alpha_value = str2num(alphaV);
+        	alpha_value = str2num(alphaV)
          end
          
          
@@ -480,7 +481,7 @@ filePathPre = '/mytest';
             %%!!!!!!!!!! To be filled with 
          
          norm_result_vector = norm(resultVector)^2;
-         put(norm_v_temp,Assoc(sprintf('%d,',i-1),'1,',sprintf('%.15f,',norm_result_vector)));
+         put(norm_v_temp,num2str(Assoc(sprintf('%d,',i-1),'1,',sprintf('%.15f,',norm_result_vector))));
      
      %% Done with onetime_saxv send signal back to leader process
      MPI_Send(leader, leader_tag, comm,my_rank);

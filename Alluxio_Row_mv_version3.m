@@ -172,7 +172,9 @@ if(my_rank == leader)
      str = ['Now broadcasting onetimesaxv con_tag to everyone ...' sprintf('\n')];
         disp(str); fwrite(fbug,str);
         this = tic;
-    MPI_Bcast(leader, con_tag, comm, con );
+       %MPI_Bcast( leader, coefs_tag, comm, coefs ); 
+    %coefs = MPI_Recv( leader, coefs_tag, comm );
+       MPI_Bcast(leader, con_tag, comm, con ); %% MPI_Recv(leader, con_tag, comm );
      bcast_time = toc(this);
      str= ['Broadcasting costs: ' num2str(bcast_time) 's' sprintf('\n')];
    % con = MPI_Recv(leader, con_tag, comm );
@@ -195,6 +197,8 @@ if(my_rank == leader)
           if recvCounter > leader
               %% dest is who sent this message
               dest = recvCounter;
+              
+              
               leader_tag = output_tag_second + recvCounter;
              [message_ranks, message_tags] = MPI_Probe( dest, leader_tag, comm );
              if ~isempty(message_ranks)
@@ -214,6 +218,7 @@ if(my_rank == leader)
     %fclose(fbug);
     
     %% leader process calculate beta p2
+    %{
     str = ['Leader process Computing beta[' num2str(it) ']...'];
     disp(str); fwrite(fbug,str)
     this = tic;
@@ -235,7 +240,7 @@ scalar_v = sqrt(scalar_v);
 	bet(it) = scalar_v;
 	delete(norm_v_temp);
 	disp(['beta[' num2str(it) '] = ' num2str(bet(it))]);
-    
+    %}
     %{
     
     %% beta p2 done.
@@ -458,10 +463,12 @@ filePathPre = '/mytest';
          %% working process receive the leader's broadcast msg
          str = (['Waiting for leader to continue to onetime_saxv... ' sprintf('\n')]);
          disp(str); fwrite(fstat, str);
-         con = MPI_Recv(leader, con_tag, comm );
+         
+         con = MPI_Recv(leader, con_tag, comm );  %%% broadcast con_tag
+         
          str = (['Received the con signal from leader process now calculating onetime_saxv']);
          disp(str); fwrite(fstat, str);
-         
+         %{
          %%%
          %%%
          % v = v - beta_sax_temp - alpha_sax_temp ; if it>1 in one function
@@ -540,7 +547,7 @@ filePathPre = '/mytest';
          norm_result_vector = norm(resultVector)^2;
          put(norm_v_temp,Assoc(sprintf('%d,',i-1),'1,',sprintf('%.15f,',norm_result_vector)));
      
-         
+         %}
          
      %% Done with onetime_saxv send signal back to leader process
      leader_tag = output_tag_second + my_rank;

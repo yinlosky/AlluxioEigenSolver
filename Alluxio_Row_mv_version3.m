@@ -84,6 +84,10 @@ leader = 0;
 % Create a unique tag id for this message (very important in Matlab MPI!).
 output_tag = 10000; %% this tag is used as a synchronization message.
 
+output_tag_second = 40000;
+
+output_tag_three = 50000;
+
 %% continue tag;
 con_tag = 20000;
 
@@ -184,7 +188,7 @@ if(my_rank == leader)
           if recvCounter > leader
               %% dest is who sent this message
               dest = recvCounter;
-              leader_tag = output_tag + recvCounter;
+              leader_tag = output_tag_second + recvCounter;
              [message_ranks, message_tags] = MPI_Probe( dest, leader_tag, comm );
              if ~isempty(message_ranks)
                  output(:,recvCounter) = MPI_Recv(dest, leader_tag, comm);
@@ -252,7 +256,7 @@ scalar_v = sqrt(scalar_v);
           if recvCounter > leader
               %% dest is who sent this message
               dest = recvCounter;
-              leader_tag = output_tag + recvCounter;
+              leader_tag = output_tag_three + recvCounter;
              [message_ranks, message_tags] = MPI_Probe(dest, leader_tag, comm );
              if ~isempty(message_ranks)
                  output(:,recvCounter) = MPI_Recv(dest, leader_tag, comm);
@@ -528,6 +532,7 @@ filePathPre = '/mytest';
          put(norm_v_temp,Assoc(sprintf('%d,',i-1),'1,',sprintf('%.15f,',norm_result_vector)));
      
      %% Done with onetime_saxv send signal back to leader process
+     leader_tag = output_tag_second + my_rank;
      MPI_Send(leader, leader_tag, comm,my_rank);
      
      %% Waiting for leader to send signal to continue to updateQ
@@ -586,7 +591,7 @@ filePathPre = '/mytest';
     str = (['Done with updateQ, sending signal back to leader process ...']);
 	disp(str); fwrite(fstat, str);
     
-    leader_tag = output_tag + my_rank;
+    leader_tag = output_tag_three + my_rank;
     MPI_Send(leader, leader_tag, comm,my_rank);
      
     

@@ -299,7 +299,7 @@ scalar_v = sqrt(scalar_v);
     leader_begin_time = tic;
     done = 0;
     %leader will receive comm_size-1 signals
-    output = zeros(1,comm_size-1); 
+    updated_vector = cell(comm_size-1); 
     
 %% Instead of using for loops, use counters to indicate how many processes have
 %% completed their tasks.
@@ -315,8 +315,8 @@ scalar_v = sqrt(scalar_v);
               leader_tag = output_tag_three + recvCounter;
              [message_ranks, message_tags] = MPI_Probe(dest, leader_tag, comm );
              if ~isempty(message_ranks)
-                 output(:,recvCounter) = MPI_Recv(dest, leader_tag, comm);
-                 str = (['Received data packet number ' num2str(recvCounter)]);
+                 updated_vector(recvCounter) = MPI_Recv(dest, leader_tag, comm);
+                 str = (['Received data packet number ' recvCounter]);
                  disp(str);fwrite(fbug,str);
                  recvCounter = recvCounter - 1;
              end
@@ -640,7 +640,7 @@ filePathPre = '/mytest';
      %vector_i_plus_one_row = sprintf('%d,',start_col:end_col);
      vector_i_plus_one_val = sprintf('%.15f,',vector_i_plus_one);
      
-     
+     %{
      %% save to partial vi+1 table
     outputFilePathPre = '/mytest';
 	outputfilePath = [outputFilePathPre '/' num2str(it+1) 'v_' num2str(NumOfNodes) 'nodes_' num2str(NumOfProcessors) 'proc_' num2str(i) '_id'];
@@ -658,13 +658,15 @@ filePathPre = '/mytest';
 	saveTime = toc(this);
 	str = ([' costs: ' num2str(saveTime) 's' sprintf('\n')]);
     disp(str); fwrite(fstat, str);
-    
+    %}
     %% Done with update Q
+    %% Rather than writing to Filesystem, Try to send it back to leader process and see how it performs.
+    
     str = (['Done with updateQ, sending signal back to leader process ...']);
 	disp(str); fwrite(fstat, str);
     
     leader_tag = output_tag_three + my_rank;
-    MPI_Send(leader, leader_tag, comm,my_rank);
+    MPI_Send(leader, leader_tag, comm,vector_i_plus_one_val);
      
     
 %%%%%%%%%%%

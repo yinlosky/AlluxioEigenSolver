@@ -88,10 +88,10 @@ output_tag_second = 40000;
 
 output_tag_three = 50000;
 
-bcast_tag = 60000;
+
 
 %% continue tag;
-con_tag = 20000;
+onetime_saxv_tag = 20000;
 
 updateq_tag = 30000;
 
@@ -174,8 +174,7 @@ if(my_rank == leader)
      str = ['Now broadcasting onetimesaxv con_tag to everyone ...' sprintf('\n')];
         disp(str); fwrite(fbug,str);
         this = tic;
-       %MPI_Bcast( leader, coefs_tag, comm, coefs ); 
-    %coefs = MPI_Recv( leader, coefs_tag, comm );
+       
      %  MPI_Bcast(leader, con_tag, comm, con ); %% MPI_Recv(leader, con_tag, comm );
        
      %%%%%%%%%%%%%%%%%%%%%
@@ -185,7 +184,7 @@ if(my_rank == leader)
           % leader receives all the results.
           if numCounter > leader
               %% dest is who sent this message
-              send_tag = bcast_tag + numCounter;
+              send_tag = onetime_saxv_tag + numCounter;
                  MPI_Send(numCounter, send_tag, comm, con);
                  numCounter = numCounter - 1;
              
@@ -261,7 +260,7 @@ scalar_v = sqrt(scalar_v);
 	delete(norm_v_temp);
 	disp(['beta[' num2str(it) '] = ' num2str(bet(it))]);
     
-    %{
+    
     
     %% beta p2 done.
     
@@ -269,9 +268,33 @@ scalar_v = sqrt(scalar_v);
     %% Now leader process broadcast updateQ flag again so that working processes will update vi
     %% v_i+1 = v/beta
     % Broadcast continue to everyone else.
-    MPI_Bcast(leader, updateq_tag, comm, con);
+   % MPI_Bcast(leader, updateq_tag, comm, con);
     
-  
+   %%%%%%%%%%%%%%%%
+    %%%%%%%%%%%%%%%%%%%%%
+    str = ['Now broadcasting updateq_tag to everyone ...' sprintf('\n')];
+        disp(str); fwrite(fbug,str);
+        this = tic;
+    
+     numCounter = comm_size - 1;
+     done = 0;
+        while ~done
+          % leader receives all the results.
+          if numCounter > leader
+              %% dest is who sent this message
+              send_tag = updateq_tag + numCounter;
+                 MPI_Send(numCounter, send_tag, comm, con);
+                 numCounter = numCounter - 1;
+             
+          else % recvCounter  == leader
+              done =1;
+          end
+        end 
+    bcast_time = toc(this);
+     str= ['Broadcasting costs: ' num2str(bcast_time) 's' sprintf('\n')];
+     disp(str); fwrite(fbug,str);
+   
+  %%%%%%%%%%%%%%%%
     %%%%%%% start next step in the algorithm
     leader_begin_time = tic;
     done = 0;
@@ -306,7 +329,7 @@ scalar_v = sqrt(scalar_v);
     str = (['Leader process for updateQ runs: ' num2str(leader_total_time) sprintf('\n')]);
     disp(str); fwrite(fbug, str);
     
-    %}
+    
 else %% working processes
 %%%%%%%%%%
 %%%%%%%%%%
@@ -484,7 +507,7 @@ filePathPre = '/mytest';
          %% working process receive the leader's broadcast msg
          str = (['Waiting for leader to continue to onetime_saxv... ' sprintf('\n')]);
          disp(str); fwrite(fstat, str);
-         send_tag = bcast_tag + my_rank;
+         send_tag = onetime_saxv_tag + my_rank;
          con = MPI_Recv(leader, send_tag, comm );  %%% receive bcast_tag
          
          str = (['Received the con signal from leader process now calculating onetime_saxv' sprintf('\n')]);
@@ -580,11 +603,12 @@ filePathPre = '/mytest';
      leader_tag = output_tag_second + my_rank;
      MPI_Send(leader, leader_tag, comm,my_rank);
     
-     %{
+     
      %% Waiting for leader to send signal to continue to updateQ
      str = (['Waiting for leader to continue update V... ' sprintf('\n')]);
      disp(str); fwrite(fstat, str);
-     con = MPI_Recv(leader, updateq_tag, comm );
+     send_tag = updateq_tag + my_rank;
+     con = MPI_Recv(leader, send_tag, comm );
      str = (['Received the con signal from leader process now updating V' sprintf('\n')]);
      disp(str); fwrite(fstat, str);
      
@@ -640,7 +664,7 @@ filePathPre = '/mytest';
     leader_tag = output_tag_three + my_rank;
     MPI_Send(leader, leader_tag, comm,my_rank);
      
-    %}
+    
 %%%%%%%%%%%
 %%%%%%%%%%
          end %% end for all working processes

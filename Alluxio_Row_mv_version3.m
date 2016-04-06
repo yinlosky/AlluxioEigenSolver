@@ -227,6 +227,47 @@ scalar_v = sqrt(scalar_v);
     %% beta p2 done.
     
     
+    %% Now leader process broadcast con flag again so that working processes will update vi
+    %% v_i+1 = v/beta
+    % Broadcast continue to everyone else.
+    MPI_Bcast(leader, con_tag, comm, con );
+    
+  
+    %%%%%%% start next step in the algorithm
+    leader_begin_time = tic;
+    done = 0;
+    %leader will receive comm_size-1 signals
+    output = zeros(1,comm_size-1); 
+    
+%% Instead of using for loops, use counters to indicate how many processes have
+%% completed their tasks.
+
+%% we are doing backwards because in MPI_RUN the highest rank process
+%% will be spawned first and it is more likely to complete earlier
+    recvCounter = comm_size-1;
+    while ~done
+          % leader receives all the results.
+          if recvCounter > leader
+              %% dest is who sent this message
+              dest = recvCounter;
+              leader_tag = output_tag + recvCounter;
+             [message_ranks, message_tags] = MPI_Probe(dest, leader_tag, comm );
+             if ~isempty(message_ranks)
+                 output(:,recvCounter) = MPI_Recv(dest, leader_tag, comm);
+                 str = (['Received data packet number ' num2str(recvCounter)]);
+                 disp(str);fwrite(fbug,str);
+                 recvCounter = recvCounter - 1;
+             end
+          else % recvCounter  == leader
+              done =1;
+          end
+    end %% end of leader process while
+    output
+    leader_total_time = toc(leader_begin_time);
+    str = (['Leader process for updateQ runs: ' num2str(leader_total_time) sprintf('\n')]);
+    disp(str); fwrite(fbug, str);
+    
+    
 else %% working processes
 %%%%%%%%%%
 %%%%%%%%%%
@@ -487,7 +528,66 @@ filePathPre = '/mytest';
      %% Done with onetime_saxv send signal back to leader process
      MPI_Send(leader, leader_tag, comm,my_rank);
      
+     %% Waiting for leader to send signal to continue to updateQ
+     str = (['Waiting for leader ... ' sprintf('\n')]);
+     disp(str); fwrite(fstat, str);
+     con = MPI_Recv(leader, con_tag, comm );
+     str = (['Received the con signal from leader process now updating V']);
+     disp(str); fwrite(fstat, str);
      
+     %% v_i+1 = v/beta
+     %% we already have resultVector as part of v
+     
+     %% get beta:
+     str = ('Getting beta value from Accumulo ...');
+     disp(str); fwrite(fstat, str);
+     %%%%
+     
+     if(~isempty(Val(beta_t(sprintf('%d,',it),'1,'))))
+        beta_it_v = str2num(Val(beta_t(sprintf('%d,',it),'1,')));
+        beta_it_v = 1./beta_it_v;
+     else
+        beta_it_v = 0;
+     end
+     
+     str = ([' Beta value is ' num2str(beta_it_v) sprintf('\n')]);
+     disp(str); fwrite(fstat, str);
+     
+     
+     %% output should be partial vi table and also make a global copy 
+     %% each machine has a local copy as well.
+     vector_i_plus_one = resultVector .* beta_it_v;
+     
+     vector_i_plus_one_row = sprintf('%d,',start_col:end_col);
+     vector_i_plus_one_val = sprintf('%.15f,',vector_i_plus_one);
+     
+     
+     %% save to partial vi+1 table
+    outputFilePathPre = '/mytest'
+	outputfilePath = [outputFilePathPre '/' num2str(it+1) 'v_' num2str(NumOfNodes) 'nodes_' num2str(Np) 'proc_' num2str(i) '_id'];
+	
+    myobject_r = AlluxioWriteRead(['alluxio://n117.bluewave.umbc.edu:19998|' outputfilePath '_r' '|CACHE|CACHE_THROUGH']);
+	%myobject_c = AlluxioWriteRead(['alluxio://n117.bluewave.umbc.edu:19998|' filePath '_c' '|CACHE|CACHE_THROUGH']);
+	myobject_v = AlluxioWriteRead(['alluxio://n117.bluewave.umbc.edu:19998|' outputfilePath '_v' '|CACHE|CACHE_THROUGH']);
+	
+    str = (['Now writing partial vi to local machine ... ']);
+	disp(str); fwrite(fstat, str);
+	this = tic;
+    javaMethod('writeFile',myobject_r,myAssoc_r);
+	%javaMethod('writeFile',myobject_c,myAssoc_c);
+	javaMethod('writeFile',myobject_v,myAssoc_v);
+	saveTime = toc(this);
+	str = ([' costs: ' num2str(saveTime) 's' sprintf('\n')]);
+    disp(str); fwrite(fstat, str);
+    
+    %% Done with update Q
+    str = (['Done with updateQ, sending signal back to leader process ...']);
+	disp(str); fwrite(fstat, str);
+    
+    leader_tag = output_tag + my_rank;
+    MPI_Send(leader, leader_tag, comm,my_rank);
+     
+    
 %%%%%%%%%%%
 %%%%%%%%%%
          end %% end for all working processes

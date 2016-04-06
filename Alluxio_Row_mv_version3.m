@@ -177,6 +177,7 @@ if(my_rank == leader)
        MPI_Bcast(leader, con_tag, comm, con ); %% MPI_Recv(leader, con_tag, comm );
      bcast_time = toc(this);
      str= ['Broadcasting costs: ' num2str(bcast_time) 's' sprintf('\n')];
+     disp(str); fwrite(fbug,str);
    % con = MPI_Recv(leader, con_tag, comm );
     %%%%%%% start next step in the algorithm
     leader_begin_time = tic;
@@ -218,7 +219,7 @@ if(my_rank == leader)
     %fclose(fbug);
     
     %% leader process calculate beta p2
-    %{
+    
     str = ['Leader process Computing beta[' num2str(it) ']...'];
     disp(str); fwrite(fbug,str)
     this = tic;
@@ -240,7 +241,7 @@ scalar_v = sqrt(scalar_v);
 	bet(it) = scalar_v;
 	delete(norm_v_temp);
 	disp(['beta[' num2str(it) '] = ' num2str(bet(it))]);
-    %}
+    
     %{
     
     %% beta p2 done.
@@ -466,22 +467,24 @@ filePathPre = '/mytest';
          
          con = MPI_Recv(leader, con_tag, comm );  %%% broadcast con_tag
          
-         str = (['Received the con signal from leader process now calculating onetime_saxv']);
+         str = (['Received the con signal from leader process now calculating onetime_saxv' sprintf('\n')]);
          disp(str); fwrite(fstat, str);
-         %{
+         
          %%%
          %%%
          % v = v - beta_sax_temp - alpha_sax_temp ; if it>1 in one function
 %%		   v = v - alpha_sax_temp; if i==1
 
         % first we get alpha
+        
          [alphaR,alphaC,alphaV]= alpha_t(sprintf('%d,',it),:);
 		 if (isempty(alphaV))
         	alpha_value = 0;
          else
         	alpha_value = str2num(alphaV);
          end
-         
+         str=(['alpha value is: ' num2str(alpha_value) sprintf('\n')]);
+         disp(str); fwrite(fstat, str);
          
          %% construct part of vi from start_col:end_col;
          %part_myVi = myVi(start_col:end_col);  n*1 dimension
@@ -495,6 +498,8 @@ filePathPre = '/mytest';
       else %%v = v - beta_sax_temp - alpha_sax_temp ; if it>1
              % v is v_val : n*1 dimension
              %% we get beta_i-1
+             str = (['This is when it > 1' sprintf('\n')]);
+             disp(str); fwrite(fstat, str);
             [betaRow,betaCol,betaVal]=beta_t(sprintf('%d,',it-1),:);
         	if(~isempty(betaVal))
                 beta_value = str2num(betaVal);
@@ -546,14 +551,15 @@ filePathPre = '/mytest';
          
          norm_result_vector = norm(resultVector)^2;
          put(norm_v_temp,Assoc(sprintf('%d,',i-1),'1,',sprintf('%.15f,',norm_result_vector)));
-     
-         %}
+        
+         
          
      %% Done with onetime_saxv send signal back to leader process
+      str =(['Done with onetime_saxv, sending signal back to leader ...' sprintf('\n')]);
+     disp(str); fwrite(fstat, str);
      leader_tag = output_tag_second + my_rank;
      MPI_Send(leader, leader_tag, comm,my_rank);
-     str =(['Done with onetime_saxv, sending signal back to leader ...' sprintf('\n')]);
-     disp(str); fwrite(fstat, str);
+    
      %{
      %% Waiting for leader to send signal to continue to updateQ
      str = (['Waiting for leader to continue update V... ' sprintf('\n')]);

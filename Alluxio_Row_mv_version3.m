@@ -334,12 +334,13 @@ scalar_v = sqrt(scalar_v);
     str = ('Now saving the updatedQ to global file ...');
     this = tic;
     disp(str); fwrite(fbug, str);
-    result_string = cellstr(updated_vector);
+    result_string = char(cellstr(updated_vector));
     
     inputFilePathPre = '/mytest';
 	inputFilePath=[inputFilePathPre '/' num2str(it+1) 'v_' num2str(NumOfNodes) 'nodes_' num2str(NumOfProcessors) 'proc_global'];
     inputobject_v = AlluxioWriteRead(['alluxio://n117.bluewave.umbc.edu:19998|' inputFilePath '_v' '|CACHE|CACHE_THROUGH']);
     
+
     javaMethod('writeFile',inputobject_v,result_string);
   
 	writeTime = toc(this);

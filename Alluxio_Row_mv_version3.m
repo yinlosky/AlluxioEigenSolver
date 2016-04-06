@@ -484,8 +484,8 @@ filePathPre = '/mytest';
          %% working process receive the leader's broadcast msg
          str = (['Waiting for leader to continue to onetime_saxv... ' sprintf('\n')]);
          disp(str); fwrite(fstat, str);
-          
-         con = MPI_Recv(leader, send_tag, comm );  %%% broadcast con_tag
+         send_tag = bcast_tag + my_rank;
+         con = MPI_Recv(leader, send_tag, comm );  %%% receive bcast_tag
          
          str = (['Received the con signal from leader process now calculating onetime_saxv' sprintf('\n')]);
          disp(str); fwrite(fstat, str);

@@ -301,7 +301,7 @@ scalar_v = sqrt(scalar_v);
     leader_begin_time = tic;
     done = 0;
     %leader will receive comm_size-1 signals
-    updated_vector = cell(comm_size-1); 
+    updated_vector = cell(1,comm_size-1); 
     
 %% Instead of using for loops, use counters to indicate how many processes have
 %% completed their tasks.
@@ -318,7 +318,7 @@ scalar_v = sqrt(scalar_v);
              [message_ranks, message_tags] = MPI_Probe(dest, leader_tag, comm );
              if ~isempty(message_ranks)
                  updated_vector(recvCounter) = cellstr(MPI_Recv(dest, leader_tag, comm));
-                 str = (['Received data packet number ' recvCounter]);
+                 str = (['Received data packet number ' num2str(recvCounter)]);
                  disp(str);fwrite(fbug,str);
                  recvCounter = recvCounter - 1;
              end

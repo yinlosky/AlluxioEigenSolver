@@ -84,16 +84,18 @@ leader = 0;
 % Create a unique tag id for this message (very important in Matlab MPI!).
 output_tag = 10000; %% this tag is used as a synchronization message.
 
-output_tag_second = 40000;
+output_tag_second = 20000;
 
-output_tag_three = 50000;
+output_tag_three = 30000;
 
-
+output_tag_four = 40000;
 
 %% continue tag;
-onetime_saxv_tag = 20000;
+onetime_saxv_tag = 50000;
 
-updateq_tag = 30000;
+updateq_tag = 60000;
+
+save_v_i_plus_one_tag = 70000;
 
 con = 1;
 
@@ -324,28 +326,92 @@ scalar_v = sqrt(scalar_v);
               done =1;
           end
     end %% end of leader process while
-    output
+   
     leader_total_time = toc(leader_begin_time);
     str = (['Leader process for updateQ runs: ' num2str(leader_total_time) sprintf('\n')]);
     disp(str); fwrite(fbug, str);
     
+    str = ('Now saving the updatedQ to global file ...');
+    this = tic;
+    disp(str); fwrite(fbug, str);
+    result_string = cellstr(updated_vector);
     
+    inputFilePathPre = '/mytest';
+	inputFilePath=[inputFilePathPre '/' num2str(it+1) 'v_' num2str(NumOfNodes) 'nodes_' num2str(NumOfProcessors) 'proc_global'];
+    inputobject_v = AlluxioWriteRead(['alluxio://n117.bluewave.umbc.edu:19998|' inputFilePath '_v' '|CACHE|CACHE_THROUGH']);
+    
+    javaMethod('writeFile',inputobject_v,result_string);
+  
+	writeTime = toc(this);
+	str = (['takes: ' num2str(writeTime) 's' sprintf('\n')]);
+	disp(str); fwrite(fbug,str);
+    
+    %%********************* now asking all working processes to copy the
+    %%new v_i_plus_one vector to local machine
+     str = ['Now broadcasting copy vector: save_v_i_plus_one_tag to everyone ...' sprintf('\n')];disp(str); fwrite(fbug,str);
+     this = tic;
+     numCounter = comm_size - 1;
+     done = 0;
+        while ~done
+          % leader receives all the results.
+          if numCounter > leader
+              %% dest is who sent this message
+              send_tag = save_v_i_plus_one_tag + numCounter;
+                 MPI_Send(numCounter, send_tag, comm, con);
+                 numCounter = numCounter - 1;
+          else % recvCounter  == leader
+              done =1;
+          end
+    end 
+     %%%%%%%%%%%%%%%%%%%%%  
+     bcast_time = toc(this);
+     str= ['Broadcasting costs: ' num2str(bcast_time) 's' sprintf('\n')];
+     disp(str); fwrite(fbug,str);
+ 
+    leader_begin_time = tic;
+    done = 0;
+    %leader will receive comm_size-1 signals
+    output = zeros(1,comm_size-1); 
+    
+%% Instead of using for loops, use counters to indicate how many processes have
+%% completed their tasks.
+%% we are doing backwards because in MPI_RUN the highest rank process
+%% will be spawned first and it is more likely to complete earlier
+    recvCounter = comm_size-1;
+    str = ['Waiting for all processes: copy global v_i+1 to finish ...' sprintf('\n')];
+    disp(str); fwrite(fbug,str);
+    while ~done
+          % leader receives all the results.
+          if recvCounter > leader
+              %% dest is who sent this message
+              dest = recvCounter;
+              leader_tag = output_tag_four + recvCounter;
+             [message_ranks, message_tags] = MPI_Probe( dest, leader_tag, comm );
+             if ~isempty(message_ranks)
+                 output(:,recvCounter) = MPI_Recv(dest, leader_tag, comm);
+                 str = (['Received data packet number ' num2str(recvCounter)]);
+                 disp(str);fwrite(fbug,str);
+                 recvCounter = recvCounter - 1;
+             end
+          else % recvCounter  == leader
+              done =1;
+          end
+    end %% end of leader process while
+    leader_total_time = toc(leader_begin_time);
+    str = (['Leader process for copyV_i+1 runs: ' num2str(leader_total_time) sprintf('\n')]);
+    disp(str); fwrite(fbug, str);
+    
+    %%%%**************************  All working processes done copying
+    %%%%v_i_plus_one to local machine.
+    
+   
 else %% working processes
-%%%%%%%%%%
-%%%%%%%%%%
-%%%%%%%%%%
- %%%%%%%%%%%%%%%%%%%%%%
-
-
-
 
 %% path to where the Alluxio files are stored
 filePathPre = '/mytest';
+i = my_rank+1;  %% my_rank starts from 0 to comm_size-1; 
 
-
- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
- i = my_rank+1;  %% my_rank starts from 0 to comm_size-1; 
-	    fstat = fopen(['benchmark/v3_' num2str(i) '_proc_MatrixVector.txt'],'w+');
+fstat = fopen(['benchmark/v3_' num2str(i) '_proc_MatrixVector.txt'],'w+');
                %% rank 0 is leader process; i ranges from 1 to comm_size-1;
         if(i==2)
         start_col = 1;
@@ -381,10 +447,10 @@ filePathPre = '/mytest';
 		inputFilePathPre = '/mytest';
 		inputFilePath=[inputFilePathPre '/' num2str(it) 'v_' num2str(NumOfNodes) 'nodes_' num2str(NumOfProcessors) 'proc_' my_machine];
 		
-		inputobject_r = AlluxioWriteRead(['alluxio://n117.bluewave.umbc.edu:19998|' inputFilePath '_r' '|CACHE|CACHE_THROUGH']);
+		%inputobject_r = AlluxioWriteRead(['alluxio://n117.bluewave.umbc.edu:19998|' inputFilePath '_r' '|CACHE|CACHE_THROUGH']);
        	inputobject_v = AlluxioWriteRead(['alluxio://n117.bluewave.umbc.edu:19998|' inputFilePath '_v' '|CACHE|CACHE_THROUGH']);
 		this = tic;
-		vi_row = javaMethod('readFile',inputobject_r);
+		%vi_row = javaMethod('readFile',inputobject_r);
 		vi_val = javaMethod('readFile',inputobject_v);
 		readv=toc(this);
 		str = ['Read vector takes: ' num2str(readv) 's' sprintf('\n')];
@@ -393,8 +459,11 @@ filePathPre = '/mytest';
 		str = ['Now constructing the vector'];
 		this = tic;
 		disp(str); fwrite(fstat, str);
-		my_row = char(vi_row); my_val = char(vi_val);
-		my_row = sscanf(my_row, '%d'); my_val = sscanf(my_val,'%f'); 	
+		%my_row = char(vi_row); 
+        my_val = char(vi_val);
+		%my_row = sscanf(my_row, '%d'); 
+        my_val = sscanf(my_val,'%f');
+        my_row = sprintf('%d,',start_col:end_col);
 		myVector = sparse(my_row, 1, my_val, NumOfNodes, 1);
 		transV = toc(this);	
 		str = ['Construction of vector done! It takes ' num2str(transV) 's' sprintf('\n')];
@@ -466,13 +535,9 @@ filePathPre = '/mytest';
         %% Now calculating parallel dot vi*v, we already have part of v calculated locally and we have the whole vi. 
         %% grab part of vi according to the cut table and grab corresponding result of v and do the math parallel_dot_p1
         %% part of v below:
-        str = 'Now start calculating vi * v';
-        disp(str); fwrite(fstat,str);
-       % str_r = sprintf('%d,',start_col:end_col);
-	   % str_v = sprintf('%.15f,',full(myresult));
-          v_val = full(myresult);
-         % p_v_val = v_val(start_col:end_col);
-            
+        v_val = full(myresult);
+        str = (['Now start calculating vi * v' sprintf('\n')]);   disp(str); fwrite(fstat,str);
+
         %% total vi is below: 
         myVi = full(myVector);
         %% construct part of vi from start_col:end_col;
@@ -488,18 +553,12 @@ filePathPre = '/mytest';
 		disp(str);fwrite(fstat,str);
         put(dot_temp,newAssoc);
         
-     
-        
-        
-        %%%%%%%%%%%%
-             
-          %fclose(fstat);
-         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
          
-         %% done with matrix* vector
+         %% **************** done with matrix* vector  ******************
          leader_tag = output_tag + my_rank;
          MPI_Send(leader, leader_tag, comm,my_rank);
-         %%%
+         %%% ******************************************************
            
          
          
@@ -640,37 +699,58 @@ filePathPre = '/mytest';
      %vector_i_plus_one_row = sprintf('%d,',start_col:end_col);
      vector_i_plus_one_val = sprintf('%.15f,',vector_i_plus_one);
      
-     %{
-     %% save to partial vi+1 table
-    outputFilePathPre = '/mytest';
-	outputfilePath = [outputFilePathPre '/' num2str(it+1) 'v_' num2str(NumOfNodes) 'nodes_' num2str(NumOfProcessors) 'proc_' num2str(i) '_id'];
-	
-    %myobject_r = AlluxioWriteRead(['alluxio://n117.bluewave.umbc.edu:19998|' outputfilePath '_r' '|CACHE|CACHE_THROUGH']);
-	%myobject_c = AlluxioWriteRead(['alluxio://n117.bluewave.umbc.edu:19998|' filePath '_c' '|CACHE|CACHE_THROUGH']);
-	myobject_v = AlluxioWriteRead(['alluxio://n117.bluewave.umbc.edu:19998|' outputfilePath '_v' '|CACHE|CACHE_THROUGH']);
-	
-    str = (['Now writing partial vi to local machine ... ']);
-	disp(str); fwrite(fstat, str);
-	this = tic;
-    %javaMethod('writeFile',myobject_r,vector_i_plus_one_row);
-	%javaMethod('writeFile',myobject_c,myAssoc_c);
-	javaMethod('writeFile',myobject_v,vector_i_plus_one_val);
-	saveTime = toc(this);
-	str = ([' costs: ' num2str(saveTime) 's' sprintf('\n')]);
-    disp(str); fwrite(fstat, str);
-    %}
+    
     %% Done with update Q
     %% Rather than writing to Filesystem, Try to send it back to leader process and see how it performs.
     
-    str = (['Done with updateQ, sending signal back to leader process ...']);
+    str = (['Done with updateQ, sending signal back to leader process ...' sprintf('\n')]);
 	disp(str); fwrite(fstat, str);
     
     leader_tag = output_tag_three + my_rank;
     MPI_Send(leader, leader_tag, comm,vector_i_plus_one_val);
      
+    str = (['Now waiting for leader to send out copying v_i+1 signal ...' sprintf('\n')]);disp(str); fwrite(fstat, str);
+    send_tag = save_v_i_plus_one_tag + my_rank;
+    con = MPI_Recv(leader, send_tag, comm );
+    str = (['Received the con signal from leader process now saving V_i+1' sprintf('\n')]);disp(str); fwrite(fstat, str);
+ 
+    str = (['Now saving the updatedQ to local machine ...' sprintf('\n')]); disp(str); fwrite(fstat, str);
+   
+    this_total = tic;
     
-%%%%%%%%%%%
-%%%%%%%%%%
+    [idum, my_machine] = system('hostname'); my_machine = strtrim(my_machine); 
+    
+    FilePathPre = '/mytest';
+	inputFilePath=[FilePathPre '/' num2str(it+1) 'v_' num2str(NumOfNodes) 'nodes_' num2str(NumOfProcessors) 'proc_global'];
+    outputFilePath=[FilePathPre '/' num2str(it+1) 'v_' num2str(NumOfNodes) 'nodes_' num2str(NumOfProcessors) 'proc_' my_machine];
+    
+    inputobject_v = AlluxioWriteRead(['alluxio://n117.bluewave.umbc.edu:19998|' inputFilePath '_v' '|CACHE|CACHE_THROUGH']);
+    outputobject_v = AlluxioWriteRead(['alluxio://n117.bluewave.umbc.edu:19998|' outputFilePath '_v' '|CACHE|CACHE_THROUGH']);
+    
+    %% reading file
+    this = tic;
+    v_i_plus_one_val = javaMethod('readFile',inputobject_v);
+    that = toc(this);
+    str=(['Reading from global file costs ' num2str(that) 's' sprintf('\n')]); disp(str); fwrite(fstat, str);
+    
+    %% writing file
+    this = tic;
+    javaMethod('writeFile',outputobject_v, v_i_plus_one_val);
+    that = toc(this);
+    str=(['Writing to local file costs ' num2str(that) 's' sprintf('\n')]); disp(str); fwrite(fstat, str);
+  
+	writeTime = toc(this_total);
+	str = (['It takes: ' num2str(writeTime) 's to save to local machine' sprintf('\n')]);disp(str); fwrite(fstat,str);
+    %****************
+    
+     %% Done with saving v_i+1    
+    str = (['Done with saving v_i+1, sending signal back to leader process ...' sprintf('\n')]);
+	disp(str); fwrite(fstat, str);
+    
+    leader_tag = output_tag_four + my_rank;
+    MPI_Send(leader, leader_tag, comm,my_rank);
+    
+    
          end %% end for all working processes
 
 disp('Success');

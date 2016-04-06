@@ -226,7 +226,7 @@ scalar_v = sqrt(scalar_v);
     
     %% beta p2 done.
     
-    
+    %%%%%%%    UPDATE Q %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %% Now leader process broadcast con flag again so that working processes will update vi
     %% v_i+1 = v/beta
     % Broadcast continue to everyone else.
@@ -544,13 +544,13 @@ filePathPre = '/mytest';
      %%%%
      
      if(~isempty(Val(beta_t(sprintf('%d,',it),'1,'))))
-        beta_it_v = str2num(Val(beta_t(sprintf('%d,',it),'1,')));
-        beta_it_v = 1./beta_it_v;
+        beta_v = str2num(Val(beta_t(sprintf('%d,',it),'1,')));
+        beta_it_v = 1./beta_v;
      else
         beta_it_v = 0;
      end
      
-     str = ([' Beta value is ' num2str(beta_it_v) sprintf('\n')]);
+     str = ([' Beta value is ' num2str(beta_v) sprintf('\n')]);
      disp(str); fwrite(fstat, str);
      
      
@@ -573,9 +573,9 @@ filePathPre = '/mytest';
     str = (['Now writing partial vi to local machine ... ']);
 	disp(str); fwrite(fstat, str);
 	this = tic;
-    javaMethod('writeFile',myobject_r,myAssoc_r);
+    javaMethod('writeFile',myobject_r,vector_i_plus_one_row);
 	%javaMethod('writeFile',myobject_c,myAssoc_c);
-	javaMethod('writeFile',myobject_v,myAssoc_v);
+	javaMethod('writeFile',myobject_v,vector_i_plus_one_val);
 	saveTime = toc(this);
 	str = ([' costs: ' num2str(saveTime) 's' sprintf('\n')]);
     disp(str); fwrite(fstat, str);

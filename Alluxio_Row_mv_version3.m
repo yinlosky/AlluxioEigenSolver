@@ -159,7 +159,8 @@ if(my_rank == leader)
         str = ['Result of alpha[' num2str(it) '] =' num2str(alpha(it)) ' is saved. Now continuing to onetimesaxv ...'];
         disp(str); fwrite(fbug,str);
     
-    %fclose(fbug);
+   %{
+        
     %%%%%%%%%% Done with Matrix * vector and calculating the alpha %%%%%%%%%%%%
  
    
@@ -233,10 +234,10 @@ scalar_v = sqrt(scalar_v);
     %% beta p2 done.
     
     %%%%%%%    UPDATE Q %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    %% Now leader process broadcast con flag again so that working processes will update vi
+    %% Now leader process broadcast updateQ flag again so that working processes will update vi
     %% v_i+1 = v/beta
     % Broadcast continue to everyone else.
-    MPI_Bcast(leader, updateq_tag, comm, con );
+    MPI_Bcast(leader, updateq_tag, comm, con);
     
   
     %%%%%%% start next step in the algorithm
@@ -273,7 +274,7 @@ scalar_v = sqrt(scalar_v);
     str = (['Leader process for updateQ runs: ' num2str(leader_total_time) sprintf('\n')]);
     disp(str); fwrite(fbug, str);
     
-    
+    %}
 else %% working processes
 %%%%%%%%%%
 %%%%%%%%%%
@@ -444,10 +445,11 @@ filePathPre = '/mytest';
          MPI_Send(leader, leader_tag, comm,my_rank);
          %%%
            
-         %%% now start next parallel 
+         %{
+         
          %%
          %% working process receive the leader's broadcast msg
-         str = (['Waiting for leader ... ' sprintf('\n')]);
+         str = (['Waiting for leader to continue to onetime_saxv... ' sprintf('\n')]);
          disp(str); fwrite(fstat, str);
          con = MPI_Recv(leader, con_tag, comm );
          str = (['Received the con signal from leader process now calculating onetime_saxv']);
@@ -463,7 +465,7 @@ filePathPre = '/mytest';
 		 if (isempty(alphaV))
         	alpha_value = 0;
          else
-        	alpha_value = str2num(alphaV)
+        	alpha_value = str2num(alphaV);
          end
          
          
@@ -536,17 +538,17 @@ filePathPre = '/mytest';
      MPI_Send(leader, leader_tag, comm,my_rank);
      
      %% Waiting for leader to send signal to continue to updateQ
-     str = (['Waiting for leader ... ' sprintf('\n')]);
+     str = (['Waiting for leader to continue update V... ' sprintf('\n')]);
      disp(str); fwrite(fstat, str);
      con = MPI_Recv(leader, updateq_tag, comm );
-     str = (['Received the con signal from leader process now updating V']);
+     str = (['Received the con signal from leader process now updating V' sprintf('\n')]);
      disp(str); fwrite(fstat, str);
      
      %% v_i+1 = v/beta
      %% we already have resultVector as part of v
      
      %% get beta:
-     str = ('Getting beta value from Accumulo ...');
+     str = (['Getting beta value from Accumulo ...' sprintf('\n')]);
      disp(str); fwrite(fstat, str);
      %%%%
      
@@ -570,7 +572,7 @@ filePathPre = '/mytest';
      
      
      %% save to partial vi+1 table
-    outputFilePathPre = '/mytest'
+    outputFilePathPre = '/mytest';
 	outputfilePath = [outputFilePathPre '/' num2str(it+1) 'v_' num2str(NumOfNodes) 'nodes_' num2str(Np) 'proc_' num2str(i) '_id'];
 	
     myobject_r = AlluxioWriteRead(['alluxio://n117.bluewave.umbc.edu:19998|' outputfilePath '_r' '|CACHE|CACHE_THROUGH']);
@@ -594,7 +596,7 @@ filePathPre = '/mytest';
     leader_tag = output_tag_three + my_rank;
     MPI_Send(leader, leader_tag, comm,my_rank);
      
-    
+    %}
 %%%%%%%%%%%
 %%%%%%%%%%
          end %% end for all working processes

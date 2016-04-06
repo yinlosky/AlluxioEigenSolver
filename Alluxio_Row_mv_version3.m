@@ -398,7 +398,8 @@ filePathPre = '/mytest';
 		%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 		%% below writing result back to Alluxio 
 		%% [outputFilePathPre '/vpath' num2str(it) '_' num2str(NumOfNodes) 'nodes_' num3str(NumOfProcessors) 'proc_' myprocessid '_id' {_r _v} ];
-		outputFilePathPre = '/test';
+		%{
+        outputFilePathPre = '/test';
 		outputPath = [outputFilePathPre '/vpath' num2str(it) '_' num2str(NumOfNodes) 'nodes_' num2str(NumOfProcessors) 'proc_' num2str(i) '_id'];
 		%%%%
 		%% create the object to write to Alluxio
@@ -416,7 +417,7 @@ filePathPre = '/mytest';
 		disp(str); fwrite(fstat,str);
         fwrite(fstat, ['Done with writing back mat*vec result back to Alluxio' ]);
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        
+        %}
         
 		
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

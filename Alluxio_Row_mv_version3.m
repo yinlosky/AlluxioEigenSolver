@@ -633,9 +633,11 @@ filePathPre = '/mytest';
      
      %% output should be partial vi table and also make a global copy 
      %% each machine has a local copy as well.
+     %% we can ignore the row because as long as we know the cut, the row is start_col:end_col
+     
      vector_i_plus_one = resultVector .* beta_it_v;
      
-     vector_i_plus_one_row = sprintf('%d,',start_col:end_col);
+     %vector_i_plus_one_row = sprintf('%d,',start_col:end_col);
      vector_i_plus_one_val = sprintf('%.15f,',vector_i_plus_one);
      
      
@@ -643,14 +645,14 @@ filePathPre = '/mytest';
     outputFilePathPre = '/mytest';
 	outputfilePath = [outputFilePathPre '/' num2str(it+1) 'v_' num2str(NumOfNodes) 'nodes_' num2str(NumOfProcessors) 'proc_' num2str(i) '_id'];
 	
-    myobject_r = AlluxioWriteRead(['alluxio://n117.bluewave.umbc.edu:19998|' outputfilePath '_r' '|CACHE|CACHE_THROUGH']);
+    %myobject_r = AlluxioWriteRead(['alluxio://n117.bluewave.umbc.edu:19998|' outputfilePath '_r' '|CACHE|CACHE_THROUGH']);
 	%myobject_c = AlluxioWriteRead(['alluxio://n117.bluewave.umbc.edu:19998|' filePath '_c' '|CACHE|CACHE_THROUGH']);
 	myobject_v = AlluxioWriteRead(['alluxio://n117.bluewave.umbc.edu:19998|' outputfilePath '_v' '|CACHE|CACHE_THROUGH']);
 	
     str = (['Now writing partial vi to local machine ... ']);
 	disp(str); fwrite(fstat, str);
 	this = tic;
-    javaMethod('writeFile',myobject_r,vector_i_plus_one_row);
+    %javaMethod('writeFile',myobject_r,vector_i_plus_one_row);
 	%javaMethod('writeFile',myobject_c,myAssoc_c);
 	javaMethod('writeFile',myobject_v,vector_i_plus_one_val);
 	saveTime = toc(this);

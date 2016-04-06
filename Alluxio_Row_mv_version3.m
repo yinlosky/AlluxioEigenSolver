@@ -342,11 +342,12 @@ scalar_v = sqrt(scalar_v);
     
 
     javaMethod('writeFile',inputobject_v, result_string);
-  
+    
 	writeTime = toc(this);
 	str = (['takes: ' num2str(writeTime) 's' sprintf('\n')]);
 	disp(str); fwrite(fbug,str);
     
+    pause(2.0);
     %%********************* now asking all working processes to copy the
     %%new v_i_plus_one vector to local machine
      str = ['Now broadcasting copy vector: save_v_i_plus_one_tag to everyone ...' sprintf('\n')];disp(str); fwrite(fbug,str);

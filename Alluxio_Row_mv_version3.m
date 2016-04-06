@@ -87,6 +87,8 @@ output_tag = 10000; %% this tag is used as a synchronization message.
 %% continue tag;
 con_tag = 20000;
 
+updateq_tag = 30000;
+
 con = 1;
 
 fbug = fopen(['benchmark/v3_' num2str(my_rank+1) '_proc_MatrixVector.txt'],'w+');
@@ -230,7 +232,7 @@ scalar_v = sqrt(scalar_v);
     %% Now leader process broadcast con flag again so that working processes will update vi
     %% v_i+1 = v/beta
     % Broadcast continue to everyone else.
-    MPI_Bcast(leader, con_tag, comm, con );
+    MPI_Bcast(leader, updateq_tag, comm, con );
     
   
     %%%%%%% start next step in the algorithm
@@ -531,7 +533,7 @@ filePathPre = '/mytest';
      %% Waiting for leader to send signal to continue to updateQ
      str = (['Waiting for leader ... ' sprintf('\n')]);
      disp(str); fwrite(fstat, str);
-     con = MPI_Recv(leader, con_tag, comm );
+     con = MPI_Recv(leader, updateq_tag, comm );
      str = (['Received the con signal from leader process now updating V']);
      disp(str); fwrite(fstat, str);
      

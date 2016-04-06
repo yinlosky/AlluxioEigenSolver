@@ -88,6 +88,8 @@ output_tag_second = 40000;
 
 output_tag_three = 50000;
 
+bcast_tag = 60000;
+
 %% continue tag;
 con_tag = 20000;
 
@@ -174,7 +176,24 @@ if(my_rank == leader)
         this = tic;
        %MPI_Bcast( leader, coefs_tag, comm, coefs ); 
     %coefs = MPI_Recv( leader, coefs_tag, comm );
-       MPI_Bcast(leader, con_tag, comm, con ); %% MPI_Recv(leader, con_tag, comm );
+     %  MPI_Bcast(leader, con_tag, comm, con ); %% MPI_Recv(leader, con_tag, comm );
+       
+     %%%%%%%%%%%%%%%%%%%%%
+     numCounter = comm_size - 1;
+     done = 0;
+        while ~done
+          % leader receives all the results.
+          if numCounter > leader
+              %% dest is who sent this message
+              send_tag = bcast_tag + numCounter;
+                 MPI_Send(numCounter, send_tag, comm, con);
+                 numCounter = numCounter - 1;
+             
+          else % recvCounter  == leader
+              done =1;
+          end
+    end 
+     %%%%%%%%%%%%%%%%%%%%%  
      bcast_time = toc(this);
      str= ['Broadcasting costs: ' num2str(bcast_time) 's' sprintf('\n')];
      disp(str); fwrite(fbug,str);
@@ -465,8 +484,8 @@ filePathPre = '/mytest';
          %% working process receive the leader's broadcast msg
          str = (['Waiting for leader to continue to onetime_saxv... ' sprintf('\n')]);
          disp(str); fwrite(fstat, str);
-         
-         con = MPI_Recv(leader, con_tag, comm );  %%% broadcast con_tag
+          
+         con = MPI_Recv(leader, send_tag, comm );  %%% broadcast con_tag
          
          str = (['Received the con signal from leader process now calculating onetime_saxv' sprintf('\n')]);
          disp(str); fwrite(fstat, str);
@@ -598,7 +617,7 @@ filePathPre = '/mytest';
      
      %% save to partial vi+1 table
     outputFilePathPre = '/mytest';
-	outputfilePath = [outputFilePathPre '/' num2str(it+1) 'v_' num2str(NumOfNodes) 'nodes_' num2str(Np) 'proc_' num2str(i) '_id'];
+	outputfilePath = [outputFilePathPre '/' num2str(it+1) 'v_' num2str(NumOfNodes) 'nodes_' num2str(NumOfProcessors) 'proc_' num2str(i) '_id'];
 	
     myobject_r = AlluxioWriteRead(['alluxio://n117.bluewave.umbc.edu:19998|' outputfilePath '_r' '|CACHE|CACHE_THROUGH']);
 	%myobject_c = AlluxioWriteRead(['alluxio://n117.bluewave.umbc.edu:19998|' filePath '_c' '|CACHE|CACHE_THROUGH']);

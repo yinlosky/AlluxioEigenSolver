@@ -156,10 +156,10 @@ if(my_rank == leader)
         delete(dot_temp);
      alpha_temp_Assoc = Assoc(sprintf('%d,',it),'1,',sprintf('%.15f,',alpha(it)));
         put(alpha_t, alpha_temp_Assoc);
-        str = ['Result of alpha[' num2str(it) '] =' num2str(alpha(it)) ' is saved. Now continuing to onetimesaxv ...'];
+        str = ['Result of alpha[' num2str(it) '] =' num2str(alpha(it)) ' is saved.' sprintf('\n')];
         disp(str); fwrite(fbug,str);
     
-   %{
+   
         
     %%%%%%%%%% Done with Matrix * vector and calculating the alpha %%%%%%%%%%%%
  
@@ -168,9 +168,13 @@ if(my_rank == leader)
     %1. leader broadcast a signal to proceed with vi*v for all working
     %processes
     
-     % Broadcast coefficients to everyone else.
+     % Broadcast coefficients to everyone else.   Now continuing to onetimesaxv ...
+     str = ['Now broadcasting onetimesaxv con_tag to everyone ...' sprintf('\n')];
+        disp(str); fwrite(fbug,str);
+        this = tic;
     MPI_Bcast(leader, con_tag, comm, con );
-    
+     bcast_time = toc(this);
+     str= ['Broadcasting costs: ' num2str(bcast_time) 's' sprintf('\n')];
    % con = MPI_Recv(leader, con_tag, comm );
     %%%%%%% start next step in the algorithm
     leader_begin_time = tic;
@@ -184,6 +188,8 @@ if(my_rank == leader)
 %% we are doing backwards because in MPI_RUN the highest rank process
 %% will be spawned first and it is more likely to complete earlier
     recvCounter = comm_size-1;
+    str = ['Waiting for all processes: onetime_saxv to finish ...' sprintf('\n')];
+    disp(str); fwrite(fbug,str);
     while ~done
           % leader receives all the results.
           if recvCounter > leader
@@ -230,6 +236,7 @@ scalar_v = sqrt(scalar_v);
 	delete(norm_v_temp);
 	disp(['beta[' num2str(it) '] = ' num2str(bet(it))]);
     
+    %{
     
     %% beta p2 done.
     
@@ -445,7 +452,7 @@ filePathPre = '/mytest';
          MPI_Send(leader, leader_tag, comm,my_rank);
          %%%
            
-         %{
+         
          
          %%
          %% working process receive the leader's broadcast msg
@@ -533,10 +540,14 @@ filePathPre = '/mytest';
          norm_result_vector = norm(resultVector)^2;
          put(norm_v_temp,Assoc(sprintf('%d,',i-1),'1,',sprintf('%.15f,',norm_result_vector)));
      
+         
+         
      %% Done with onetime_saxv send signal back to leader process
      leader_tag = output_tag_second + my_rank;
      MPI_Send(leader, leader_tag, comm,my_rank);
-     
+     str =(['Done with onetime_saxv, sending signal back to leader ...' sprintf('\n')]);
+     disp(str); fwrite(fstat, str);
+     %{
      %% Waiting for leader to send signal to continue to updateQ
      str = (['Waiting for leader to continue update V... ' sprintf('\n')]);
      disp(str); fwrite(fstat, str);

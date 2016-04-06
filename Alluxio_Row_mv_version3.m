@@ -334,7 +334,7 @@ scalar_v = sqrt(scalar_v);
     str = ('Now saving the updatedQ to global file ...');
     this = tic;
     disp(str); fwrite(fbug, str);
-    result_string = strjoin(updated_vector);
+    result_string = [updated_vector{1} sprintf('%s', updated_vector{2:end})];
     
     inputFilePathPre = '/mytest';
 	inputFilePath=[inputFilePathPre '/' num2str(it+1) 'v_' num2str(NumOfNodes) 'nodes_' num2str(NumOfProcessors) 'proc_global'];

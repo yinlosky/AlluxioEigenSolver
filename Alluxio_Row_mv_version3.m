@@ -318,8 +318,9 @@ scalar_v = sqrt(scalar_v);
              [message_ranks, message_tags] = MPI_Probe(dest, leader_tag, comm );
              if ~isempty(message_ranks)
                  str = (['Received data packet number ' num2str(recvCounter)]); disp(str);fwrite(fbug,str);
-                 disp(['class of MPI_recv package is: ' class(MPI_Recv(dest, leader_tag, comm))]);
-                 updated_vector(recvCounter) = cellstr(MPI_Recv(dest, leader_tag, comm))
+                 %disp(['class of MPI_recv package is: ' class(MPI_Recv(dest, leader_tag, comm))]);
+                 disp(MPI_Recv(dest, leader_tag, comm));
+                 %updated_vector(recvCounter) = cellstr(MPI_Recv(dest, leader_tag, comm))
                  recvCounter = recvCounter - 1;
              end
           else % recvCounter  == leader
@@ -701,7 +702,7 @@ fstat = fopen(['benchmark/v3_' num2str(i) '_proc_MatrixVector.txt'],'w+');
      vector_i_plus_one = resultVector .* beta_it_v;
      
      %vector_i_plus_one_row = sprintf('%d,',start_col:end_col);
-     vector_i_plus_one_val = sprintf('%.15f,',vector_i_plus_one);
+     vector_i_plus_one_val = sprintf('%.15f,',vector_i_plus_one)
      
     
     %% Done with update Q

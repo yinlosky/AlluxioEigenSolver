@@ -436,7 +436,8 @@ fstat = fopen(['benchmark/v3_' num2str(i) '_proc_MatrixVector.txt'],'w+');
         
         vectorLength = end_col - start_col + 1;
 	%% version 2: reading vector from Alluxio, each process should know which machine it belongs to.
-
+     
+    
                [idum, my_machine] = system('hostname'); 
                my_machine = strtrim(my_machine);
 		 str = ['My rank id is: ' num2str(i-1) 'and My machine is: ' my_machine sprintf('\n')];
@@ -447,8 +448,9 @@ fstat = fopen(['benchmark/v3_' num2str(i) '_proc_MatrixVector.txt'],'w+');
 		disp(str); fwrite(fstat, str);
 		
 		inputFilePathPre = '/mytest';
-		inputFilePath=[inputFilePathPre '/' num2str(it) 'v_' num2str(NumOfNodes) 'nodes_' num2str(NumOfProcessors) 'proc_' my_machine];
-		
+		%inputFilePath=[inputFilePathPre '/' num2str(it) 'v_' num2str(NumOfNodes) 'nodes_' num2str(NumOfProcessors) 'proc_' my_machine];
+		inputFilePath=[inputFilePathPre '/' num2str(it) 'v_' num2str(NumOfNodes) 'nodes_' num2str(NumOfProcessors) 'proc_' num2str(i) '_id'];
+        
 		%inputobject_r = AlluxioWriteRead(['alluxio://n117.bluewave.umbc.edu:19998|' inputFilePath '_r' '|CACHE|CACHE_THROUGH']);
        	inputobject_v = AlluxioWriteRead(['alluxio://n117.bluewave.umbc.edu:19998|' inputFilePath '_v' '|CACHE|CACHE_THROUGH']);
 		this = tic;
@@ -724,7 +726,8 @@ fstat = fopen(['benchmark/v3_' num2str(i) '_proc_MatrixVector.txt'],'w+');
     
     FilePathPre = '/mytest';
 	inputFilePath=[FilePathPre '/' num2str(it+1) 'v_' num2str(NumOfNodes) 'nodes_' num2str(NumOfProcessors) 'proc_global'];
-    outputFilePath=[FilePathPre '/' num2str(it+1) 'v_' num2str(NumOfNodes) 'nodes_' num2str(NumOfProcessors) 'proc_' my_machine];
+    %outputFilePath=[FilePathPre '/' num2str(it+1) 'v_' num2str(NumOfNodes) 'nodes_' num2str(NumOfProcessors) 'proc_' my_machine];
+    outputFilePath=[FilePathPre '/' num2str(it+1) 'v_' num2str(NumOfNodes) 'nodes_' num2str(NumOfProcessors) 'proc_' num2str(i) '_id'];
     
     inputobject_v = AlluxioWriteRead(['alluxio://n117.bluewave.umbc.edu:19998|' inputFilePath '_v' '|CACHE|CACHE_THROUGH']);
     outputobject_v = AlluxioWriteRead(['alluxio://n117.bluewave.umbc.edu:19998|' outputFilePath '_v' '|CACHE|CACHE_THROUGH']);

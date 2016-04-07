@@ -317,6 +317,7 @@ scalar_v = sqrt(scalar_v);
               leader_tag = output_tag_three + recvCounter;
              [message_ranks, message_tags] = MPI_Probe(dest, leader_tag, comm );
              if ~isempty(message_ranks)
+                 disp(['class of MPI_recv package is: ' class(MPI_Recv(dest, leader_tag, comm))]);
                  updated_vector(recvCounter) = cellstr(MPI_Recv(dest, leader_tag, comm));
                  str = (['Received data packet number ' num2str(recvCounter)]);
                  disp(str);fwrite(fbug,str);

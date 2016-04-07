@@ -270,7 +270,7 @@ for it = 1:max_iteration
         put(cur_it,it_assoc); %% globalize the current iteration so all processors will be able to read the right lz_q{it}
 
 	%%%%%%%%%%%%%%%%%%%%%% saving vi to global file because matrix * vi needs the whole vi %%%%%%%%%%%%%%%%%%
-
+   %{
 	%% Only do it once when it == 1 because in the end we update the result of vi based on local results
 	if (it == 1) 
 	disp('Now saving vector to the global alluxio file');
@@ -300,7 +300,7 @@ for it = 1:max_iteration
 	str = (['Saving partial vector i: '  num2str(savePVI) 's' sprintf('\n')]);
 	disp(str); fwrite(fstat, str);
 	end
-	
+	%}
         disp(['computing v=Aq ' num2str(it) ' ...']);
 	temp = DB('mv_temp'); delete(temp);temp = DB('mv_temp');  %% remove the temp table from previous operation for paralell_mv_p1.m
   if(TFS == 1)
@@ -310,11 +310,11 @@ for it = 1:max_iteration
         %% eval(pRUN('Alluxio_Row_mv',NumOfProcessors,machines));
         %% Version 2: when vector saved in Alluxio
 	%system(['alluxio fs rmr /mytest/vpath' num2str(it) '*']);
-        eval(pRUN('Alluxio_Row_mv_version2',NumOfProcessors,machines));
+        eval(pRUN('Alluxio_Row_mv_version3',NumOfProcessors,machines));
         that = toc(this);
         fstat = fopen(fname,'a+');
         disp(['Iteration ' num2str(it) ' Alluxio_Row_mv_version2 takes: '  num2str(that)]);
-        fwrite(fstat,['Iteration ' num2str(it) ' Alluxio_Row_mv_version2 takes: '  num2str(that) sprintf('\n')]);
+        fwrite(fstat,['Iteration ' num2str(it) ' Alluxio_Row_mv_version3 takes: '  num2str(that) sprintf('\n')]);
   else
         disp(['Running the local disk version of matrix*vector']);
          this = tic;
@@ -323,170 +323,6 @@ for it = 1:max_iteration
         disp(['Iteration ' num2str(it) ' LHD_Row_mv takes: '  num2str(that)]);
         fwrite(fstat,['Iteration ' num2str(it) ' LHD_Row_mv takes: '  num2str(that) sprintf('\n')]);
         end
-
-
-        disp(['Result of v = Aq ' num2str(it) ' is saved in table ' num2str(NumOfNodes) 'lz_vpath']);
-
-    
-    %%%%%%%%%%%%%  matrix * vector done! ***************************************   
-
-	%% alpha(it) = dotproduct(aqnpath,q_path{it}, NumOfNodes, NumOfMachines);
-	%% dotproduct should save the output in table 'dot_output' ('1,','1,'), also result could be read from dot_product;
-	%% the input for lz_vi is  [outputFilePathPre '/' num2str(it) 'v_' num2str(NumOfNodes) 'nodes_' num3str(NumOfProcessors) 'proc_' myprocessid '_id']; 
-
-	%% alpha(it) will read from the dot_output table.
-
-    % num2str(NumOfNodes)
- 
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% vi * v begin **********************************************
-    %%  Begin Version 2
-	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-	
-	disp('Now Prepare for vi*v storing the elemetns into the tfs');
-	disp('Removing existing file in tfs if exists');
-	%% lz_vpath is located as /mytest/1048576lz_vpath_global
-	system(['alluxio fs rmr /mytest/' num2str(NumOfNodes) 'lz_vpath*']);
-	
-	str = ['Now saving lz_vpath to global file ... ' sprintf('\n')];
-	disp(str); fwrite(fstat, str);
-	this = tic;
-	saveVpathToGTFS();  
-	saveVtime = toc(this);
-	
-	str = ['Saving lz_vpath to global file takes: ' num2str(saveVtime) 's' sprintf('\n')];
-	disp(str); fwrite(fstat, str);
-	
-	str = ['Saving lz_vpath to local machines ...' sprintf('\n')];
-	disp(str); fwrite(fstat, str);
-	this = tic;
-	eval(pRUN('saveVpathToTFS', NumOfMachines,machines));
-	saveLocalV = toc(this);
-	str = ['Saving lz_vpath to local machines takes ' num2str(saveLocalV) 's' sprintf('\n')];
-	disp(str); fwrite(fstat, str);
-
-	disp(['Computing dotproduct of vi * v ... and saving the result in alpha(' num2str(it) ')']);
-
-	dot_total = tic;
-        parallel_dotproduct_p1_temp = DB('dot_temp');
-        this = tic;
-        eval(pRUN('parallel_dotproduct_p1_version2',NumOfProcessors,machines));
-	that = toc(this);
-	
-        str = (['p1 costs ' num2str(that) 's' sprintf('\n')]);
-        disp(str); fwrite(fstat,str);
-	
-	this = tic;
-        alpha(it) = parallel_dotproduct_p2();
-        that = toc(this);
-	
-	str = (['p2 costs ' num2str(that) 's' sprintf('\n')]);
-        disp(str); fwrite(fstat,str);		
-
-	dot_time = toc(dot_total);
-        disp(['Iteration ' num2str(it) ' Calculating alpha takes: '  num2str(dot_time)]);
-        fwrite(fstat,['Iteration ' num2str(it) ' Calculating alpha takes: '  num2str(dot_time) sprintf('\n')]);
-        delete(parallel_dotproduct_p1_temp);
-        disp('Saving alpha to alpha_t');
-        alpha_temp_Assoc = Assoc(sprintf('%d,',it),'1,',sprintf('%.15f,',alpha(it)));
-        put(alpha_t, alpha_temp_Assoc);
-        disp(['Result of alpha[' num2str(it) '] =' num2str(alpha(it)) ' is saved.']);
-
-		
-%%	save vi vector to Global file       
-%%	saveViToGTFS()
-%%	saveViToTFS()
-
-%%      save lz_vpath to Global file. first need remove the previous one 
-%% 	remove_previous_lz_vpath
-%%	saveVToGTFS()
-%% 	saveVToTFS()
-%%	
-
-%%      parallel_dotproduct_p1_version2()
-%%	parallel_dotproduct_p2_version2() %% should be the same as version 1. 
-	
-	%%%%%%%%%
-	%% Below is 1st version of vi * v
-	%{
-	disp(['Computing dotproduct of vi * v ... and saving the result in alpha(' num2str(it) ')']);
-	dot_time = tic;
-	parallel_dotproduct_p1_temp = DB('dot_temp');
-	this = tic;
-	eval(pRUN('parallel_dotproduct_p1',NumOfProcessors,machines));
-	that = toc(this);
-	str = (['p1 costs ' num2str(that) 's' sprintf('\n')]);
-	disp(str); fwrite(fstat,str);
-	
-	this = tic;
-	alpha(it) = parallel_dotproduct_p2();
-	that = toc(this);
-	str = (['p2 costs ' num2str(that) 's' sprintf('\n'));
-	disp(str); fwrite(fstat,str);
-	
-	dot_total = toc(dot_time);
-	disp(['Iteration ' num2str(it) ' Calculating alpha takes: '  num2str(dot_total)]); 
-	fwrite(fstat,['Iteration ' num2str(it) ' Calculating alpha takes: '  num2str(dot_total) sprintf('\n')]);
-	delete(parallel_dotproduct_p1_temp);
-	disp('Saving alpha to alpha_t');
-	alpha_temp_Assoc = Assoc(sprintf('%d,',it),'1,',sprintf('%.15f,',alpha(it)));
-	put(alpha_t, alpha_temp_Assoc);
-	disp(['Result of alpha[' num2str(it) '] =' num2str(alpha(it)) ' is saved.']);
-	
-       %}
-	%%%%%%%%%%%%%%%%%%% vi * v done! *****************************************************
-
-    %%%%%%%%%%%%%%%%%%% Calculating v = v - beta{i-1}*v{i-1} - alpha{i}*v{i} **********************
-	
-	 this = tic;
-        eval(pRUN('onetime_saxv',NumOfProcessors,machines));
-        that = toc(this);
-        disp(['Iteration ' num2str(it) ' onetime_saxv: '  num2str(that)]);
-        fwrite(fstat,['Iteration ' num2str(it) ' onetime_saxv: '  num2str(that) sprintf('\n')]);
-
-	disp(['v is saved in ' num2str(NumOfNodes) 'lz_vpath table']);
-     
-
-	%%%%%%%%%%%%%%%%%%% Calculating v = v - beta{i-1}*v{i-1} - alpha{i}*v{i}  Done!**********************
-
-	%*************  Calculating beta{i} = ||v|| *************************************************************
-
-    disp(['Computing beta[' num2str(it) ']...']);
-	parallel_lz_norm_v_tempt = DB(['lz_norm_v' num2str(NumOfNodes) '_temp']);
-	this = tic;
-	eval(pRUN('parallel_lz_norm_v_p1',NumOfProcessors,machines));
-	parallel_lz_norm_v_p2; %% scalar_v is written to beta_i in the table beta_t('i,','1,')
-	that = toc(this);
-	disp(['Iteration ' num2str(it) ' beta takes: '  num2str(that)]);
-	fwrite(fstat,['Iteration ' num2str(it) ' beta takes: '  num2str(that) sprintf('\n')]);	
-	bet(it) = scalar_v;
-	delete(parallel_lz_norm_v_tempt);
-	disp(['beta[' num2str(it) '] = ' num2str(bet(it))]);
-		
-	
-
-	if(num_ortho > it - 1)
-	disp('The new vector converged. Finishing ...');
-        compute_eigval(it, alpha, bet, eig_k);
-	save_tridiagonal_matrix(alpha, bet, it);
-	break
-	end 
-	if(bet(it) == 0.0)
-	disp(['beta[' num2str(it) ']=0. finishing']);
-	disp('Saving the tridiagonal matrix');
-	compute_eigval(it, alpha, bet, eig_k);
-	save_tridiagonal_matrix(alpha, bet, it);
-	break
-	end
-	
-	disp(['Computing q' num2str(it+1) '...']);
-
-	%%%%%%%%%%%%%%  Update {NumOfNodes}lz_vpath %%%%%%%%%%%%%%%%%%%%%%
-	this = tic;
-	eval(pRUN('parallel_update_q',NumOfProcessors,machines));
-	that = toc(this);
-	disp(['Iteration ' num2str(it) ' Update Q takes: '  num2str(that)]);
-	fwrite(fstat,['Iteration ' num2str(it) ' Update Q takes: '  num2str(that) sprintf('\n')]);
-	disp(['q_{' num2str(it+1) '} is calcualted']);
 
 oneIterationTime=toc(thistic);
     disp(['Iteration: ' num2str(it) ': ' num2str(oneIterationTime) 's']);

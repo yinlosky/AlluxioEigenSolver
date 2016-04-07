@@ -100,7 +100,7 @@ save_v_i_plus_one_tag = 70000;
 con = 1;
 
 fbug = fopen(['benchmark/v3_' num2str(my_rank+1) '_proc_MatrixVector.txt'],'w+');
-
+fdebug = fopen('benchmark/stat.txt','a+');
 % Leader: just waiting to receive all signals from working processes
 if(my_rank == leader)
     %flag for beding done with all processing  
@@ -135,7 +135,7 @@ if(my_rank == leader)
     output
     leader_total_time = toc(leader_begin_time);
     str = (['Leader process for matrix*vector runs: ' num2str(leader_total_time) sprintf('\n')]);
-    disp(str); fwrite(fbug, str);
+    disp(str); fwrite(fbug, str);fwrite(fdebug, str);
     %fclose(fbug); %% debug for matrix * vector done
     
     %%%
@@ -156,7 +156,7 @@ if(my_rank == leader)
         alpha(it) = it_alpha;
         that = toc(this);
         str = (['Calculation alpha costs ' num2str(that) 's' sprintf('\n')]);
-        disp(str); fwrite(fbug,str);
+        disp(str); fwrite(fbug,str);fwrite(fdebug, str);
         delete(dot_temp);
      alpha_temp_Assoc = Assoc(sprintf('%d,',it),'1,',sprintf('%.15f,',alpha(it)));
         put(alpha_t, alpha_temp_Assoc);
@@ -197,7 +197,7 @@ if(my_rank == leader)
      %%%%%%%%%%%%%%%%%%%%%  
      bcast_time = toc(this);
      str= ['Broadcasting costs: ' num2str(bcast_time) 's' sprintf('\n')];
-     disp(str); fwrite(fbug,str);
+     disp(str); fwrite(fbug,str);fwrite(fdebug, str);
    % con = MPI_Recv(leader, con_tag, comm );
     %%%%%%% start next step in the algorithm
     leader_begin_time = tic;
@@ -235,7 +235,7 @@ if(my_rank == leader)
     output
     leader_total_time = toc(leader_begin_time);
     str = (['Leader process for onetimesaxv runs: ' num2str(leader_total_time) sprintf('\n')]);
-    disp(str); fwrite(fbug, str);
+    disp(str); fwrite(fbug, str);fwrite(fdebug, str);
     %fclose(fbug);
     
     %% leader process calculate beta p2
@@ -256,7 +256,7 @@ scalar_v = sqrt(scalar_v);
     
     that = toc(this);
     str = ['Iteration ' num2str(it) ' beta takes: '  num2str(that) sprintf('\n')];
-	disp(str); fwrite(fbug, str);
+	disp(str); fwrite(fbug, str);fwrite(fdebug, str);
 
 	bet(it) = scalar_v;
 	delete(norm_v_temp);
@@ -294,7 +294,7 @@ scalar_v = sqrt(scalar_v);
         end 
     bcast_time = toc(this);
      str= ['Broadcasting costs: ' num2str(bcast_time) 's' sprintf('\n')];
-     disp(str); fwrite(fbug,str);
+     disp(str); fwrite(fbug,str);fwrite(fdebug, str);
    
   %%%%%%%%%%%%%%%%
     %%%%%%% start next step in the algorithm
@@ -319,13 +319,13 @@ scalar_v = sqrt(scalar_v);
              if ~isempty(message_ranks)
                  str = (['Received data packet number ' num2str(recvCounter)]); disp(str);fwrite(fbug,str);
                  %disp(['class of MPI_recv package is: ' class(MPI_Recv(dest, leader_tag, comm))]);
-                 disp('received from above number: ');
+                % disp('received from above number: ');
                  tempstr = MPI_Recv(dest, leader_tag, comm);
-                 disp('stored in tempstr');
+                % disp('stored in tempstr');
                  tempstr_cell = cellstr(tempstr);
-                 disp('transfered into cellstring');
+                % disp('transfered into cellstring');
                  updated_vector(recvCounter) = tempstr_cell;
-                 disp('stored into updated_vector');
+                % disp('stored into updated_vector');
                  recvCounter = recvCounter - 1;
              end
           else % recvCounter  == leader
@@ -335,7 +335,7 @@ scalar_v = sqrt(scalar_v);
    
     leader_total_time = toc(leader_begin_time);
     str = (['Leader process for updateQ runs: ' num2str(leader_total_time) sprintf('\n')]);
-    disp(str); fwrite(fbug, str);
+    disp(str); fwrite(fbug, str);fwrite(fdebug, str);
     
     str = ('Now saving the updatedQ to global file ...');
     this = tic;
@@ -351,7 +351,7 @@ scalar_v = sqrt(scalar_v);
     
 	writeTime = toc(this);
 	str = (['takes: ' num2str(writeTime) 's' sprintf('\n')]);
-	disp(str); fwrite(fbug,str);
+	disp(str); fwrite(fbug,str);fwrite(fdebug, str);
     
     pause(2.0);
     %%********************* now asking all working processes to copy the
@@ -374,7 +374,7 @@ scalar_v = sqrt(scalar_v);
      %%%%%%%%%%%%%%%%%%%%%  
      bcast_time = toc(this);
      str= ['Broadcasting costs: ' num2str(bcast_time) 's' sprintf('\n')];
-     disp(str); fwrite(fbug,str);
+     disp(str); fwrite(fbug,str);fwrite(fdebug, str);
  
     leader_begin_time = tic;
     done = 0;
@@ -407,7 +407,7 @@ scalar_v = sqrt(scalar_v);
     end %% end of leader process while
     leader_total_time = toc(leader_begin_time);
     str = (['Leader process for copyV_i+1 runs: ' num2str(leader_total_time) sprintf('\n')]);
-    disp(str); fwrite(fbug, str);
+    disp(str); fwrite(fbug, str);fwrite(fdebug, str);
     
     %%%%**************************  All working processes done copying
     %%%%v_i_plus_one to local machine.

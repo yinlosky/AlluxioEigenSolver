@@ -454,8 +454,8 @@ fstat = fopen(['benchmark/v3_' num2str(i) '_proc_MatrixVector.txt'],'w+');
 		disp(str); fwrite(fstat, str);
 		
 		inputFilePathPre = '/mytest';
-		%inputFilePath=[inputFilePathPre '/' num2str(it) 'v_' num2str(NumOfNodes) 'nodes_' num2str(NumOfProcessors) 'proc_' my_machine];
-		inputFilePath=[inputFilePathPre '/' num2str(it) 'v_' num2str(NumOfNodes) 'nodes_' num2str(NumOfProcessors) 'proc_' num2str(i) '_id'];
+		inputFilePath=[inputFilePathPre '/' num2str(it) 'v_' num2str(NumOfNodes) 'nodes_' num2str(NumOfProcessors) 'proc_' my_machine];
+		%inputFilePath=[inputFilePathPre '/' num2str(it) 'v_' num2str(NumOfNodes) 'nodes_' num2str(NumOfProcessors) 'proc_' num2str(i) '_id'];
         
 		%inputobject_r = AlluxioWriteRead(['alluxio://n117.bluewave.umbc.edu:19998|' inputFilePath '_r' '|CACHE|CACHE_THROUGH']);
        	inputobject_v = AlluxioWriteRead(['alluxio://n117.bluewave.umbc.edu:19998|' inputFilePath '_v' '|CACHE|CACHE_THROUGH']);
@@ -725,15 +725,22 @@ fstat = fopen(['benchmark/v3_' num2str(i) '_proc_MatrixVector.txt'],'w+');
     str = (['Received the con signal from leader process now saving V_i+1' sprintf('\n')]);disp(str); fwrite(fstat, str);
  
     str = (['Now saving the updatedQ to local machine ...' sprintf('\n')]); disp(str); fwrite(fstat, str);
-   
+    pause(2.0); %% add this 2 seconds to make sure the leader process has completed/ alluxio has completed the updated v_i+1
     this_total = tic;
     
     [idum, my_machine] = system('hostname'); my_machine = strtrim(my_machine); 
     
+    %%% *********** only the process with:
+    %% my_rank mod (NumOfProcessors - 1)/(NumOfMachines -1) == 0
+    %%% 
+   
+    if rem(my_rank, (NumOfProcessors-1)/(NumOfMachines-1)) == 0
+      str='copying....';disp(str); fwrite(fstat, str);
+       
     FilePathPre = '/mytest';
 	inputFilePath=[FilePathPre '/' num2str(it+1) 'v_' num2str(NumOfNodes) 'nodes_' num2str(NumOfProcessors) 'proc_global'];
-    %outputFilePath=[FilePathPre '/' num2str(it+1) 'v_' num2str(NumOfNodes) 'nodes_' num2str(NumOfProcessors) 'proc_' my_machine];
-    outputFilePath=[FilePathPre '/' num2str(it+1) 'v_' num2str(NumOfNodes) 'nodes_' num2str(NumOfProcessors) 'proc_' num2str(i) '_id'];
+    outputFilePath=[FilePathPre '/' num2str(it+1) 'v_' num2str(NumOfNodes) 'nodes_' num2str(NumOfProcessors) 'proc_' my_machine];
+    %outputFilePath=[FilePathPre '/' num2str(it+1) 'v_' num2str(NumOfNodes) 'nodes_' num2str(NumOfProcessors) 'proc_' num2str(i) '_id'];
     
     inputobject_v = AlluxioWriteRead(['alluxio://n117.bluewave.umbc.edu:19998|' inputFilePath '_v' '|CACHE|CACHE_THROUGH']);
     outputobject_v = AlluxioWriteRead(['alluxio://n117.bluewave.umbc.edu:19998|' outputFilePath '_v' '|CACHE|CACHE_THROUGH']);
@@ -749,7 +756,7 @@ fstat = fopen(['benchmark/v3_' num2str(i) '_proc_MatrixVector.txt'],'w+');
     javaMethod('writeFile',outputobject_v, v_i_plus_one_val);
     that = toc(this);
     str=(['Writing to local file costs ' num2str(that) 's' sprintf('\n')]); disp(str); fwrite(fstat, str);
-  
+    end %% end for writing to local machine
 	writeTime = toc(this_total);
 	str = (['It takes: ' num2str(writeTime) 's to save to local machine' sprintf('\n')]);disp(str); fwrite(fstat,str);
     %****************

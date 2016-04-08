@@ -134,7 +134,7 @@ if(my_rank == leader)
     end %% end of leader process while
     output
     leader_total_time = toc(leader_begin_time);
-    str = (['Leader process for matrix*vector runs: ' num2str(leader_total_time) sprintf('\n')]);
+    str = (['MV: ' sprintf('\t') num2str(leader_total_time) sprintf('\n')]);
     disp(str); fwrite(fbug, str);fwrite(fdebug, str);
     %fclose(fbug); %% debug for matrix * vector done
     
@@ -155,13 +155,13 @@ if(my_rank == leader)
     	this = tic;
         alpha(it) = it_alpha;
         that = toc(this);
-        str = (['Calculation alpha costs ' num2str(that) 's' sprintf('\n')]);
+        str = (['alpha' sprintf('\t') num2str(that) sprintf('\n')]);
         disp(str); fwrite(fbug,str);fwrite(fdebug, str);
         delete(dot_temp);
      alpha_temp_Assoc = Assoc(sprintf('%d,',it),'1,',sprintf('%.15f,',alpha(it)));
         put(alpha_t, alpha_temp_Assoc);
-        str = ['Result of alpha[' num2str(it) '] =' num2str(alpha(it)) ' is saved.' sprintf('\n')];
-        disp(str); fwrite(fbug,str);
+        %str = ['Result of alpha[' num2str(it) '] =' num2str(alpha(it)) ' is saved.' sprintf('\n')];
+        %disp(str); fwrite(fbug,str);
     
    
         
@@ -196,7 +196,7 @@ if(my_rank == leader)
     end 
      %%%%%%%%%%%%%%%%%%%%%  
      bcast_time = toc(this);
-     str= ['Broadcasting costs: ' num2str(bcast_time) 's' sprintf('\n')];
+     str= ['Broadcasting' sprintf('\t') num2str(bcast_time) sprintf('\n')];
      disp(str); fwrite(fbug,str);fwrite(fdebug, str);
    % con = MPI_Recv(leader, con_tag, comm );
     %%%%%%% start next step in the algorithm
@@ -234,7 +234,7 @@ if(my_rank == leader)
     end %% end of leader process while
     output
     leader_total_time = toc(leader_begin_time);
-    str = (['Leader process for onetimesaxv runs: ' num2str(leader_total_time) sprintf('\n')]);
+    str = (['onetime_saxv' sprintf('\t') num2str(leader_total_time) sprintf('\n')]);
     disp(str); fwrite(fbug, str);fwrite(fdebug, str);
     %fclose(fbug);
     
@@ -255,7 +255,7 @@ scalar_v = sqrt(scalar_v);
     put(beta_t, scalar_v_assoc);
     
     that = toc(this);
-    str = ['Iteration ' num2str(it) ' beta takes: '  num2str(that) sprintf('\n')];
+    str = ['beta' sprintf('\t')  num2str(that) sprintf('\n')];
 	disp(str); fwrite(fbug, str);fwrite(fdebug, str);
 
 	bet(it) = scalar_v;
@@ -293,7 +293,7 @@ scalar_v = sqrt(scalar_v);
           end
         end 
     bcast_time = toc(this);
-     str= ['Broadcasting costs: ' num2str(bcast_time) 's' sprintf('\n')];
+     str= ['Broadcasting' sprintf('\t') num2str(bcast_time) sprintf('\n')];
      disp(str); fwrite(fbug,str);fwrite(fdebug, str);
    
   %%%%%%%%%%%%%%%%
@@ -334,7 +334,7 @@ scalar_v = sqrt(scalar_v);
     end %% end of leader process while
    
     leader_total_time = toc(leader_begin_time);
-    str = (['Leader process for updateQ runs: ' num2str(leader_total_time) sprintf('\n')]);
+    str = (['updateQ' sprintf('\t') num2str(leader_total_time) sprintf('\n')]);
     disp(str); fwrite(fbug, str);fwrite(fdebug, str);
     
     str = ('Now saving the updatedQ to global file ...');
@@ -350,7 +350,7 @@ scalar_v = sqrt(scalar_v);
     javaMethod('writeFile',inputobject_v, result_string);
     
 	writeTime = toc(this);
-	str = (['takes: ' num2str(writeTime) 's' sprintf('\n')]);
+	str = (['saving updatedv' sprintf('\t') num2str(writeTime) sprintf('\n')]);
 	disp(str); fwrite(fbug,str);fwrite(fdebug, str);
     
     pause(2.0);
@@ -373,7 +373,7 @@ scalar_v = sqrt(scalar_v);
     end 
      %%%%%%%%%%%%%%%%%%%%%  
      bcast_time = toc(this);
-     str= ['Broadcasting costs: ' num2str(bcast_time) 's' sprintf('\n')];
+     str= ['Broadcasting' sprintf('\t') num2str(bcast_time) sprintf('\n')];
      disp(str); fwrite(fbug,str);fwrite(fdebug, str);
  
     leader_begin_time = tic;
@@ -406,7 +406,7 @@ scalar_v = sqrt(scalar_v);
           end
     end %% end of leader process while
     leader_total_time = toc(leader_begin_time);
-    str = (['Leader process for copyV_i+1 runs: ' num2str(leader_total_time) sprintf('\n')]);
+    str = (['copyV_i+1' sprintf('\t') num2str(leader_total_time) sprintf('\n')]);
     disp(str); fwrite(fbug, str);fwrite(fdebug, str);
     
     %%%%**************************  All working processes done copying
@@ -417,7 +417,7 @@ else %% working processes
 
 %% path to where the Alluxio files are stored
 filePathPre = '/mytest';
-i = my_rank+1;  %% my_rank starts from 0 to comm_size-1; 
+i = my_rank+1;  %% my_rank starts from 0 to comm_size-1; so I starts from 1 to comm_size
 
 fstat = fopen(['benchmark/v3_' num2str(i) '_proc_MatrixVector.txt'],'w+');
                %% rank 0 is leader process; i ranges from 1 to comm_size-1;
@@ -629,10 +629,10 @@ fstat = fopen(['benchmark/v3_' num2str(i) '_proc_MatrixVector.txt'],'w+');
 		inputFilePathPre = '/mytest';
 		inputFilePath=[inputFilePathPre '/' num2str(it-1) 'v_' num2str(NumOfNodes) 'nodes_' num2str(NumOfProcessors) 'proc_' my_machine];
 		
-		inputobject_r = AlluxioWriteRead(['alluxio://n117.bluewave.umbc.edu:19998|' inputFilePath '_r' '|CACHE|CACHE_THROUGH']);
+		%inputobject_r = AlluxioWriteRead(['alluxio://n117.bluewave.umbc.edu:19998|' inputFilePath '_r' '|CACHE|CACHE_THROUGH']);
        	inputobject_v = AlluxioWriteRead(['alluxio://n117.bluewave.umbc.edu:19998|' inputFilePath '_v' '|CACHE|CACHE_THROUGH']);
 		this = tic;
-		vi_row = javaMethod('readFile',inputobject_r);
+		%vi_row = javaMethod('readFile',inputobject_r);
 		vi_val = javaMethod('readFile',inputobject_v);
 		readv=toc(this);
 		str = ['Read vector i-1 takes: ' num2str(readv) 's' sprintf('\n')];
@@ -641,8 +641,11 @@ fstat = fopen(['benchmark/v3_' num2str(i) '_proc_MatrixVector.txt'],'w+');
 		str = ['Now constructing the vector i-1'];
 		this = tic;
 		disp(str); fwrite(fstat, str);
-		my_row = char(vi_row); my_val = char(vi_val);
-		my_row = sscanf(my_row, '%d'); my_val = sscanf(my_val,'%f'); 	
+		%my_row = char(vi_row); 
+        my_val = char(vi_val);
+		%my_row = sscanf(my_row, '%d'); 
+        my_val = sscanf(my_val,'%f');
+        my_row = 1:NumOfNodes;
 		myVectorMinus1 = sparse(my_row, 1, my_val, NumOfNodes, 1);
         myVectorMinus1 = full(myVectorMinus1);
 		transV = toc(this);	

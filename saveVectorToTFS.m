@@ -47,7 +47,7 @@ end
 inputFilePathPre = '/mytest';
 inputFilePath=[inputFilePathPre '/' num2str(it) 'v_' num2str(NumOfNodes) 'nodes_' num2str(NumOfProcessors) 'proc_global' ];
 
-        inputobject_r = AlluxioWriteRead(['alluxio://n117.bluewave.umbc.edu:19998|' inputFilePath '_r' '|CACHE|CACHE_THROUGH']);
+        %inputobject_r = AlluxioWriteRead(['alluxio://n117.bluewave.umbc.edu:19998|' inputFilePath '_r' '|CACHE|CACHE_THROUGH']);
         %inputobject_c = AlluxioWriteRead(['alluxio://n117.bluewave.umbc.edu:19998|' filePath '_c' '|CACHE|CACHE_THROUGH']);
         inputobject_v = AlluxioWriteRead(['alluxio://n117.bluewave.umbc.edu:19998|' inputFilePath '_v' '|CACHE|CACHE_THROUGH']);
 
@@ -77,7 +77,7 @@ for i = myMachine
 	fwrite(fstat, ['Now reading the global file vector!' sprintf('\n')]);
 	%% Now reading the global file
 	this = tic;
-	myVector_r = javaMethod('readFile',inputobject_r);
+	%myVector_r = javaMethod('readFile',inputobject_r);
 	myVector_v = javaMethod('readFile',inputobject_v);
 	that = toc(this);	
 	
@@ -88,12 +88,12 @@ for i = myMachine
 	disp(str); fwrite(fstat, str);
 	
 	outputFilePath = [outputFilePathPre '/' num2str(it) 'v_' num2str(NumOfNodes) 'nodes_' num2str(NumOfProcessors) 'proc_' mymachine];
-	outputobject_r = AlluxioWriteRead(['alluxio://n117.bluewave.umbc.edu:19998|' outputFilePath '_r' '|CACHE|CACHE_THROUGH']);
+	%outputobject_r = AlluxioWriteRead(['alluxio://n117.bluewave.umbc.edu:19998|' outputFilePath '_r' '|CACHE|CACHE_THROUGH']);
 	outputobject_v = AlluxioWriteRead(['alluxio://n117.bluewave.umbc.edu:19998|' outputFilePath '_v' '|CACHE|CACHE_THROUGH']);
 	
 	%% start writing
 	this = tic;
-	javaMethod('writeFile',outputobject_r, myVector_r);
+	%javaMethod('writeFile',outputobject_r, myVector_r);
 	javaMethod('writeFile',outputobject_v, myVector_v);
 	writeTime = toc(this);
 

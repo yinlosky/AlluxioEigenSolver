@@ -25,14 +25,14 @@ cut_t = DB(['Cut' num2str(NumOfNodes)]);   %% Cut table assigns the tasks to the
 %%% To get the number of machines in the cluster this serves to help run different sets of experiments
 machines_t = DB('NumOfMachines');
 
-numOfMachines = str2num(Val(machines_t('1,','1,')));
+NumOfMachines = str2num(Val(machines_t('1,','1,')));
 
 %% Filepath to store in TFS
 filePathPre = '/mytest';
 
 %% Below is for debugging purpose
 DebugPathPre = '/home/yhuang9/DebugFolderForTFS/';
-DebugPath = ([DebugPathPre '/' num2str(NumOfNodes) '_' num2str(numOfMachines) '_' num2str(Np)]);
+DebugPath = ([DebugPathPre '/' num2str(NumOfNodes) '_' num2str(NumOfMachines) '_' num2str(Np)]);
 if(~exist([DebugPath] , 'dir'))
         mkdir([DebugPath] );
 end
@@ -53,28 +53,43 @@ for i = myProc    % i starts from 1
 	flog = fopen([DebugPath '/' num2str(i) '_process_debug.txt'],'w+');	
       
         % To get the start_col and end_col for the process that is running individually 
+        
+switch NumOfMachines
+    case 3
+        pace = 8;
+    case 5
+        pace = 4;
+    case 9
+        pace = 2;
+    case 16
+        pace = 1;
+end
+        
 	if(i>1)
         disp(['My i is: ' num2str(i)]);
         fwrite(flog, ['My i is: ' num2str(i) sprintf('\n')]);
         if(i==2)
         start_col = 1;
-        end_col = str2num(Val(cut_t(sprintf('%d,',i-1),:)));
+        end_col = str2num(Val(cut_t(sprintf('%d,',(i-1)*pace),:)));
         else
                 if(i<Np)
-                        start_col = str2num(Val(cut_t(sprintf('%d,',i-2),:)))+1;
-                        end_col = str2num(Val(cut_t(sprintf('%d,',i-1),:)));
+                        start_col = str2num(Val(cut_t(sprintf('%d,',(i-2)*pace),:)))+1;
+                        end_col = str2num(Val(cut_t(sprintf('%d,',(i-1)*pace),:)));
                 end
         end
         if(i==Np)
-        start_col = str2num(Val(cut_t(sprintf('%d,',i-2),:)))+1;
+        start_col = str2num(Val(cut_t(sprintf('%d,',(i-2)*pace),:)))+1;
         end_col = NumOfNodes;
         end
         disp(['Start_col : end_col ' num2str(start_col) ' : ' num2str(end_col)]);
         fwrite(flog, ['Start_col : end_col ' num2str(start_col) ' : ' num2str(end_col)]);      
 	
         %% To set up the location where to store the data from the table
+        if(pace == 1)
 	filePath = ([filePathPre '/mydata' num2str(NumOfNodes) '_' num2str(i) ]);
-        
+        else
+    filePath = ([filePathPre '/mydata' num2str(NumOfNodes) '_' num2str(Np) 'proc_' num2str(i) ]);
+        end
  	%% Now we begin to store the data reading from start_col to end_col to filePath
 	myobject=AlluxioWriteRead(['alluxio://n117.bluewave.umbc.edu:19998|' filePath '|CACHE|CACHE_THROUGH']);
 	

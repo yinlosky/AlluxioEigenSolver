@@ -38,7 +38,7 @@ fstat = fopen( [DebugPath '/savingGlobal.log' ],'w+');
 outputFilePathPre = '/mytest';
 outputFilePath = [outputFilePathPre '/' num2str(it) 'v_' num2str(NumOfNodes) 'nodes_' num2str(NumOfProcessors) 'proc_global' ];
 
-outputobject_r = AlluxioWriteRead(['alluxio://n117.bluewave.umbc.edu:19998|' outputFilePath '_r' '|CACHE|CACHE_THROUGH']);
+%outputobject_r = AlluxioWriteRead(['alluxio://n117.bluewave.umbc.edu:19998|' outputFilePath '_r' '|CACHE|CACHE_THROUGH']);
 outputobject_v = AlluxioWriteRead(['alluxio://n117.bluewave.umbc.edu:19998|' outputFilePath '_v' '|CACHE|CACHE_THROUGH']);
 
 %%% start reading from Accumulo for vector
@@ -54,7 +54,7 @@ disp(str); fwrite(fstat,str);
 
 %%%%% start saving the vector to TFS file
 this = tic;
-javaMethod('writeFile',outputobject_r,vecr);
+%javaMethod('writeFile',outputobject_r,vecr);
 javaMethod('writeFile',outputobject_v,vecv);
 saveTime = toc(this);
 str= ['Saving vector to global vector file takes: ' num2str(saveTime) 's' sprintf('\n')];

@@ -43,10 +43,10 @@ fstat = fopen(fname,'a+');
 
 disp(['Start time: ' sprintf('\n')]);
 StartTime = datestr(now);
-fwrite(fstat,['***********************************************' sprintf('\n') 'Begin time: ' StartTime sprintf('\n*******************************************')]);
+fwrite(fstat,['***********************************************' sprintf('\n') 'Begin time: ' StartTime sprintf('\n*******************************************\n')]);
 diary (['YinEigen: ' num2str(NumOfNodes) '_Machines' num2str(NumOfMachines) '_Proc' num2str(NumOfProcessors) '_Iter' num2str(max_iteration) '_logs.txt']);
-fwrite(fstat,['**Commands: YinEigen( ' num2str(NumOfMachines) ',' num2str(NumOfProcessors) ',' num2str(NumOfNodes) ',' num2str(initMat) ',' num2str(EdgesPerVertex) ',' num2str(max_iteration) ',' num2str(eig_k) ',' num2str(KeepB) ',' num2str(Run_schedule) ',' num2str(StoreTFS) ',' num2str(StoreLHD)  ',' num2str(TFS) ')' ]);
-disp(['TFS is ' num2str(TFS)]);
+fwrite(fstat,['**Commands: YinEigen( ' num2str(NumOfMachines) ',' num2str(NumOfProcessors) ',' num2str(NumOfNodes) ',' num2str(initMat) ',' num2str(EdgesPerVertex) ',' num2str(max_iteration) ',' num2str(eig_k) ',' num2str(KeepB) ',' num2str(Run_schedule) ',' num2str(StoreTFS) ',' num2str(StoreLHD)  ',' num2str(TFS) ')' sprintf('\n') ]);
+%disp(['TFS is ' num2str(TFS)]);
 lz_allTime = tic;
 
 machines=getMachines(NumOfMachines);
@@ -270,12 +270,12 @@ for it = 1:max_iteration
         put(cur_it,it_assoc); %% globalize the current iteration so all processors will be able to read the right lz_q{it}
 
 	%%%%%%%%%%%%%%%%%%%%%% saving vi to global file because matrix * vi needs the whole vi %%%%%%%%%%%%%%%%%%
-   %{
+   
 	%% Only do it once when it == 1 because in the end we update the result of vi based on local results
 	if (it == 1) 
 	disp('Now saving vector to the global alluxio file');
-	disp('First check if the file already exists from previous experiment so we delete it');
-	system(['alluxio fs rmr /mytest/' num2str(it) 'v*']);
+	%disp('First check if the file already exists from previous experiment so we delete it');
+	%system(['alluxio fs rmr /mytest/' num2str(it) 'v*']);
         this = tic;
 	%% saving vi to global file
 	%% outputFilePath = [outputFilePathPre '/' num2str(it) 'v_' num2str(NumOfNodes) 'nodes_' num2str(NumOfProcessors) 'proc_global' ];   This is where the global file saved 
@@ -293,14 +293,16 @@ for it = 1:max_iteration
 	disp(str); fwrite(fstat, str);	
 	%% saving partial_vi to each local machine
 	%% the partition of the vi is based on the schedule table
+    %{
 	disp(['Now saving partial_vectori to each machine']);
 	this = tic;
 	eval(pRUN('savePartialVectorToTFS', NumOfProcessors, machines));
 	savePVI = toc(this);
 	str = (['Saving partial vector i: '  num2str(savePVI) 's' sprintf('\n')]);
 	disp(str); fwrite(fstat, str);
+    %}
 	end
-	%}
+	
         disp(['computing v=Aq ' num2str(it) ' ...']);
 	temp = DB('mv_temp'); delete(temp);temp = DB('mv_temp');  %% remove the temp table from previous operation for paralell_mv_p1.m
   if(TFS == 1)

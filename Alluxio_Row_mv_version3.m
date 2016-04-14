@@ -134,14 +134,15 @@ if(my_rank == leader)
     end %% end of leader process while
     output
     leader_total_time = toc(leader_begin_time);
-    str = (['MV' sprintf('\t') num2str(leader_total_time) sprintf('\n') 'Time received: ' datestr(clock,0) sprintf('\n')]);
+    str = (['MV' sprintf('\t') num2str(leader_total_time) sprintf('\n') 'Time received: ' datestr(clock,0) sprintf('\n') ...
+        '***********************' sprintf('\n')]);
     disp(str); fwrite(fbug, str);fwrite(fdebug, str);
     %fclose(fbug); %% debug for matrix * vector done
     
     %%%
     
     
-    str = (['Leader process now calculates the value of alpha[it]' sprintf('\n')]);
+    str = (['Leader process now calculates the value of alpha[' num2str(it) ']' sprintf('\n')]);
     this = tic;
     disp(str); fwrite(fbug, str);
     [tRow,tCol,tVal] = dot_temp(sprintf('%d,',1:NumOfProcessors),:); %% This range query works for rows not for cols so this is fine.
@@ -156,7 +157,8 @@ if(my_rank == leader)
     	
         alpha(it) = it_alpha;
         that = toc(this);
-        str = (['alpha' sprintf('\t') num2str(that) sprintf('\n')]);
+        str = (['alpha' sprintf('\t') num2str(that) sprintf('\n') ...
+        '***********************' sprintf('\n')]);
         disp(str); fwrite(fbug,str);fwrite(fdebug, str);
         delete(dot_temp);
      alpha_temp_Assoc = Assoc(sprintf('%d,',it),'1,',sprintf('%.15f,',alpha(it)));
@@ -175,7 +177,8 @@ if(my_rank == leader)
     
      % Broadcast coefficients to everyone else.   Now continuing to onetimesaxv ...
      str = ['Now broadcasting onetimesaxv con_tag to everyone ...' sprintf('\n')];
-        disp(str); fwrite(fbug,str);
+     str2 = ['Time broadcasts: ' datestr(clock, 0) sprintf('\n')];
+        disp(str); fwrite(fbug,str); fwrite(fdebug,str2);
         this = tic;
        
      %  MPI_Bcast(leader, con_tag, comm, con ); %% MPI_Recv(leader, con_tag, comm );
@@ -197,7 +200,7 @@ if(my_rank == leader)
     end 
      %%%%%%%%%%%%%%%%%%%%%  
      bcast_time = toc(this);
-     str= ['Broadcasting' sprintf('\t') num2str(bcast_time) sprintf('\n')];
+     str= ['Broadcasting done time: ' datestr(clock,0) sprintf('\n') 'Broadcasting' sprintf('\t') num2str(bcast_time) sprintf('\n')];
      disp(str); fwrite(fbug,str);fwrite(fdebug, str);
    % con = MPI_Recv(leader, con_tag, comm );
     %%%%%%% start next step in the algorithm
@@ -235,7 +238,8 @@ if(my_rank == leader)
     end %% end of leader process while
     output
     leader_total_time = toc(leader_begin_time);
-    str = (['onetime_saxv' sprintf('\t') num2str(leader_total_time) sprintf('\n') 'Time received: ' datestr(clock,0) sprintf('\n')]);
+    str = (['onetime_saxv' sprintf('\t') num2str(leader_total_time) sprintf('\n') 'Time received: ' datestr(clock,0) sprintf('\n') ...
+        '***********************************' sprintf('\n')]);
     disp(str); fwrite(fbug, str);fwrite(fdebug, str);
     %fclose(fbug);
     
@@ -256,7 +260,8 @@ scalar_v = sqrt(scalar_v);
     put(beta_t, scalar_v_assoc);
     
     that = toc(this);
-    str = ['beta' sprintf('\t')  num2str(that) sprintf('\n')];
+    str = ['********************' sprintf('\n') 'beta' sprintf('\t')  num2str(that) sprintf('\n') ...
+       '************************' sprintf('\n') ];
 	disp(str); fwrite(fbug, str);fwrite(fdebug, str);
 
 	bet(it) = scalar_v;
@@ -294,7 +299,8 @@ scalar_v = sqrt(scalar_v);
           end
         end 
     bcast_time = toc(this);
-     str= ['Broadcasting' sprintf('\t') num2str(bcast_time) sprintf('\n')];
+     str= ['Broadcasting' sprintf('\t') num2str(bcast_time) sprintf('\n') ...
+         'Time sent: ' datestr(clock, 0) sprintf('\n')];
      disp(str); fwrite(fbug,str);fwrite(fdebug, str);
    
   %%%%%%%%%%%%%%%%
@@ -335,7 +341,8 @@ scalar_v = sqrt(scalar_v);
     end %% end of leader process while
    
     leader_total_time = toc(leader_begin_time);
-    str = (['updateQ' sprintf('\t') num2str(leader_total_time) sprintf('\n') 'Time received: ' datestr(clock,0) sprintf('\n')]);
+    str = (['updateQ' sprintf('\t') num2str(leader_total_time) sprintf('\n') 'Time received: ' datestr(clock,0) sprintf('\n') ...
+        '******************************' sprintf('\n')]);
     disp(str); fwrite(fbug, str);fwrite(fdebug, str);
     
     str = ('Now saving the updatedQ to global file ...');
@@ -351,7 +358,8 @@ scalar_v = sqrt(scalar_v);
     javaMethod('writeFile',inputobject_v, result_string);
     
 	writeTime = toc(this);
-	str = (['saving updatedv' sprintf('\t') num2str(writeTime) sprintf('\n')]);
+	str = (['saving updatedv' sprintf('\t') num2str(writeTime) sprintf('\n') ...
+        '*******************************************' sprintf('\n')]);
 	disp(str); fwrite(fbug,str);fwrite(fdebug, str);
     
     pause(2.0);
@@ -374,7 +382,8 @@ scalar_v = sqrt(scalar_v);
     end 
      %%%%%%%%%%%%%%%%%%%%%  
      bcast_time = toc(this);
-     str= ['Broadcasting' sprintf('\t') num2str(bcast_time) sprintf('\n')];
+     str= ['Broadcasting' sprintf('\t') num2str(bcast_time) sprintf('\n') ...
+         'Broadcasting time: ' datestr(clock, 0) sprintf('\n')];
      disp(str); fwrite(fbug,str);fwrite(fdebug, str);
  
     leader_begin_time = tic;
@@ -407,7 +416,8 @@ scalar_v = sqrt(scalar_v);
           end
     end %% end of leader process while
     leader_total_time = toc(leader_begin_time);
-    str = (['copyV_i+1' sprintf('\t') num2str(leader_total_time) sprintf('\n') 'Time received: ' datestr(clock,0) sprintf('\n')]);
+    str = (['copyV_i+1' sprintf('\t') num2str(leader_total_time) sprintf('\n') 'Time received: ' datestr(clock,0) sprintf('\n') ...
+        '***********************' sprintf('\n')]);
     disp(str); fwrite(fbug, str);fwrite(fdebug, str);
     
     %%%%**************************  All working processes done copying
@@ -417,7 +427,7 @@ scalar_v = sqrt(scalar_v);
 else %% working processes
 
 %% TO calculate how much time spending on syn and doing the computation 
-fstat = fopen(['timer/' num2str(NumOfMachines) 'machines_' num2str(my_rank+1) '_timer.txt'],'w+');
+fstat = fopen(['timer/' num2str(NumOfMachines) 'machines_' num2str(my_rank+1) '_timer.txt'],'a+');
    
 %% path to where the Alluxio files are stored
 filePathPre = '/mytest';
@@ -457,7 +467,7 @@ end
         end_col = NumOfNodes;
         
         end
-        str = (['Start_col : end_col ' num2str(start_col) ' : ' num2str(end_col) sprintf('\n')]);
+        str = (['**************Iteration ' num2str(it) '*****************' sprintf('\n') 'Start_col : end_col ' num2str(start_col) ' : ' num2str(end_col) sprintf('\n')]);
         disp(str); fwrite(fstat,str);
         
         vectorLength = end_col - start_col + 1;
@@ -801,7 +811,7 @@ end
     leader_tag = output_tag_four + my_rank;
     MPI_Send(leader, leader_tag, comm,my_rank);
     timer = toc(mytic);
-    str = (['Done with saving v_i+1, sending signal back to leader process costs ' num2str(timer) sprintf('\n') 'Time sent: ' datestr(clock, 0) sprintf('\n')]);
+    str = (['Done with saving v_i+1, sending signal back to leader process costs ' num2str(timer) sprintf('\n') 'Time sent: ' datestr(clock, 0) sprintf('\n') '**************Iteration ' num2str(it) '*****************' sprintf('\n')]);
 	disp(str); fwrite(fstat, str);
     
          end %% end for all working processes

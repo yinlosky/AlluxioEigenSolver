@@ -99,7 +99,7 @@ save_v_i_plus_one_tag = 70000;
 
 con = 1;
 
-fbug = fopen(['benchmark/v3_' num2str(my_rank+1) '_proc_MatrixVector.txt'],'w+');
+fbug = fopen(['benchmark/' num2str(NumOfMachines) 'machines_' num2str(my_rank+1) '_proc_MatrixVector.txt'],'w+');
 fdebug = fopen('benchmark/stat.txt','a+');
 % Leader: just waiting to receive all signals from working processes
 if(my_rank == leader)
@@ -134,7 +134,7 @@ if(my_rank == leader)
     end %% end of leader process while
     output
     leader_total_time = toc(leader_begin_time);
-    str = (['MV' sprintf('\t') num2str(leader_total_time) sprintf('\n')]);
+    str = (['MV' sprintf('\t') num2str(leader_total_time) sprintf('\n') 'Time received: ' datestr(clock,0) sprintf('\n')]);
     disp(str); fwrite(fbug, str);fwrite(fdebug, str);
     %fclose(fbug); %% debug for matrix * vector done
     
@@ -235,7 +235,7 @@ if(my_rank == leader)
     end %% end of leader process while
     output
     leader_total_time = toc(leader_begin_time);
-    str = (['onetime_saxv' sprintf('\t') num2str(leader_total_time) sprintf('\n')]);
+    str = (['onetime_saxv' sprintf('\t') num2str(leader_total_time) sprintf('\n') 'Time received: ' datestr(clock,0) sprintf('\n')]);
     disp(str); fwrite(fbug, str);fwrite(fdebug, str);
     %fclose(fbug);
     
@@ -335,7 +335,7 @@ scalar_v = sqrt(scalar_v);
     end %% end of leader process while
    
     leader_total_time = toc(leader_begin_time);
-    str = (['updateQ' sprintf('\t') num2str(leader_total_time) sprintf('\n')]);
+    str = (['updateQ' sprintf('\t') num2str(leader_total_time) sprintf('\n') 'Time received: ' datestr(clock,0) sprintf('\n')]);
     disp(str); fwrite(fbug, str);fwrite(fdebug, str);
     
     str = ('Now saving the updatedQ to global file ...');
@@ -407,7 +407,7 @@ scalar_v = sqrt(scalar_v);
           end
     end %% end of leader process while
     leader_total_time = toc(leader_begin_time);
-    str = (['copyV_i+1' sprintf('\t') num2str(leader_total_time) sprintf('\n')]);
+    str = (['copyV_i+1' sprintf('\t') num2str(leader_total_time) sprintf('\n') 'Time received: ' datestr(clock,0) sprintf('\n')]);
     disp(str); fwrite(fbug, str);fwrite(fdebug, str);
     
     %%%%**************************  All working processes done copying
@@ -416,6 +416,9 @@ scalar_v = sqrt(scalar_v);
    
 else %% working processes
 
+%% TO calculate how much time spending on syn and doing the computation 
+fstat = fopen(['timer/' num2str(NumOfMachines) 'machines_' num2str(my_rank+1) '_timer.txt'],'w+');
+   
 %% path to where the Alluxio files are stored
 filePathPre = '/mytest';
 i = my_rank+1;  %% my_rank starts from 0 to comm_size-1; so I starts from 1 to comm_size
@@ -434,7 +437,7 @@ switch NumOfMachines
         pace = 1;
 end
 
-fstat = fopen(['benchmark/v3_' num2str(i) '_proc_MatrixVector.txt'],'w+');
+%fstat = fopen(['benchmark/v3_' num2str(i) '_proc_MatrixVector.txt'],'w+');
                %% rank 0 is leader process; i ranges from 1 to comm_size-1;
         if(i==2)
         start_col = 1;
@@ -566,9 +569,9 @@ fstat = fopen(['benchmark/v3_' num2str(i) '_proc_MatrixVector.txt'],'w+');
         %% Now calculating parallel dot vi*v, we already have part of v calculated locally and we have the whole vi. 
         %% grab part of vi according to the cut table and grab corresponding result of v and do the math parallel_dot_p1
         %% part of v below:
-        v_val = full(myresult);
         str = (['Now start calculating vi * v' sprintf('\n')]);   disp(str); fwrite(fstat,str);
-
+        mytic = tic;
+        v_val = full(myresult);
         %% total vi is below: 
         myVi = full(myVector);
         %% construct part of vi from start_col:end_col;
@@ -584,15 +587,21 @@ fstat = fopen(['benchmark/v3_' num2str(i) '_proc_MatrixVector.txt'],'w+');
 		disp(str);fwrite(fstat,str);
         put(dot_temp,newAssoc);
         
-
+        timer = toc(mytic);
+        str = (['vi*v costs ' num2str(timer) sprintf('\n')]);
+        disp(str); fwrite(fstat,str);
          
-         %% **************** done with matrix* vector  ******************
-         leader_tag = output_tag + my_rank;
-         MPI_Send(leader, leader_tag, comm,my_rank);
+        str = (['Now sending onde vi * v to leader process']);
+        disp(str); fwrite(fstat,str);
+        mytic = tic;
+        %% **************** done with matrix* vector  ******************
+        leader_tag = output_tag + my_rank;
+        MPI_Send(leader, leader_tag, comm,my_rank);
+        timer = toc(mytic);
+        str = (['sending signal costs: ' num2str(timer) sprintf('\n') 'Time sent: ' datestr(clock, 0) sprintf('\n')]);
+        disp(str); fwrite(fstat,str);
+      
          %%% ******************************************************
-           
-         
-         
          %%
          %% working process receive the leader's broadcast msg
          str = (['Waiting for leader to continue to onetime_saxv... ' sprintf('\n')]);
@@ -600,7 +609,7 @@ fstat = fopen(['benchmark/v3_' num2str(i) '_proc_MatrixVector.txt'],'w+');
          send_tag = onetime_saxv_tag + my_rank;
          con = MPI_Recv(leader, send_tag, comm );  %%% receive bcast_tag
          
-         str = (['Received the con signal from leader process now calculating onetime_saxv' sprintf('\n')]);
+         str = (['Received the con signal from leader process now calculating onetime_saxv' sprintf('\n') 'Time received: ' datestr(clock, 0) sprintf('\n')]);
          disp(str); fwrite(fstat, str);
          
          %%%
@@ -691,18 +700,20 @@ fstat = fopen(['benchmark/v3_' num2str(i) '_proc_MatrixVector.txt'],'w+');
          
          
      %% Done with onetime_saxv send signal back to leader process
-      str =(['Done with onetime_saxv, sending signal back to leader ...' sprintf('\n')]);
-     disp(str); fwrite(fstat, str);
+     mytic = tic;
      leader_tag = output_tag_second + my_rank;
      MPI_Send(leader, leader_tag, comm,my_rank);
-    
+     timer = toc(mytic);
+     str =(['Done with onetime_saxv, sending signal back to leader ...' sprintf('\n') 'Time sent: ' datestr(clock, 0) sprintf('\n')]);
+     disp(str); fwrite(fstat, str);
+  
      
      %% Waiting for leader to send signal to continue to updateQ
      str = (['Waiting for leader to continue update V... ' sprintf('\n')]);
      disp(str); fwrite(fstat, str);
      send_tag = updateq_tag + my_rank;
      con = MPI_Recv(leader, send_tag, comm );
-     str = (['Received the con signal from leader process now updating V' sprintf('\n')]);
+     str = (['Received the con signal from leader process now updating V' sprintf('\n') 'Time received: ' datestr(clock, 0) sprintf('\n')]);
      disp(str); fwrite(fstat, str);
      
      %% v_i+1 = v/beta
@@ -737,16 +748,16 @@ fstat = fopen(['benchmark/v3_' num2str(i) '_proc_MatrixVector.txt'],'w+');
     %% Done with update Q
     %% Rather than writing to Filesystem, Try to send it back to leader process and see how it performs.
     
-    str = (['Done with updateQ, sending signal back to leader process ...' sprintf('\n')]);
+    str = (['Done with updateQ, sending signal back to leader process ...' sprintf('\n') 'Time sent: ' datestr(clock, 0) sprintf('\n')]);
 	disp(str); fwrite(fstat, str);
     
     leader_tag = output_tag_three + my_rank;
     MPI_Send(leader, leader_tag, comm,vector_i_plus_one_val);
      
-    str = (['Now waiting for leader to send out copying v_i+1 signal ...' sprintf('\n')]);disp(str); fwrite(fstat, str);
+    str = (['Now waiting for leader to send out copying v_i+1 signal ...' sprintf('\n') 'Time started: ' datestr(clock, 0) sprintf('\n')]);disp(str); fwrite(fstat, str);
     send_tag = save_v_i_plus_one_tag + my_rank;
     con = MPI_Recv(leader, send_tag, comm );
-    str = (['Received the con signal from leader process now saving V_i+1' sprintf('\n')]);disp(str); fwrite(fstat, str);
+    str = (['Received the con signal from leader process now saving V_i+1' sprintf('\n') 'Time received: ' datestr(clock, 0) sprintf('\n')]);disp(str); fwrite(fstat, str);
  
     str = (['Now saving the updatedQ to local machine ...' sprintf('\n')]); disp(str); fwrite(fstat, str);
     pause(2.0); %% add this 2 seconds to make sure the leader process has completed/ alluxio has completed the updated v_i+1
@@ -786,12 +797,12 @@ fstat = fopen(['benchmark/v3_' num2str(i) '_proc_MatrixVector.txt'],'w+');
     %****************
     
      %% Done with saving v_i+1    
-    str = (['Done with saving v_i+1, sending signal back to leader process ...' sprintf('\n')]);
-	disp(str); fwrite(fstat, str);
-    
+    mytic = tic;
     leader_tag = output_tag_four + my_rank;
     MPI_Send(leader, leader_tag, comm,my_rank);
-    
+    timer = toc(mytic);
+    str = (['Done with saving v_i+1, sending signal back to leader process costs ' num2str(timer) sprintf('\n') 'Time sent: ' datestr(clock, 0) sprintf('\n')]);
+	disp(str); fwrite(fstat, str);
     
          end %% end for all working processes
 fclose(fbug);fclose(fdebug);

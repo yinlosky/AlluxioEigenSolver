@@ -262,7 +262,8 @@ fstat = fopen(fname,'a+');
 
 for it = 1:max_iteration
 	thistic=tic;
-	disp('**************myEigen iterations***********************');
+    str= ['----------------------Iteration: ' num2str(it)  ' begins-----------------------'];
+	disp(str); fwrite(fstat, str);
 	
 	 %%%%%%%%%%%%%%%%%%%%%%  matrix * vector begin **********************
        %% update the cur_it first

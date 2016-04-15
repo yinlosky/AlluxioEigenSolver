@@ -142,8 +142,11 @@ if(my_rank == leader)
     end %% end of leader process while
     output
     leader_total_time = toc(leader_begin_time);
-    str = (['MV' sprintf('\t') num2str(leader_total_time) sprintf('\n') 'Time received: ' datestr(clock,0) sprintf('\n') ...
-        '***********************' sprintf('\n')]);
+    str= (['=============================Iteration ' num2str(it) ' begins============================']);
+    fwrite(fdebug, str);
+    str = (['--------------------------MV begin--------------------- ' sprintf('\n') ...
+        'MV' sprintf('\t') num2str(leader_total_time) sprintf('\n') 'Time received: ' datestr(clock,0) sprintf('\n') ...
+        '--------------------------MV Done--------------------- ''***********************alpha begin**************' sprintf('\n')]);
     disp(str); fwrite(fbug, str);fwrite(fdebug, str);
     %fclose(fbug); %% debug for matrix * vector done
     
@@ -166,7 +169,7 @@ if(my_rank == leader)
         alpha(it) = it_alpha;
         that = toc(this);
         str = (['alpha' sprintf('\t') num2str(that) sprintf('\n') ...
-        '***********************' sprintf('\n')]);
+        '***********************alpha done*****************' sprintf('\n')]);
         disp(str); fwrite(fbug,str);fwrite(fdebug, str);
         delete(dot_temp);
      alpha_temp_Assoc = Assoc(sprintf('%d,',it),'1,',sprintf('%.15f,',alpha(it)));
@@ -184,9 +187,9 @@ if(my_rank == leader)
     %processes
     
      % Broadcast coefficients to everyone else.   Now continuing to onetimesaxv ...
-     str = ['Now broadcasting onetimesaxv con_tag to everyone ...' sprintf('\n')];
-     str2 = ['Time broadcasts: ' datestr(clock, 0) sprintf('\n')];
-        disp(str); fwrite(fbug,str); fwrite(fdebug,str2);
+     str = ['------------------------onetime_saxv begin-------------------' ... 
+        'Time broadcasts: ' datestr(clock, 0) sprintf('\n')];
+        disp(str); fwrite(fbug,str); fwrite(fdebug,str);
         this = tic;
        
      %  MPI_Bcast(leader, con_tag, comm, con ); %% MPI_Recv(leader, con_tag, comm );
@@ -247,7 +250,7 @@ if(my_rank == leader)
     output
     leader_total_time = toc(leader_begin_time);
     str = (['onetime_saxv' sprintf('\t') num2str(leader_total_time) sprintf('\n') 'Time received: ' datestr(clock,0) sprintf('\n') ...
-        '***********************************' sprintf('\n')]);
+        '--------------------------onetime_saxv done-----------------------' sprintf('\n')]);
     disp(str); fwrite(fbug, str);fwrite(fdebug, str);
     %fclose(fbug);
     
@@ -288,7 +291,7 @@ scalar_v = sqrt(scalar_v);
     
    %%%%%%%%%%%%%%%%
     %%%%%%%%%%%%%%%%%%%%%
-    str = ['Now broadcasting updateq_tag to everyone ...' sprintf('\n')];
+    str = ['--------------------------updatev begin-------------------' sprintf('\n')];
         disp(str); fwrite(fbug,str);
         this = tic;
     
@@ -349,8 +352,8 @@ scalar_v = sqrt(scalar_v);
     end %% end of leader process while
    
     leader_total_time = toc(leader_begin_time);
-    str = (['updateQ' sprintf('\t') num2str(leader_total_time) sprintf('\n') 'Time received: ' datestr(clock,0) sprintf('\n') ...
-        '******************************' sprintf('\n')]);
+    str = (['updateV' sprintf('\t') num2str(leader_total_time) sprintf('\n') 'Time received: ' datestr(clock,0) sprintf('\n') ...
+        '------------------updatev done----------------' sprintf('\n')]);
     disp(str); fwrite(fbug, str);fwrite(fdebug, str);
     
     str = ('Now saving the updatedQ to global file ...');
@@ -366,14 +369,14 @@ scalar_v = sqrt(scalar_v);
     javaMethod('writeFile',inputobject_v, result_string);
     
 	writeTime = toc(this);
-	str = (['saving updatedv' sprintf('\t') num2str(writeTime) sprintf('\n') ...
-        '*******************************************' sprintf('\n')]);
+	str = (['*****************saving updatedv begin*************************' sprintf('\n')...
+        'saving updatedv in leader' sprintf('\t') num2str(writeTime) sprintf('\n')]);
 	disp(str); fwrite(fbug,str);fwrite(fdebug, str);
     
     pause(2.0);
     %%********************* now asking all working processes to copy the
     %%new v_i_plus_one vector to local machine
-     str = ['Now broadcasting copy vector: save_v_i_plus_one_tag to everyone ...' sprintf('\n')];disp(str); fwrite(fbug,str);
+     str = ['Now broadcasting copy vector: save_v_i_plus_one_tag to everyone ...' sprintf('\n')];disp(str); %fwrite(fbug,str);
      this = tic;
      numCounter = comm_size - 1;
      done = 0;
@@ -425,9 +428,10 @@ scalar_v = sqrt(scalar_v);
     end %% end of leader process while
     leader_total_time = toc(leader_begin_time);
     str = (['copyV_i+1' sprintf('\t') num2str(leader_total_time) sprintf('\n') 'Time received: ' datestr(clock,0) sprintf('\n') ...
-        '***********************' sprintf('\n')]);
+        '***********************save updatedv done***************' sprintf('\n')]);
     disp(str); fwrite(fbug, str);fwrite(fdebug, str);
-    
+    str= (['=============================Iteration ' num2str(it) ' Done============================']);
+    fwrite(fdebug, str);
     %%%%**************************  All working processes done copying
     %%%%v_i_plus_one to local machine.
     

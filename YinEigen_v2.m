@@ -281,7 +281,7 @@ for it = 1:max_iteration
 	%% outputFilePath = [outputFilePathPre '/' num2str(it) 'v_' num2str(NumOfNodes) 'nodes_' num2str(NumOfProcessors) 'proc_global' ];   This is where the global file saved 
         saveVectorToGTFS();
         saveT = toc(this);
-	str=([ 'Saving vector to global file costs ' num2str(saveT) 's']);
+	str=([ 'Saving vector to global file costs ' num2str(saveT) 's' sprintf('\n')]);
         disp(str); fwrite(fstat, str);
         disp(['Now each machine makes its own copy of vector']);
         this = tic;
@@ -289,7 +289,7 @@ for it = 1:max_iteration
 	%%outputFilePath = [outputFilePathPre '/' num2str(it) 'v_' num2str(NumOfNodes) 'nodes_' num2str(NumOfProcessors) 'proc_' mymachine];  
         eval(pRUN('saveVectorToTFS', NumOfMachines,machines));
         savelocal = toc(this);
-	str = (['Machine copy vector costs ' num2str(savelocal) 's']);
+	str = (['Machine copy vector costs ' num2str(savelocal) 's' sprintf('\n')]);
 	disp(str); fwrite(fstat, str);	
 	%% saving partial_vi to each local machine
 	%% the partition of the vi is based on the schedule table
@@ -312,7 +312,7 @@ for it = 1:max_iteration
         %% eval(pRUN('Alluxio_Row_mv',NumOfProcessors,machines));
         %% Version 2: when vector saved in Alluxio
 	%system(['alluxio fs rmr /mytest/vpath' num2str(it) '*']);
-        eval(pRUN('Alluxio_Row_mv_version3',NumOfProcessors,machines));
+        eval(pRUN('Alluxio_Row_mv_version4',NumOfProcessors,machines));
         that = toc(this);
         fstat = fopen(fname,'a+');
         disp(['Iteration ' num2str(it) ' Alluxio_Row_mv_version2 takes: '  num2str(that)]);

@@ -1,4 +1,4 @@
-function YinEigen(NumOfMachines,  NumOfProcessors, NumOfNodes, initMat, EdgesPerVertex, max_iteration, eig_k, KeepB, Run_schedule, StoreTFS, StoreLHD, TFS)
+function YinEigen_v2(NumOfMachines,  NumOfProcessors, NumOfNodes, initMat, EdgesPerVertex, max_iteration, eig_k, KeepB, Run_schedule, StoreTFS, StoreLHD, TFS)
 %%
 %% Usage: This function is used for calculating the eigen values and eigen vectors for input symmetric matrix 
 %% with the size of NumOfNodes using Alluxio in-memory file system to store the input matrix 

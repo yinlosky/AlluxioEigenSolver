@@ -38,7 +38,7 @@ if ~exist('benchmark','dir')
         mkdir('benchmark');
 end
 
-fname = ('benchmark/stat.txt');
+fname = ('benchmark/version4_stat.txt');
 fstat = fopen(fname,'a+');
 
 disp(['Start time: ' sprintf('\n')]);

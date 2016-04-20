@@ -24,9 +24,6 @@ function YinEigen_v2(NumOfMachines,  NumOfProcessors, NumOfNodes, initMat, Edges
 %% Date: Mar, 15, 2016
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%%
-%% Version by Mar 15: assumes that input matrix has been initialized. Vector B has not been initialized
-%%
 
 %%% Connect to the DB to access the global variables among multiple
 %%% processes in the whole cluster
@@ -119,7 +116,9 @@ put(proc_t,p_assoc);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % local variables to construct the Tridigonal matrix%%%%%%%%
+global alpha; 
 alpha = zeros(1,max_iteration);
+global bet; 
 bet = zeros(1,max_iteration);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -274,15 +273,13 @@ for it = 1:max_iteration
    
 	%% Only do it once when it == 1 because in the end we update the result of vi based on local results
 	if (it == 1) 
-	disp('Now saving vector to the global alluxio file');
-	%disp('First check if the file already exists from previous experiment so we delete it');
-	%system(['alluxio fs rmr /mytest/' num2str(it) 'v*']);
+        disp('Now saving vector to the global alluxio file');
         this = tic;
 	%% saving vi to global file
 	%% outputFilePath = [outputFilePathPre '/' num2str(it) 'v_' num2str(NumOfNodes) 'nodes_' num2str(NumOfProcessors) 'proc_global' ];   This is where the global file saved 
         saveVectorToGTFS();
         saveT = toc(this);
-	str=([ 'Saving vector to global file costs ' num2str(saveT) 's' sprintf('\n')]);
+        str=([ 'Saving vector to global file costs ' num2str(saveT) 's' sprintf('\n')]);
         disp(str); fwrite(fstat, str);
         disp(['Now each machine makes its own copy of vector']);
         this = tic;
@@ -290,34 +287,91 @@ for it = 1:max_iteration
 	%%outputFilePath = [outputFilePathPre '/' num2str(it) 'v_' num2str(NumOfNodes) 'nodes_' num2str(NumOfProcessors) 'proc_' mymachine];  
         eval(pRUN('saveVectorToTFS', NumOfMachines,machines));
         savelocal = toc(this);
-	str = (['Machine copy vector costs ' num2str(savelocal) 's' sprintf('\n')]);
-	disp(str); fwrite(fstat, str);	
-	%% saving partial_vi to each local machine
-	%% the partition of the vi is based on the schedule table
-    %{
-	disp(['Now saving partial_vectori to each machine']);
-	this = tic;
-	eval(pRUN('savePartialVectorToTFS', NumOfProcessors, machines));
-	savePVI = toc(this);
-	str = (['Saving partial vector i: '  num2str(savePVI) 's' sprintf('\n')]);
-	disp(str); fwrite(fstat, str);
-    %}
+        str = (['Machine copy vector costs ' num2str(savelocal) 's' sprintf('\n')]);
+        disp(str); fwrite(fstat, str);	
+        
 	end
 	
         disp(['computing v=Aq ' num2str(it) ' ...']);
 	temp = DB('mv_temp'); delete(temp);temp = DB('mv_temp');  %% remove the temp table from previous operation for paralell_mv_p1.m
   if(TFS == 1)
         disp('Running TFS version of matrix multipilcation');
-        this = tic;
+        thisT = tic;
         %% Version 1: when vector not stored in Alluxio
         %% eval(pRUN('Alluxio_Row_mv',NumOfProcessors,machines));
         %% Version 2: when vector saved in Alluxio
 	%system(['alluxio fs rmr /mytest/vpath' num2str(it) '*']);
-        eval(pRUN('Alluxio_Row_mv_version4',NumOfProcessors,machines));
+        eval(pRUN('Alluxio_Row_mv_version5_p1',NumOfProcessors,machines));
+        
+        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        disp(['Constructing the Tridigonal matrix...']);
+      
+        tempTmatrix = constructT(it, alpha, bet); 
+        [Q,D] = eig(tempTmatrix);
+        D = diag(D);
+        %% Do selective_orthogonalize locally%%%%
+       
+        disp(['NumOfMachines in SO: ' num2str(NumOfMachines) 'Starting so, iterations # is ' num2str(it) ' beta_it value is: ' num2str(bet(it))]);
+        this = tic;
+        
+        %num_ortho = parallel_selective_orthogonalize(it, bet(it), Q,D, NumOfMachines,NumOfProcessors);
+        
+        
+        cur_loop_j = DB('cur_loop_j');
+        eps = 2.204e-16;
+        num_ortho = 0;
+        error_bound = abs(sqrt(eps)*D(k));
+        
+        for j = 1:k
+        cur_error = abs(beta_i * Q(k,j));
+        disp(['Error of' num2str(j) '/' num2str(k) ' th vector:' num2str(cur_error) 'compare to ' num2str(error_bound)]);
+		
+            if(cur_error <= error_bound)
+                disp(['V need to be reorthogalized by ' num2str(j) 'th Ritz Vector']);
+                    num_ortho =  num_ortho + 1;
+                disp(['Reorthogonalizing against' num2str(j) 'th Ritz vector']);
+                % write a method to compute r r = V[i,:]*Q[:,j] computR.m
+
+                %rpath = computeR(k,j,Q, NumOfNodes, NumOfMachines); %% k is the cur_it value, j is current loop id, Q is the eigenVector matrix constructed from T
+                    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% output: 'so_rpath'
+
+                disp(['Store j: ' num2str(j) ' into cur_loop_j(1,1) table']);
+                loop_j_Assoc = Assoc('1,','1,',sprintf('%d,',j));
+                put(cur_loop_j,loop_j_Assoc);
+            
+                eval(pRUN('parallel_SO',NumOfProcessors,machines));
+            end
+        end % end for
+        
         that = toc(this);
-        fstat = fopen(fname,'a+');
-        disp(['Iteration ' num2str(it) ' Alluxio_Row_mv_version2 takes: '  num2str(that)]);
-        fwrite(fstat,['Iteration ' num2str(it) ' Alluxio_Row_mv_version3 takes: '  num2str(that) sprintf('\n')]);
+        disp(['Iteration ' num2str(it) ' SO takes: '  num2str(that)]);
+        fwrite(fstat,['Iteration ' num2str(it) ' SO takes: '  num2str(that) sprintf('\n')]);
+        disp(['Number of orthongalization: ' num2str(num_ortho)]);
+
+
+        if(num_ortho > it - 1)
+        disp('The new vector converged. Finishing ...');
+        compute_eigval(it, alpha, bet, eig_k);
+        save_tridiagonal_matrix(alpha, bet, it);
+        break
+        end 
+        
+        if(bet(it) == 0.0)
+        disp(['beta[' num2str(it) ']=0. finishing']);
+        disp('Saving the tridiagonal matrix');
+        compute_eigval(it, alpha, bet, eig_k);
+        save_tridiagonal_matrix(alpha, bet, it);
+        break
+        end
+        
+        
+        eval(pRUN('Alluxio_Row_mv_version5_p2',NumOfProcessors,machines));
+        
+        
+        that = toc(thisT);
+        %fstat = fopen(fname,'a+');
+        %disp(['Iteration ' num2str(it) ' Alluxio_Row_mv_version4 takes: '  num2str(that)]);
+       % fwrite(fstat,['Iteration ' num2str(it) ' Alluxio_Row_mv_version4 takes: '  num2str(that) sprintf('\n')]);
   else
         disp(['Running the local disk version of matrix*vector']);
          this = tic;
@@ -325,21 +379,21 @@ for it = 1:max_iteration
         that = toc(this);
         disp(['Iteration ' num2str(it) ' LHD_Row_mv takes: '  num2str(that)]);
         fwrite(fstat,['Iteration ' num2str(it) ' LHD_Row_mv takes: '  num2str(that) sprintf('\n')]);
-        end
+  end
 
-oneIterationTime=toc(thistic);
+        
+  
+    oneIterationTime=toc(thistic);
     disp(['Iteration: ' num2str(it) ': ' num2str(oneIterationTime) 's']);
-        fwrite(fstat,['Iteration: ' num2str(it) ': ' num2str(oneIterationTime) 's' sprintf('\n')]);
+    fwrite(fstat,['Iteration: ' num2str(it) ': ' num2str(oneIterationTime) 's' sprintf('\n')]);
 
 	compute_eigval(it, alpha, bet, eig_k);
 	disp('Saving the tridiagonal matrix');
 	save_tridiagonal_matrix(alpha, bet, it);
 	
-    %oneIterationTime=toc(thistic);
-   % disp(['Iteration: ' num2str(it) ': ' num2str(oneIterationTime) 's']);
-%	fwrite(fstat,['Iteration: ' num2str(it) ': ' num2str(oneIterationTime) 's' sprintf('\n')]);
+    
 	end  %% end for loop
-%}	
+	
 	if ( TFS ~= 1) %% LHD mode we remove the local disk files to save space.
     eval(pRUN('deletefiles',NumOfMachines,machines));
     end

@@ -323,7 +323,7 @@ for it = 1:max_iteration
         error_bound = abs(sqrt(eps)*D(it));
         
         for j = 1:it
-        cur_error = abs(beta_i * Q(it,j));
+        cur_error = abs(bet(it) * Q(it,j));
         disp(['Error of' num2str(j) '/' num2str(it) ' th vector:' num2str(cur_error) 'compare to ' num2str(error_bound)]);
 		
             if(cur_error <= error_bound)

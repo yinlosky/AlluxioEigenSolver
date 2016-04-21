@@ -109,9 +109,9 @@ norm_b_temp = DB(['lz_norm_B_temp2']); %% temp db table for calculating the norm
 
 
 
-so_rpath = DB('so_rpath');  %% selective orthogonalize intermidate output table
+
 cur_loop_j = DB('cur_loop_j'); %% so inside loop identifier j every process need to know this value to computeR
-rtv_temp = DB('rtv_temp'); %% so inside we need calculate the dotproduct of rtv, this table is used to save the temp result
+
 % so_rrtv = DB('so_rrtv'); %% so to store the vector 'rrtv' which is used to update lz_vpath, lz_vpath = lz_vpath - so_rrtv;
 
 temp_lz_vpath = DB([num2str(NumOfNodes) 'lz_vpath']);
@@ -124,10 +124,10 @@ delete(beta_t);
 
 
 delete(norm_b_temp);
-delete(so_rpath);
+
 delete(cur_loop_j);
-delete(rtv_temp);
-delete(so_rrtv);
+
+
 delete(temp_lz_vpath);
 delete(temp_mv_temp);
 delete(temp_dot_temp);
@@ -138,10 +138,10 @@ beta_t = DB('beta');
 
 norm_b_temp = DB(['lz_norm_B' num2str(NumOfNodes) '_temp']);
 
-so_rpath = DB('so_rpath');
+
 cur_loop_j = DB('cur_loop_j');
-rtv_temp = DB('rtv_temp');
-so_rrtv = DB('so_rrtv');
+
+
 temp_dot_temp=DB('dot_temp');
 temp_lz_vpath = DB([num2str(NumOfNodes) 'lz_vpath']);
 

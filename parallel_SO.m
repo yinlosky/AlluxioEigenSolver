@@ -56,42 +56,29 @@ col = str2num(Val(cur_loop_j('1,','1,')));
 m = DB(['M' num2str(NumOfNodes)]);
 cut_t = DB(['Cut' num2str(NumOfNodes)]);   %% Cut table assigns the tasks to the processors
 
-num = DB(['Entries' num2str(NumOfNodes)]);  %% This table stores the elements for each column
-
-%%  initialize alpha() and beta()
-
-%global alpha;
 global bet;
 
 %%% Below is for MPI related %%%%%%%%%%%%%%%%%%%%%%
 % Initialize MPI.
 MPI_Init;
-
 % Create communicator.
 comm = MPI_COMM_WORLD;
-
 % Get size and rank.
 comm_size = MPI_Comm_size(comm);
 my_rank = MPI_Comm_rank(comm);
-
 % Since the leader only manages, there must be at least 2 processes
 if comm_size <= 1
     error('Cannot be run with only one process');
 end
-
 disp(['my_rank: ',num2str(my_rank)]);
 % Set who is leader.
 leader = 0;
 % Create a unique tag id for this message (very important in Matlab MPI!).
 output_tag = 10000; %% this tag is used as a synchronization message.
-
 output_tag_second = 20000;
-
 output_tag_three = 30000;
-
 output_tag_four = 40000;
 
-%% continue tag;
 onetime_saxv_tag = 50000;
 
 updateq_tag = 60000;
@@ -166,7 +153,7 @@ if(my_rank == leader)
         str = (['rtv_val calculation' sprintf('\t') num2str(that) sprintf('\n') ...
         '***********************rtv_val done*****************' sprintf('\n')]);
         disp(str); fwrite(fbug,str);fwrite(fdebug, str);
-        %delete(dot_temp);
+        delete(so_rtv_temp);
         rtv_temp_Assoc = Assoc(sprintf('%d,',it),'1,',sprintf('%.15f,',rtv_val));
         put(rtv_table, rtv_temp_Assoc);
 

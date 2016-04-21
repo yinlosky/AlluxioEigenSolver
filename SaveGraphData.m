@@ -6,25 +6,25 @@
 
 myDB;
 
-%nodes_t = DB('Scale');
-%Scale = str2num(Val(nodes_t(:,:)));
-
-nodes_t=DB('NumOfNodes');
+machines_t = DB('NumOfMachines');
+NumOfMachines = str2num(Val(machines_t(:,:)));
+nodes_t = DB('NumOfNodes');
 NumOfNodes = str2num(Val(nodes_t(:,:)));
+proc_t=DB('NumOfProcessors');
+NumOfProcessors = str2num(Val(proc_t(:,:)));
 
-MatrixName = (['M' num2str(NumOfNodes)]);
-initM_numofm = DB('NumOfMachines');
-Nfile = str2num(Val(initM_numofm(:,:)));
 
-initM_edges = DB('edges');
-EdgesPerVertex = str2num(Val(initM_edges(:,:)));
+matrix_t = DB(['M' num2str(NumOfNodes)]);
+initM_edges_t  = DB('edges');
+EdgesPerVertex = str2num(Val(initM_edges_t(:,:)));
+
+Nfile = NumOfMachines;
 
 %%%%%%%%%%%%%%%%%%%%%%%%% Remove old table %%%%%%%%%%%%%%%%%%%%%%%%
 %myMatrix = DB([MatrixName]);
 %delete(myMatrix);       
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-myMatrix = DB([MatrixName]); 
 %SCALE = 22;   EdgesPerVertex = 16;               % Set algorithm inputs.
 %SCALE = 18;   EdgesPerVertex = 16;               % Set algorithm inputs.
 
@@ -40,7 +40,7 @@ myFiles = global_ind(w);   % PARALLEL.
 for i = myFiles
   
     rand('seed',i);                              % Set random seed to be unique for this file.
-    [v1 v2] = SymKronGraph500NoPerm(NumOfNodes,EdgesPerVertex./Np);       % Generate data.
+    [v1,v2] = SymKronGraph500NoPerm(NumOfNodes,EdgesPerVertex./Np);       % Generate data.
  
     rowStr = sprintf('%d,',v1);                                      % Convert to strings.
     colStr = sprintf('%d,',v2);
@@ -55,6 +55,6 @@ for i = myFiles
      %########################################################
 
     A = Assoc(rowStr,colStr,1,@min);
-    put(myMatrix,num2str(A));
+    put(matrix_t,num2str(A));
 end
 agg(w);

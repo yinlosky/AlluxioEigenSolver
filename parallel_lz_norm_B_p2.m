@@ -8,15 +8,7 @@ function parallel_lz_norm_B_p2(Np)
 %% Initialize the tables 
 myDB;
 %machines_t = DB('NumOfMachines');
-nodes_t = DB('NumOfNodes');
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%NumOfMachines = str2num(Val(machines_t('1,','1,')));
-%NumOfMachines = 1;
-%NumOfNodes = str2num(Val(nodes_t('1,','1,')));
-%NumOfNodes = 16;
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+%nodes_t = DB('NumOfNodes');
 
 %%%%%%%%%%%%%%%%%%
 
@@ -27,7 +19,7 @@ temp_t(:,:);
 tic;
 myProc = 1:Np;
 scalar_b=0;
-for i= myProc
+for i = myProc
 	disp(num2str(i));
 	temp = str2num(Val(temp_t(sprintf('%d,',i),'1,')));
 	disp(['temp ' num2str(i) 'th is: ' num2str(temp)]);

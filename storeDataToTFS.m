@@ -92,8 +92,6 @@ end
         end
  	%% Now we begin to store the data reading from start_col to end_col to filePath
 	myobject=AlluxioWriteRead(['alluxio://n117.bluewave.umbc.edu:19998|' filePath '|CACHE|CACHE_THROUGH']);
-	
-
 
 	%% Create the following three objects for writing strings
 	myobject_r = AlluxioWriteRead(['alluxio://n117.bluewave.umbc.edu:19998|' filePath '_r' '|CACHE|CACHE_THROUGH']);
@@ -104,21 +102,20 @@ end
 	this = tic; 
 	%	myAssoc = mIt(sprintf('%d,',start_col:end_col),:);   %% Saving the Assoc directly (Not working for big data)
 	[myAssoc_r myAssoc_c myAssoc_v] = mIt(sprintf('%d,',start_col:end_col),:);
-        
-        readTime = toc(this);
+    readTime = toc(this);
 	fwrite(flog, ['Reading above columns costs: ' num2str(readTime) 's' sprintf('\n')]);
 	
 	%% save the row, col, val string into TFS files and save the time
 	this = tic;
-        javaMethod('writeFile',myobject_r,myAssoc_r);
+    javaMethod('writeFile',myobject_r,myAssoc_r);
 	javaMethod('writeFile',myobject_c,myAssoc_c);
 	javaMethod('writeFile',myobject_v,myAssoc_v);
 	saveTime = toc(this);
 	fwrite(flog, ['Saving above three string costs: ' num2str(saveTime) 's' sprintf('\n')]);
 
 	%% clear unused variable to save space
-        clear myAssoc_r;
-        clear myAssoc_c;
+    clear myAssoc_r;
+    clear myAssoc_c;
 	clear myAssoc_v;
 
         %% We write a {i}_done.txt file to indicate the completion of the execution of the code
@@ -128,7 +125,7 @@ end
 	else
 	%% Process 1 simply waits without doing anything. 
 	disp(['I am just waiting as process 1!']);
-        end
+    end
 end   %% end for loop
 
 

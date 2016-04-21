@@ -1,6 +1,6 @@
 function saveVectorToGTFS()
 %% usage: this function serves to save the updated vector {NumOfNodes}lz_q{iteration} to TFS global file in the following location:
-%%% inputFilePathPre '/' num2str(it) 'v_' num2str(NumOfNodes) 'nodes_' num2str(NumOfProcessors) 'proc_global' _r _v  
+%%% inputFilePathPre '/' num2str(it) 'v_' num2str(NumOfNodes) 'nodes_' num2str(NumOfProcessors) 'proc_global' _v  
 %%
 
 %%
@@ -49,7 +49,6 @@ this = tic;
 readv = toc(this);
 str = ['Read vector: ' num2str(readv) 's' sprintf('\n')];
 disp(str); fwrite(fstat,str);
-
 
 
 %%%%% start saving the vector to TFS file

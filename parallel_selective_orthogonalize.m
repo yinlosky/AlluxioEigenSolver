@@ -1,4 +1,4 @@
-function Number = parallel_selective_orthogonalize(k, beta_i, v_path, Q, D, NumOfNodes, NumOfMachines,NumOfProcessors)
+function Number = parallel_selective_orthogonalize(k, beta_i, Q, D, NumOfMachines,NumOfProcessors)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% File name: parallel_selective_orthogonalize.m
 %% This is the function for deciding if an orthogonalization is needed, return the count of orthogonalizations
@@ -19,43 +19,8 @@ function Number = parallel_selective_orthogonalize(k, beta_i, v_path, Q, D, NumO
 
 disp(['!!!!!!!Now running parallel_so !!!!!!!!!!!!!']);
 myDB;
-
-       switch NumOfMachines
-         case 1
-                machines={'n117'};
-         case 2
-                machines={'n117' 'n118'};
-         case 3
-                machines={'n117' 'n118' 'n119'};
-         case 4
-                machines={'n117' 'n118' 'n119' 'n120'};
-         case 5
-                machines={'n117' 'n118' 'n119' 'n120' 'n121'};
-         case 6
-                machines={'n117' 'n118' 'n119' 'n120' 'n121' 'n122'};
-         case 7
-                machines={'n117' 'n118' 'n119' 'n120' 'n121' 'n122' 'n123'};
-         case 8
-                machines={'n117' 'n118' 'n119' 'n120' 'n121' 'n122' 'n123' 'n124'};
-         case 9
-                machines={'n117' 'n118' 'n119' 'n120' 'n121' 'n122' 'n123' 'n124' 'n125'};
-         case 10
-                machines={'n117' 'n118' 'n119' 'n120' 'n121' 'n122' 'n123' 'n124' 'n125' 'n126'};
-        case 11
-                machines={'n117' 'n118' 'n119' 'n120' 'n121' 'n122' 'n123' 'n124' 'n125' 'n126' 'n127'};
-        case 12
-                machines={'n117' 'n118' 'n119' 'n120' 'n121' 'n122' 'n123' 'n124' 'n125' 'n126' 'n127' 'n128'};
-        case 13
-                machines={'n117' 'n118' 'n119' 'n120' 'n121' 'n122' 'n123' 'n124' 'n125' 'n126' 'n127' 'n128' 'n129'};
-        case 14
-                machines={'n117' 'n118' 'n119' 'n120' 'n121' 'n122' 'n123' 'n124' 'n125' 'n126' 'n127' 'n128' 'n129' 'n130'};
-        case 15
-                machines={'n117' 'n118' 'n119' 'n120' 'n121' 'n122' 'n123' 'n124' 'n125' 'n126' 'n127' 'n128' 'n129' 'n130' 'n131'};
-        case 16
-                machines={'n117' 'n118' 'n119' 'n120' 'n121' 'n122' 'n123' 'n124' 'n125' 'n126' 'n127' 'n128' 'n129' 'n130' 'n131' 'n132'};
-        end
-
-
+machines=getMachines(NumOfMachines);
+     
 cur_loop_j = DB('cur_loop_j');
 eps = 2.204e-16;
 reortho_count = 0;

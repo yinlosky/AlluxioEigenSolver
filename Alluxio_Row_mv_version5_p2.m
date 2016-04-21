@@ -45,7 +45,7 @@ import yhuang9.testAlluxio.* ;
 
 root = matlabroot;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-alpha_t = DB('alpha');
+
 beta_t = DB('beta');
 machines_t = DB('NumOfMachines');
 nodes_t = DB('NumOfNodes');
@@ -64,11 +64,10 @@ it = str2num(Val(cur_it('1,','1,')));  %% current iteration
 m = DB(['M' num2str(NumOfNodes)]);
 cut_t = DB(['Cut' num2str(NumOfNodes)]);   %% Cut table assigns the tasks to the processors
 
-num = DB(['Entries' num2str(NumOfNodes)]);  %% This table stores the elements for each column
 
 %%  initialize alpha() and beta()
 
-global alpha;
+
 global bet;
 
 %%% Below is for MPI related %%%%%%%%%%%%%%%%%%%%%%

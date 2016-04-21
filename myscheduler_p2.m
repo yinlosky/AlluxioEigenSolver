@@ -1,4 +1,4 @@
-function myscheduler_p2(NumOfMachines, Np)
+function myscheduler_p2(Np, EdgesPerVertex)
 %%
 %% This function is used to schedule the cut table for all processors accross the cluster
 %%
@@ -33,6 +33,7 @@ avgCol = floor(NumOfNodes/(Np-1));
 %% load is the average number of elements for each process
 %% StandardM[] is the original mark for each process, which is the equal division of the array. 
 startCol = 1;
+my_step = ceil(load * (EdgesPerVertex/NumOfNodes)); %% set the step as sparseness * load
 for ticks = 1 : Np-2
 
   endCol = [floor(startCol / avgCol ) + 1]  * avgCol;
@@ -44,14 +45,20 @@ for ticks = 1 : Np-2
 	if CurrentLoad > load
  		while CurrentLoad > load
 	      		CurrentLoad = CurrentLoad - str2num(Val(thisout(sprintf('%d,',endCol),:)));
-	      		endCol = endCol - 1;
-	        end
+            % comment below to set the step so the scheduler will converge
+            % faster
+            %    endCol = endCol - 1;
+                endCol = endCol - my_step;
+             
+        
+        end
 	%	disp(['CurrentLoad is: ' num2str(CurrentLoad) ' Load is ' num2str(load)  ]); 
 	%	disp(['endCol is: ' num2str(endCol)]);
 	else
 	%	disp(['Executing the else part!']); 
 		while CurrentLoad < load
-			endCol = endCol + 1;
+			%endCol = endCol + 1;
+             endCol = endCol + my_step;
 			CurrentLoad = CurrentLoad + str2num(Val(thisout(sprintf('%d,',endCol),:)));
 		end
 	end

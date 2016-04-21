@@ -61,7 +61,7 @@ for i = myProc
 %%%% Below might need optimization for performance
 	[myRow,myCol,myVal]=input_v(sprintf('%d,',start_node:end_node),:);
 	myVal=str2num(myVal).*s;
-	put(output,Assoc(myRow,myCol,sprintf('%.5f,',myVal)));
+	put(output,Assoc(myRow,myCol,sprintf('%.15f,',myVal)));
 
 	%for j = start_node:end_node
 	%	newVal = str2num(Val(input_v(sprintf('%d,',j),'1,')))*s; %% Multiply the vector with the s

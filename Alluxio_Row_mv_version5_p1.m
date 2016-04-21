@@ -32,7 +32,6 @@ cur_it= DB('cur_it');
 proc_t = DB('NumOfProcessors');
 dot_temp = DB('dot_temp');
 
-
 NumOfMachines = str2num(Val(machines_t('1,','1,')));
 NumOfNodes = str2num(Val(nodes_t('1,','1,')));
 NumOfProcessors = str2num(Val(proc_t('1,','1,')));
@@ -42,9 +41,6 @@ norm_v_temp = DB(['lz_norm_v' num2str(NumOfNodes) '_temp']);
 it = str2num(Val(cur_it('1,','1,')));  %% current iteration
 m = DB(['M' num2str(NumOfNodes)]);
 cut_t = DB(['Cut' num2str(NumOfNodes)]);   %% Cut table assigns the tasks to the processors
-
-num = DB(['Entries' num2str(NumOfNodes)]);  %% This table stores the elements for each column
-
 %%  initialize alpha() and beta()
 
 global alpha;
@@ -129,7 +125,7 @@ if(my_rank == leader)
     str = (['--------------------------MV begin--------------------- ' sprintf('\n') ...
         'MV' sprintf('\t') num2str(leader_total_time) sprintf('\n') 'Time received: ' ...
         datestr(clock,0) sprintf('\n') ...
-        '--------------------------MV Done--------------------- ' ... 
+        '--------------------------MV Done--------------------- ' sprintf('\n') ... 
         '***********************alpha begin**************' sprintf('\n')]);
     disp(str); fwrite(fbug, str);fwrite(fdebug, str);
     %fclose(fbug); %% debug for matrix * vector done
@@ -141,9 +137,7 @@ if(my_rank == leader)
     this = tic;
     disp(str); fwrite(fbug, str);
     [tRow,tCol,tVal] = dot_temp(sprintf('%d,',1:NumOfProcessors),:); %% This range query works for rows not for cols so this is fine.
-
     if(~isempty(tVal))
-%tVal = str2num(tVal);
     tVal=sscanf(tVal,'%f');
     it_alpha = sum(tVal);
     else 
@@ -152,7 +146,7 @@ if(my_rank == leader)
     	
         alpha(it) = it_alpha;
         that = toc(this);
-        str = (['alpha' sprintf('\t') num2str(that) sprintf('\n') ...
+        str = (['alpha is ' num2str(it_alpha) 'takes: ' sprintf('\t') num2str(that) sprintf('\n') ...
         '***********************alpha done*****************' sprintf('\n')]);
         disp(str); fwrite(fbug,str);fwrite(fdebug, str);
         delete(dot_temp);
@@ -164,20 +158,14 @@ if(my_rank == leader)
    
         
     %%%%%%%%%% Done with Matrix * vector and calculating the alpha %%%%%%%%%%%%
- 
-   
     %%%%%% Now begin to calculate onetime_saxv
     %1. leader broadcast a signal to proceed with vi*v for all working
     %processes
-    
      % Broadcast coefficients to everyone else.   Now continuing to onetimesaxv ...
-     str = ['------------------------onetime_saxv begin-------------------' ... 
+     str = ['------------------------onetime_saxv begin-------------------' sprintf('\n') ... 
         'Time broadcasts: ' datestr(clock, 0) sprintf('\n')];
         disp(str); fwrite(fbug,str); fwrite(fdebug,str);
         this = tic;
-       
-     %  MPI_Bcast(leader, con_tag, comm, con ); %% MPI_Recv(leader, con_tag, comm );
-       
      %%%%%%%%%%%%%%%%%%%%%
      numCounter = comm_size - 1;
      done = 0;
@@ -217,8 +205,6 @@ if(my_rank == leader)
           if recvCounter > leader
               %% dest is who sent this message
               dest = recvCounter;
-              
-              
               leader_tag = output_tag_second + recvCounter;
              %[message_ranks, message_tags] = MPI_Probe( dest, leader_tag, comm );
              %if ~isempty(message_ranks)
@@ -242,7 +228,7 @@ if(my_rank == leader)
     %% leader process calculate beta p2
     
     str = ['Leader process Computing beta[' num2str(it) ']...'];
-    disp(str); fwrite(fbug,str)
+    disp(str); fwrite(fbug,str);
     str = ['************************beta begins********************' sprintf('\n')];
     disp(str); fwrite(fbug, str);fwrite(fdebug, str);
     this = tic;
@@ -253,7 +239,7 @@ if(my_rank == leader)
  else scalar_v = sum(str2num(temp_t_Val));
  end   %%% Calcualate the total sum of the values	
 %disp(['Before sqrt: ' sprintf('%.15f,', scalar_v)]);
-scalar_v = sqrt(scalar_v);
+    scalar_v = sqrt(scalar_v);
     scalar_v_assoc = Assoc(sprintf('%d,',it),'1,',sprintf('%.15f,',scalar_v));
     put(beta_t, scalar_v_assoc);
     

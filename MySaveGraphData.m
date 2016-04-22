@@ -6,17 +6,17 @@
 
 myDB;
 
-machines_t = DB('NumOfMachines');
+machines_t = DB('init_NumOfMachines');
 NumOfMachines = str2num(Val(machines_t(:,:)));
-nodes_t = DB('NumOfNodes');
+nodes_t = DB('init_NumOfNodes');
 NumOfNodes = str2num(Val(nodes_t(:,:)));
-proc_t=DB('NumOfProcessors');
+proc_t=DB('init_NumOfProcessors');
 NumOfProcessors = str2num(Val(proc_t(:,:)));
+initM_edges_t  = DB('init_edges');
+EdgesPerVertex = str2num(Val(initM_edges_t(:,:)));
 
 
 matrix_t = DB(['M' num2str(NumOfNodes)]);
-initM_edges_t  = DB('edges');
-EdgesPerVertex = str2num(Val(initM_edges_t(:,:)));
 
 %Nfile = NumOfMachines;
 

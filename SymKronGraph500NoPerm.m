@@ -10,6 +10,9 @@ function [StartVertex EndVertex] = SymKronGraph500NoPerm(TotalNum,EdgesPerVertex
 %    StartVertex = Mx1 vector of integer start vertices in the range [1,N]
   %    EndVertex = Mx1 vector of integer end vertices in the range [1,N]
 % The output will also be written to a file named Heigen{scale}_randnum.edge  
+[idum, my_machine] = system('hostname'); 
+ my_machine = strtrim(my_machine);
+
   N = TotalNum-1;              % Set  power of number of vertices..
   SCALE = log2(TotalNum);
 
@@ -30,7 +33,7 @@ ij = ij + 2^(ib-1) * [ii_bit; jj_bit];
 
   StartVertex = ij(1,:).';     % Copy to output.
   EndVertex = ij(2,:).';       % Copy to output.
-  fidEdge =fopen(['Heigen' num2str(TotalNum) '_' num2str(randi([0,10000]))  '.edge'],'w');
+  fidEdge =fopen(['Heigen' num2str(TotalNum) '_' my_machine '_' num2str(feature('getpid'))  '.edge'],'w');
 
   for index = 1:M
       myStr = sprintf('%d\t%d',StartVertex(index),EndVertex(index));

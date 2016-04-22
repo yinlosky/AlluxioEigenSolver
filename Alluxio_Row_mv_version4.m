@@ -65,8 +65,9 @@ num = DB(['Entries' num2str(NumOfNodes)]);  %% This table stores the elements fo
 
 %%  initialize alpha() and beta()
 
-alpha = zeros(1,10);
-bet = zeros(1,10);
+global alpha;
+global bet;
+
 
 
 
@@ -142,7 +143,7 @@ if(my_rank == leader)
     end %% end of leader process while
     output
     leader_total_time = toc(leader_begin_time);
-    str= (['=============================Iteration ' num2str(it) ' begins============================']);
+    str= (['=============================Iteration ' num2str(it) ' begins============================' sprintf('\n')]);
     fwrite(fdebug, str);
     str = (['--------------------------MV begin--------------------- ' sprintf('\n') ...
         'MV' sprintf('\t') num2str(leader_total_time) sprintf('\n') 'Time received: ' datestr(clock,0) sprintf('\n') ...
@@ -258,6 +259,8 @@ if(my_rank == leader)
     
     str = ['Leader process Computing beta[' num2str(it) ']...'];
     disp(str); fwrite(fbug,str)
+    str = ['************************beta begins********************' sprintf('\n')];
+    disp(str); fwrite(fbug, str);fwrite(fdebug, str);
     this = tic;
 	%parallel_lz_norm_v_p2; %% scalar_v is written to beta_i in the table beta_t('i,','1,')
 	 [temp_t_Row,temp_t_Col,temp_t_Val] = norm_v_temp(sprintf('%d,',1:NumOfProcessors),:);
@@ -271,17 +274,82 @@ scalar_v = sqrt(scalar_v);
     put(beta_t, scalar_v_assoc);
     
     that = toc(this);
-    str = ['********************' sprintf('\n') 'beta' sprintf('\t')  num2str(that) sprintf('\n') ...
-       '************************' sprintf('\n') ];
+    str = ['beta' sprintf('\t')  num2str(that) sprintf('\n') ...
+       '************************beta done*******************' sprintf('\n') ];
 	disp(str); fwrite(fbug, str);fwrite(fdebug, str);
 
 	bet(it) = scalar_v;
 	delete(norm_v_temp);
 	disp(['beta[' num2str(it) '] = ' num2str(bet(it))]);
-    
-    
-    
     %% beta p2 done.
+    
+    %=============================================================
+    %====   Parallel selective orthogonization Start    ===============
+    %=============================================================
+  
+    %% Attention: because we need access elements in particular row and col of {NumOfNodes}lz_q{it}  which is the vi in the algorithm, we need save
+    %% resutls back to the database for the sake of parallel so part. I haven't completed this part yet.
+    
+    disp(['=======================================' ... 
+        'Now starting parallel so process ...' sprintf('\n') '==============================' sprintf('\n')]);
+    tempTmatrix = constructT(it, alpha, bet); 
+    [Q,D] = eig(tempTmatrix);
+    D = diag(D);
+    
+    v_path = ([num2str(NumOfNodes) 'lz_vpath']);
+	disp(['NumOfMachines in SO: ' num2str(NumOfMachines) 'Starting so, iterations # is ' num2str(it) ' beta_it value is: ' num2str(bet(it))]);
+    
+    
+    %num_ortho = parallel_selective_orthogonalize(it, bet(it), v_path, Q,D, NumOfNodes, NumOfMachines,NumOfProcessors);
+    
+    cur_loop_j = DB('cur_loop_j');
+    eps = 2.204e-16;
+    reortho_count = 0;
+    
+    error_bound = abs(sqrt(eps)*D(it));
+    
+    for j = 1:it
+	cur_error = abs(bet(it) * Q(it,j));
+	disp(['Error of' num2str(j) '/' num2str(it) ' th vector:' num2str(cur_error) 'compare to ' num2str(error_bound)]);
+		
+		if(cur_error <= error_bound)  %% broadcast a signal for SO
+			disp(['V need to be reorthogalized by ' num2str(j) 'th Ritz Vector']);
+				reortho_count =  reortho_count + 1;
+			disp(['Reorthogonalizing against' num2str(j) 'th Ritz vector']);
+			% write a method to compute r r = V[i,:]*Q[:,j] computR.m
+		
+			%rpath = computeR(k,j,Q, NumOfNodes, NumOfMachines); %% k is the cur_it value, j is current loop id, Q is the eigenVector matrix constructed from T
+				%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% output: 'so_rpath'
+
+			disp(['Store j: ' num2str(j) ' into cur_loop_j(1,1) table']);
+			loop_j_Assoc = Assoc('1,','1,',sprintf('%d,',j));
+			put(cur_loop_j,loop_j_Assoc);
+		
+       		 %R_output = DB('so_rpath'); delete(R_output);
+             
+            %broadcast the computeR signal to all workers 
+			eval(pRUN('parallel_computeR',NumOfProcessors,machines)); %% should write to 'so_rpath', all processes should know the cur_it as k, cur_loop_j as j, Q is the eigenVector matrix from T %%%%%%%
+			%
+            
+            
+			eval(pRUN('parallel_rtv_p1',NumOfProcessors,machines));
+			parallel_rtv_p2;	
+		    p_rtv_temp = DB('rtv_temp');delete(p_rtv_temp);
+		  
+			eval(pRUN('parallel_so_rrtv',NumOfProcessors,machines)); %% times 'so_rpath' with 'scalar_rtv' and store in 'so_rrtv'
+			
+	    	eval(pRUN('parallel_so_updatev',NumOfProcessors,machines)); %% lz_vpath is finally updated!!
+        else
+            %%broadcast a signal 
+        end
+    end
+    
+    %=============================================================
+    %====   Parallel selective orthogonization Done   ===============
+    %=============================================================
+    
+    
+    
     
     %%%%%%%    UPDATE Q %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %% Now leader process broadcast updateQ flag again so that working processes will update vi
@@ -292,7 +360,7 @@ scalar_v = sqrt(scalar_v);
    %%%%%%%%%%%%%%%%
     %%%%%%%%%%%%%%%%%%%%%
     str = ['--------------------------updatev begin-------------------' sprintf('\n')];
-        disp(str); fwrite(fbug,str);
+        disp(str); fwrite(fbug,str);fwrite(fdebug, str);
         this = tic;
     
      numCounter = comm_size - 1;
@@ -359,7 +427,7 @@ scalar_v = sqrt(scalar_v);
     str = ('Now saving the updatedQ to global file ...');
     this = tic;
     disp(str); fwrite(fbug, str);
-    result_string = [updated_vector{1} sprintf('%s', updated_vector{2:end})];
+    result_string = [updated_vector{1} sprintf('%s', updated_vector{2:end})]; %% convert to char from cell string so we can write to Alluxio
     
     inputFilePathPre = '/mytest';
 	inputFilePath=[inputFilePathPre '/' num2str(it+1) 'v_' num2str(NumOfNodes) 'nodes_' num2str(NumOfProcessors) 'proc_global'];
@@ -430,7 +498,7 @@ scalar_v = sqrt(scalar_v);
     str = (['copyV_i+1' sprintf('\t') num2str(leader_total_time) sprintf('\n') 'Time received: ' datestr(clock,0) sprintf('\n') ...
         '***********************save updatedv done***************' sprintf('\n')]);
     disp(str); fwrite(fbug, str);fwrite(fdebug, str);
-    str= (['=============================Iteration ' num2str(it) ' Done============================']);
+    str= (['=============================Iteration ' num2str(it) ' Done============================' sprintf('\n')]);
     fwrite(fdebug, str);
     %%%%**************************  All working processes done copying
     %%%%v_i_plus_one to local machine.
@@ -613,7 +681,7 @@ end
         str = (['vi*v costs ' num2str(timer) sprintf('\n')]);
         disp(str); fwrite(fstat,str);
          
-        str = (['Now sending onde vi * v to leader process']);
+        str = (['Now sending done vi * v to leader process']);
         disp(str); fwrite(fstat,str);
         mytic = tic;
         %% **************** done with matrix* vector  ******************
@@ -730,6 +798,7 @@ end
      disp(str); fwrite(fstat, str);
   
      
+     
      %% Waiting for leader to send signal to continue to updateQ
      str = (['Waiting for leader to continue update V... ' sprintf('\n')]);
      disp(str); fwrite(fstat, str);
@@ -835,18 +904,3 @@ that = toc(this);
 disp(['Finalization costs: ' num2str(that) 's']);
 
 
-
-%% function MPI_Send( dest, tag, comm, varargin )
-%% function varargout = MPI_Recv( source, tag, comm )
-
-
-
-
-
-
-%disp('Sending to agg');
-%fwrite(fstat,['Sending to agg']);
-%agg(w);
-%disp('Agg is done! I am closed now');
-%fwrite(fstat, ['Agg is done! I am closed now.']);
-%fclose(fstat);

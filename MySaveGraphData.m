@@ -41,7 +41,7 @@ for i = myFiles
     
     if(i>1)
     %rand('seed',i);                              % Set random seed to be unique for this file.
-    [v1,v2] = SymKronGraph500NoPerm(NumOfNodes,EdgesPerVertex./(Np-1));       % Generate data.
+    [v1,v2] = SymKronGraph500NoPerm(NumOfNodes,EdgesPerVertex./(Np-1),i);       % Generate data.
  
     rowStr = sprintf('%d,',v1);                                      % Convert to strings.
     colStr = sprintf('%d,',v2);
@@ -56,7 +56,9 @@ for i = myFiles
      %########################################################
 
     A = Assoc(rowStr,colStr,'1,',@min);
+    disp('Now start inserting the data!');
     put(matrix_t,A);
+    disp('Insertion done!');
     else 
         disp(['This is leader process, I am just waiting!']);
     end

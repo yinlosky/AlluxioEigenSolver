@@ -1,4 +1,4 @@
-function [StartVertex EndVertex] = SymKronGraph500NoPerm(TotalNum,EdgesPerVertex)
+function [StartVertex EndVertex] = SymKronGraph500NoPerm(TotalNum,EdgesPerVertex,ProcId)
   %Graph500NoPerm: Generates symmetric graph edges using the same 2x2 Kronecker algorithm (R-MAT) as the Graph500 benchmark, but no permutation of vertex labels is performed.
 %IO user function.
   %  Usage:
@@ -10,6 +10,8 @@ function [StartVertex EndVertex] = SymKronGraph500NoPerm(TotalNum,EdgesPerVertex
 %    StartVertex = Mx1 vector of integer start vertices in the range [1,N]
   %    EndVertex = Mx1 vector of integer end vertices in the range [1,N]
 % The output will also be written to a file named Heigen{scale}_randnum.edge  
+pause(120*ProcId);
+
 [idum, my_machine] = system('hostname'); 
  my_machine = strtrim(my_machine);
 

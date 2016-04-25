@@ -36,7 +36,7 @@ ij = ij + 2^(ib-1) * [ii_bit; jj_bit];
   StartVertex = ij(1,:).';     % Copy to output.
   EndVertex = ij(2,:).';       % Copy to output.
   fidEdge =fopen(['Heigen' num2str(TotalNum) '_' my_machine '_' num2str(feature('getpid'))  '.edge'],'w');
-
+  disp(['Writing to local disk for Heigen!!!' sprintf('\n')]);
   for index = 1:M
       myStr = sprintf('%d\t%d',StartVertex(index),EndVertex(index));
       if (index ~= M)
@@ -46,9 +46,11 @@ ij = ij + 2^(ib-1) * [ii_bit; jj_bit];
         fwrite(fidEdge,myStr);
       end
   end
+  
   startv = ij(1,:).';
   endv = ij(2,:).';
   StartVertex = vertcat(startv,endv);
   EndVertex = vertcat(endv,startv);
+  disp(['Writing done! Now return from function.' sprintf('\n')]);
 end
 

@@ -18,10 +18,21 @@ put(initM_edges_t, Assoc('1,','1,',sprintf('%d,',EdgesPerVertex)));
 
 machines = getMachines(NumOfMachines);
 
-disp(['Now initializing the input matrix in ' 'M' num2str(NumOfNodes)]);
-this = tic; eval(pRUN('MySaveGraphData',NumOfProcessors, machines)); total_time = toc(this);
-disp(['Total time to initialize M' num2str(NumOfNodes) ' is ' num2str(total_time)]);
+iteration_number = EdgesPerVertex/25;
 
+iteration_num_t = DB('iteration_num_t');
+
+
+for i = 1:1:iteration_number
+    put(iteration_num_t, Assoc('1,','1,',sprintf('%d,',i)));
+disp(['Round ' num2str(i) ' initializing the input matrix in ' 'M' num2str(NumOfNodes)]);
+
+this = tic; eval(pRUN('MySaveGraphData',NumOfProcessors, machines)); total_time = toc(this);
+
+disp(['Total time to initialize M' num2str(NumOfNodes) ' is ' num2str(total_time)]);
+end
+
+delete(iteration_num_t);
 
 end
 

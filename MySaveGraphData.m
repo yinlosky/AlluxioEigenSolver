@@ -14,7 +14,8 @@ proc_t=DB('init_NumOfProcessors');
 NumOfProcessors = str2num(Val(proc_t(:,:)));
 initM_edges_t  = DB('init_edges');
 EdgesPerVertex = str2num(Val(initM_edges_t(:,:)));
-
+iteration_num_t = DB('iteration_num_t');
+iteration_number = str2num(Val(iteration_num_t(:,:)));
 
 matrix_t = DB(['M' num2str(NumOfNodes)]);
 
@@ -41,10 +42,10 @@ for i = myFiles
     
     if(i>1)
     %rand('seed',i);                              % Set random seed to be unique for this file.
-    [v1,v2] = SymKronGraph500NoPerm(NumOfNodes,EdgesPerVertex./(Np-1),i);       % Generate data.
+    [v1,v2] = SymKronGraph500NoPerm(NumOfNodes,EdgesPerVertex./(Np-1),i,iteration_number);       % Generate data.
  
-    rowStr = sprintf('%d,',v1);                                      % Convert to strings.
-    colStr = sprintf('%d,',v2);
+    %v1 = ;                                      % Convert to strings.
+    %v2 = ;
     %valStr = repmat('1,',1,numel(v1));
      
      %######################################################
@@ -55,7 +56,7 @@ for i = myFiles
   %fileTime = toc;  disp(['Time: ' num2str(fileTime) ', Edges/sec: ' num2str(numel(v1)./fileTime)]);
      %########################################################
 
-    A = Assoc(rowStr,colStr,'1,',@min);
+    A = Assoc(sprintf('%d,',v1),sprintf('%d,',v2),'1,',@min);
     disp('Now start inserting the data!');
     put(matrix_t,A);
     disp('Insertion done!');

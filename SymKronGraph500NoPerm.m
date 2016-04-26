@@ -1,4 +1,4 @@
-function [StartVertex EndVertex] = SymKronGraph500NoPerm(TotalNum,EdgesPerVertex,ProcId)
+function [StartVertex EndVertex] = SymKronGraph500NoPerm(TotalNum,EdgesPerVertex,ProcId, it_num)
   %Graph500NoPerm: Generates symmetric graph edges using the same 2x2 Kronecker algorithm (R-MAT) as the Graph500 benchmark, but no permutation of vertex labels is performed.
 %IO user function.
   %  Usage:
@@ -35,8 +35,9 @@ ij = ij + 2^(ib-1) * [ii_bit; jj_bit];
 
   StartVertex = ij(1,:).';     % Copy to output.
   EndVertex = ij(2,:).';       % Copy to output.
-  fidEdge =fopen(['Heigen' num2str(TotalNum) '_' my_machine '_' num2str(feature('getpid'))  '.edge'],'w');
+  fidEdge =fopen(['it' num2str(it_num) '_Heigen' num2str(TotalNum) '_' my_machine '_' num2str(feature('getpid'))  '.edge'],'w');
   disp(['Writing to local disk for Heigen!!!' sprintf('\n')]);
+  this = tic;
   for index = 1:M
       myStr = sprintf('%d\t%d',StartVertex(index),EndVertex(index));
       if (index ~= M)
@@ -46,7 +47,8 @@ ij = ij + 2^(ib-1) * [ii_bit; jj_bit];
         fwrite(fidEdge,myStr);
       end
   end
-  
+  wtime = toc(this);
+  disp(['Writing time: ' num2str(wtime) 's' sprintf('\n')]);
   startv = ij(1,:).';
   endv = ij(2,:).';
   StartVertex = vertcat(startv,endv);

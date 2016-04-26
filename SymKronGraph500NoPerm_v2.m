@@ -34,15 +34,19 @@ end
   EndVertex = ij(2,:).';       % Copy to output.
   fidEdge =fopen(['Heigen' num2str(TotalNum) '_' num2str(id)  '.edge'],'w');
 
+ 
+  this = tic;
   for index = 1:M
-      myStr = sprintf('%d\t%d',StartVertex(index),EndVertex(index));
+      
       if (index ~= M)
-      fwrite(fidEdge,myStr);
-      fwrite(fidEdge,sprintf('\n'));
+      fprintf(fidEdge,'%d\t%d\n', StartVertex(index), EndVertex(index));
       else
-        fwrite(fidEdge,myStr);
+        fprintf(fidEdge,'%d\t%d', StartVertex(index), EndVertex(index));
       end
   end
+  totalTime = toc(this);
+  disp(['Ingestion Speed is ' num2str(M*5)/totalTime 'B/s' sprintf('\n')]);
+  
   startv = ij(1,:).';
   endv = ij(2,:).';
   StartVertex = vertcat(startv,endv);

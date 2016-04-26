@@ -10,7 +10,7 @@ function [StartVertex EndVertex] = SymKronGraph500NoPerm(TotalNum,EdgesPerVertex
 %    StartVertex = Mx1 vector of integer start vertices in the range [1,N]
   %    EndVertex = Mx1 vector of integer end vertices in the range [1,N]
 % The output will also be written to a file named Heigen{scale}_randnum.edge  
-pause(120*ProcId);
+%pause(120*ProcId);
 
 [idum, my_machine] = system('hostname'); 
  my_machine = strtrim(my_machine);
@@ -26,7 +26,7 @@ pause(120*ProcId);
   ab = A + B;                 % Normalize coefficients.
   c_norm = C/(1 - (A + B));
 a_norm = A/(A + B);
-
+disp(['Starting to initialize...' sprintf('\n')]);
 for ib = 1:SCALE            % Loop over each scale.
            ii_bit = rand(1, M) > ab;
 jj_bit = rand(1, M) > ( c_norm * ii_bit + a_norm * not (ii_bit) );

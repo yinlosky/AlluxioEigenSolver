@@ -15,7 +15,7 @@ function [StartVertex EndVertex] = SymKronGraph500NoPerm(TotalNum,EdgesPerVertex
 [idum, my_machine] = system('hostname'); 
  my_machine = strtrim(my_machine);
 
-  N = TotalNum-1;              % Set  power of number of vertices..
+  N = TotalNum;              % Set  power of number of vertices..
   SCALE = log2(TotalNum);
 
   M = round(EdgesPerVertex .* N);     % Compute total number of edges to generate.
@@ -25,12 +25,12 @@ function [StartVertex EndVertex] = SymKronGraph500NoPerm(TotalNum,EdgesPerVertex
   ij = ones (2, M);           % Initialize index arrays.
   ab = A + B;                 % Normalize coefficients.
   c_norm = C/(1 - (A + B));
-a_norm = A/(A + B);
-disp(['Starting to initialize...' sprintf('\n')]);
-for ib = 1:SCALE            % Loop over each scale.
+  a_norm = A/(A + B);
+  disp(['Starting to initialize...' sprintf('\n')]);
+  for ib = 1:SCALE            % Loop over each scale.
            ii_bit = rand(1, M) > ab;
-jj_bit = rand(1, M) > ( c_norm * ii_bit + a_norm * not (ii_bit) );
-ij = ij + 2^(ib-1) * [ii_bit; jj_bit];
+           jj_bit = rand(1, M) > ( c_norm * ii_bit + a_norm * not (ii_bit) );
+           ij = ij + 2^(ib-1) * [ii_bit; jj_bit];
   end
 
   StartVertex = ij(1,:).';     % Copy to output.
@@ -49,10 +49,9 @@ ij = ij + 2^(ib-1) * [ii_bit; jj_bit];
   end
   wtime = toc(this);
   disp(['Writing time: ' num2str(wtime) 's' sprintf('\n')]);
-  startv = ij(1,:).';
-  endv = ij(2,:).';
-  StartVertex = vertcat(startv,endv);
-  EndVertex = vertcat(endv,startv);
+
+  StartVertex = vertcat(ij(1,:).',ij(2,:).');
+  EndVertex = vertcat(ij(2,:).',ij(1,:).');
   disp(['Writing done! Now return from function.' sprintf('\n')]);
 end
 

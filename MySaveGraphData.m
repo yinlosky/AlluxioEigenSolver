@@ -42,20 +42,8 @@ for i = myFiles
     
     if(i>1)
     %rand('seed',i);                              % Set random seed to be unique for this file.
-    [v1,v2] = SymKronGraph500NoPerm(NumOfNodes,EdgesPerVertex./(Np-1),i,iteration_number);       % Generate data.
+    [v1,v2] = SymKronGraph500NoPerm(NumOfNodes,EdgesPerVertex./((Np-1)*4),i,iteration_number);       % Generate data.
  
-    %v1 = ;                                      % Convert to strings.
-    %v2 = ;
-    %valStr = repmat('1,',1,numel(v1));
-     
-     %######################################################
-    % Open files, write data, and close files.
-    %fidRow=fopen([fname 'r.txt'],'w'); fidCol=fopen([fname 'c.txt'],'w'); fidVal =fopen([fname 'v.txt'],'w');
-   % fwrite(fidRow,rowStr);             fwrite(fidCol,colStr);             fwrite(fidVal,valStr);
-   % fclose(fidRow);                    fclose(fidCol);                    fclose(fidVal);
-  %fileTime = toc;  disp(['Time: ' num2str(fileTime) ', Edges/sec: ' num2str(numel(v1)./fileTime)]);
-     %########################################################
-
     A = Assoc(sprintf('%d,',v1),sprintf('%d,',v2),'1,',@min);
     disp('Now start inserting the data!');
     put(matrix_t,A);

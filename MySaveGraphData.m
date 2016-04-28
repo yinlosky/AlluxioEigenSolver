@@ -38,15 +38,29 @@ M = EdgesPerVertex .* Nmax;                      % Total number of edges.
 w = zeros(Np,1,map([Np 1],{},0:Np-1));
 myFiles = global_ind(w);   % PARALLEL.
 
+chunksize = 62500
 for i = myFiles
     
     if(i>1)
     %rand('seed',i);                              % Set random seed to be unique for this file.
     [v1,v2] = SymKronGraph500NoPerm(NumOfNodes,EdgesPerVertex./((Np-1)*4),i,iteration_number);       % Generate data.
- 
-    A = Assoc(sprintf('%d,',v1),sprintf('%d,',v2),'1,',@min);
     disp('Now start inserting the data!');
-    put(matrix_t,A);
+    
+    totalNum = size(v1,1);
+    insert_step = floor(totalNum / chunksize);
+    
+    for index=1:insert_step
+        if index == insert_step
+            readv1 = v1((index-1)*chunksize+1:totalNum);
+            readv2 = v2((index-1)*chunksize+1:totalNum);
+        else
+        readv1 = v1((index-1)*chunksize+1:index*chunksize);
+        readv2 = v2((index-1)*chunksize+1:index*chunksize);
+        end
+        put(matrix_t,Assoc(sprintf('%d,',readv1),sprintf('%d,',readv2),'1,',@min));
+    end
+    
+    
     disp('Insertion done!');
     else 
         disp(['This is leader process, I am just waiting!']);

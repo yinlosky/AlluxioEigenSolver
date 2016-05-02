@@ -28,9 +28,9 @@ for i = myMachine
         end_node = NumOfNodes;
         end
         length = end_node - start_node+1;
-        disp(length);
+        %disp(length);
         rowStr = sprintf('%d,',start_node:end_node);
-        disp(rowStr);
+        %disp(rowStr);
         valStr = sprintf('%.15f,', rand(1,length,'double'));
         %colStr = sprintf('%d,',ones(1,length));
         newAssoc = Assoc(rowStr,'1,',valStr);

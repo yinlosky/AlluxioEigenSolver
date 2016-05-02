@@ -38,7 +38,7 @@ M = EdgesPerVertex .* Nmax;                      % Total number of edges.
 w = zeros(Np,1,map([Np 1],{},0:Np-1));
 myFiles = global_ind(w);   % PARALLEL.
 
-chunksize = 62500
+chunksize = 62500;
 for i = myFiles
     
     if(i>1)

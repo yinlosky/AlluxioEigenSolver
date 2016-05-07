@@ -222,7 +222,7 @@ i = my_rank+1;  %% my_rank starts from 0 to comm_size-1; so I starts from 1 to c
         partial_sum = sum(val_arr.^2);
         put(tempB_t,Assoc(sprintf('%d,',my_rank),'1,',sprintf('%.15f,',partial_sum)));
 %%                 2. Send finish to the leader
-        mytic = this;
+        mytic = tic;
         leader_tag = syn1_tag + my_rank;
         MPI_Send(leader, leader_tag, comm,my_rank);
         timer = toc(mytic);
@@ -247,7 +247,7 @@ i = my_rank+1;  %% my_rank starts from 0 to comm_size-1; so I starts from 1 to c
           put(output_t, Assoc(rowStr,'1,',sprintf('%.15f,',lz_q1_val)));
 
 %%                 5. send signal back to the leader 
-        mytic = this;
+        mytic = tic;
         leader_tag = syn2_tag + my_rank;
         MPI_Send(leader, leader_tag, comm,my_rank);
         timer = toc(mytic);

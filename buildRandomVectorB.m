@@ -1,4 +1,4 @@
-function buildRandomVectorB
+%function buildRandomVectorB
 %%% Usage: This function will run in parallel to build random vector B and
 %%%        calculate lz_q1 = B / || B ||
 
@@ -116,7 +116,7 @@ leader_begin_time = tic;
              %if ~isempty(message_ranks)
                  output(:,recvCounter) = MPI_Recv(dest, leader_tag, comm);
                  str = (['Received data packet number ' num2str(recvCounter)]);
-                 disp(str);fwrite(fbug,str);
+                 disp(str);fwrite(fdebug,str);
                  recvCounter = recvCounter - 1;
              %end
           else % recvCounter  == leader
@@ -179,7 +179,7 @@ leader_begin_time = tic;
              %if ~isempty(message_ranks)
                  output(:,recvCounter) = MPI_Recv(dest, leader_tag, comm);
                  str = (['Received data packet number ' num2str(recvCounter)]);
-                 disp(str);fwrite(fbug,str);
+                 disp(str);fwrite(fdebug,str);
                  recvCounter = recvCounter - 1;
              %end
           else % recvCounter  == leader

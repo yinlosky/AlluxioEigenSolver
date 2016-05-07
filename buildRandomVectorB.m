@@ -251,7 +251,7 @@ i = my_rank+1;  %% my_rank starts from 0 to comm_size-1; so I starts from 1 to c
      chunksize = 62500;
      
     insert_step = floor(length / chunksize);
-    
+    %% insert minus 1
     for index=1:insert_step
         if (index == insert_step)
             chunk_val_arr = lz_q1_val((index-1)*chunksize+1:end_node);

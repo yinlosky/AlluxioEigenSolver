@@ -135,7 +135,7 @@ leader_begin_time = tic;
     %% 2. Calculate || B || and save the result back to normB table.
     partial_B_arr = str2num(Val(tempB_t(:,:)));
     normB_value = sqrt(sum(partial_B_arr));
-    put(normB_t,Assoc('1,','1,',normB_value));
+    put(normB_t,Assoc('1,','1,',sprintf('%.15f,',normB_value)));
    
     %% 3. Send continue update signal to all worker processes.
        str = ['------------------------Update lz_v1 begin-------------------' sprintf('\n')];
@@ -218,6 +218,7 @@ i = my_rank+1;  %% my_rank starts from 0 to comm_size-1; so I starts from 1 to c
         rowStr = sprintf('%d,',start_node:end_node);
         %disp(rowStr);
         val_arr = rand(1,length,'double');
+        disp([sprintf('%.15f,',val_arr)]);
         partial_sum = sum(val_arr.^2);
         put(tempB_t,Assoc(sprintf('%d,',my_rank),'1,',sprintf('%.15f,',partial_sum)));
 %%                 2. Send finish to the leader

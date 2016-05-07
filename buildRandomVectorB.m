@@ -246,7 +246,26 @@ i = my_rank+1;  %% my_rank starts from 0 to comm_size-1; so I starts from 1 to c
           normB = str2num(Val(normB_t(:,:)));
           lz_q1_val = val_arr ./ normB;
           
-          put(output_t, Assoc(rowStr,'1,',sprintf('%.15f,',lz_q1_val)));
+     %%% insert by chunk because the arr is too large  
+     rowStr = sprintf('%d,',start_node:end_node);
+     chunksize = 62500;
+     
+    insert_step = floor(length / chunksize);
+    
+    for index=1:insert_step
+        if index == insert_step
+            chunk_val_arr = lz_q1_val((index-1)*chunksize+1:end_node);
+            put(output_t,Assoc(sprintf('%d,',start_node+(index-1)*chunksize:end_node),'1,', sprintf('%.15f,',chunk_val_arr),@min));
+      
+        else
+            chunk_val_arr = lz_q1_val((index-1)*chunksize+1:index*chunksize);
+            put(output_t,Assoc(sprintf('%d,',start_node+(index-1)*chunksize:start_node+index*chunksize),'1,', sprintf('%.15f,',chunk_val_arr),@min));
+ 
+        end
+        
+    end
+          
+         % put(output_t, Assoc(rowStr,'1,',sprintf('%.15f,',lz_q1_val)));
 
 %%                 5. send signal back to the leader 
         mytic = tic;

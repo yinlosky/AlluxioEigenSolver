@@ -133,7 +133,8 @@ leader_begin_time = tic;
     disp(str); fwrite(fdebug, str);
     
     %% 2. Calculate || B || and save the result back to normB table.
-    partial_B_arr = str2num(Val(tempB_t(:,:)));
+    [br,bc,bv] =  tempB_t(:,:);
+    partial_B_arr = str2num(bv);
     normB_value = sqrt(sum(partial_B_arr));
     put(normB_t,Assoc('1,','1,',sprintf('%.15f,',normB_value)));
    
@@ -217,6 +218,7 @@ i = my_rank+1;  %% my_rank starts from 0 to comm_size-1; so I starts from 1 to c
         
         rowStr = sprintf('%d,',start_node:end_node);
         %disp(rowStr);
+        rand('seed',i); %set the seed particular for i so we don't generate the same data
         val_arr = rand(1,length,'double');
         disp([sprintf('%.15f,',val_arr)]);
         partial_sum = sum(val_arr.^2);

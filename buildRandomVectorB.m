@@ -255,11 +255,13 @@ i = my_rank+1;  %% my_rank starts from 0 to comm_size-1; so I starts from 1 to c
     for index=1:insert_step
         if index == insert_step
             chunk_val_arr = lz_q1_val((index-1)*chunksize+1:end_node);
-            put(output_t,Assoc(sprintf('%d,',start_node+(index-1)*chunksize:end_node), '1,' , sprintf('%.15f,',chunk_val_arr)));
+            index_arr = start_node+(index-1)*chunksize:end_node;
+            put(output_t,Assoc(sprintf('%d,', index_arr), '1,' , sprintf('%.15f,',chunk_val_arr)));
       
         else
             chunk_val_arr = lz_q1_val((index-1)*chunksize+1:index*chunksize);
-            put(output_t,Assoc(sprintf('%d,',start_node+(index-1)*chunksize:start_node+index*chunksize),'1,', sprintf('%.15f,',chunk_val_arr)));
+            index_arr = start_node+(index-1)*chunksize:start_node+index*chunksize;
+            put(output_t,Assoc(sprintf('%d,', index_arr), '1,', sprintf('%.15f,',chunk_val_arr)));
  
         end
         

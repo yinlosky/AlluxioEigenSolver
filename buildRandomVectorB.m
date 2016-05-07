@@ -48,7 +48,7 @@ if(test_flag == 1)
     NumOfProcessors = str2num(Val(test_proc_t(:,:)));
 end
 
-gap = floor(NumOfNodes/(NumOfProcessors-1));
+gap = floor(NumOfNodes/(Np-1));
 
 output_t = DB([num2str(NumOfNodes) 'lz_q1']);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -247,7 +247,7 @@ i = my_rank+1;  %% my_rank starts from 0 to comm_size-1; so I starts from 1 to c
           lz_q1_val = val_arr ./ normB;
           
      %%% insert by chunk because the arr is too large  
-     rowStr = sprintf('%d,',start_node:end_node);
+     %rowStr = sprintf('%d,',start_node:end_node);
      chunksize = 62500;
      
     insert_step = floor(length / chunksize);
@@ -255,11 +255,11 @@ i = my_rank+1;  %% my_rank starts from 0 to comm_size-1; so I starts from 1 to c
     for index=1:insert_step
         if index == insert_step
             chunk_val_arr = lz_q1_val((index-1)*chunksize+1:end_node);
-            put(output_t,Assoc(sprintf('%d,',start_node+(index-1)*chunksize:end_node),'1,', sprintf('%.15f,',chunk_val_arr),@min));
+            put(output_t,Assoc(sprintf('%d,',start_node+(index-1)*chunksize:end_node), '1,' , sprintf('%.15f,',chunk_val_arr)));
       
         else
             chunk_val_arr = lz_q1_val((index-1)*chunksize+1:index*chunksize);
-            put(output_t,Assoc(sprintf('%d,',start_node+(index-1)*chunksize:start_node+index*chunksize),'1,', sprintf('%.15f,',chunk_val_arr),@min));
+            put(output_t,Assoc(sprintf('%d,',start_node+(index-1)*chunksize:start_node+index*chunksize),'1,', sprintf('%.15f,',chunk_val_arr)));
  
         end
         

@@ -220,7 +220,7 @@ i = my_rank+1;  %% my_rank starts from 0 to comm_size-1; so I starts from 1 to c
         %disp(rowStr);
         rand('seed',i); %set the seed particular for i so we don't generate the same data
         val_arr = rand(1,length,'double');
-        disp([sprintf('%.15f,',val_arr)]);
+        %disp([sprintf('%.15f,',val_arr)]);
         partial_sum = sum(val_arr.^2);
         put(tempB_t,Assoc(sprintf('%d,',my_rank),'1,',sprintf('%.15f,',partial_sum)));
 %%                 2. Send finish to the leader

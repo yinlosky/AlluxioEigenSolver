@@ -18,8 +18,31 @@ thisout = DB(['Entries' num2str(NumOfNodes)]);
 cut = DB(['Cut' num2str(NumOfNodes)]);
 
 %% Calculate the average load
-[tr,tc,tv]=thisout(:,:);
-TotalEn = sum(str2num(tv));
+%% old unoptimized code
+%[tr,tc,tv]=thisout(:,:);
+%TotalEn = sum(str2num(tv));
+
+TotalEn = 0;
+
+step = 50000;
+totalIndex = floor(NumOfNodes / step);
+
+for i = 1:totalIndex
+    disp(num2str(i));
+    if i == totalIndex
+        start_ind = (i-1) * step+1;
+        end_ind = NumOfNodes;
+        [tr,tc,tv]=thisout(sprintf('%d,',start_ind:end_ind),:);
+        TotalEn = TotalEn+sum(str2num(tv));
+    else
+        start_ind = (i-1)* step+1;
+        end_ind = i*step;
+        [tr,tc,tv]=thisout(sprintf('%d,',start_ind:end_ind),:);
+        TotalEn = TotalEn+sum(str2num(tv));
+    end
+end
+
+
 disp(['Total entries are: ' num2str(TotalEn)]);
 load = TotalEn/(Np-1); % process 0 is just waiting
 disp(['Load is: ' num2str(load)]);

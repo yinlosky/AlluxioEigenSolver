@@ -50,6 +50,7 @@ myProc = global_ind(w); %Parallel
 
 for i = myProc    % i starts from 1
 	% set up the debug file for each process
+   
 	flog = fopen([DebugPath '/' num2str(i) '_process_debug.txt'],'w+');	
       
         % To get the start_col and end_col for the process that is running individually 
@@ -81,6 +82,7 @@ end
         start_col = str2num(Val(cut_t(sprintf('%d,',(i-2)*pace),:)))+1;
         end_col = NumOfNodes;
         end
+         pause(900*(i-1));
         disp(['Start_col : end_col ' num2str(start_col) ' : ' num2str(end_col)]);
         fwrite(flog, ['Start_col : end_col ' num2str(start_col) ' : ' num2str(end_col)]);      
 	

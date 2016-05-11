@@ -265,6 +265,7 @@ i = my_rank+1;  %% my_rank starts from 0 to comm_size-1; so I starts from 1 to c
 %% pace is used to save the schedule time from cut table since we have sliced 1048576 into 135 slices. 
 %% now we are testing 3 machines, 5machines, 9machines, 16 machines. 
 %%   1+7*2= 15, 1+7*4 = 29, 1+ 7*8 = 57, 1+ 7*15 = 136
+%{
 switch NumOfMachines
     case 3
         pace = 8;
@@ -275,24 +276,25 @@ switch NumOfMachines
     case 16
         pace = 1;
 end
+%}
 
 %fstat = fopen(['benchmark/v3_' num2str(i) '_proc_MatrixVector.txt'],'w+');
                %% rank 0 is leader process; i ranges from 1 to comm_size-1;
         if(i==2)
         start_col = 1;
-        %end_col = str2num(Val(cut_t(sprintf('%d,',i-1),:))); before using
+        end_col = str2num(Val(cut_t(sprintf('%d,',i-1),:))); before using
         %pace
-        end_col = str2num(Val(cut_t(sprintf('%d,',(i-1)*pace),:)));
+        %end_col = str2num(Val(cut_t(sprintf('%d,',(i-1)*pace),:)));
        
         else
                 if(i<NumOfProcessors)
-                        start_col = str2num(Val(cut_t(sprintf('%d,',(i-2)*pace),:)))+1;
-                        end_col = str2num(Val(cut_t(sprintf('%d,',(i-1)*pace),:)));
+                        start_col = str2num(Val(cut_t(sprintf('%d,',(i-2)),:)))+1;
+                        end_col = str2num(Val(cut_t(sprintf('%d,',(i-1)),:)));
                         
                 end
         end
         if(i==NumOfProcessors)
-        start_col = str2num(Val(cut_t(sprintf('%d,',(i-2)*pace),:)))+1;
+        start_col = str2num(Val(cut_t(sprintf('%d,',(i-2)),:)))+1;
         end_col = NumOfNodes;
         
         end
@@ -342,12 +344,14 @@ end
                        % if(exist([root '/mydata' num2str(NumOfNodes) '/' num2str(i) '.txt']))  %% We have one row to multiply
             
                        %% According to the way we write the files the file name is: filePathPre/mydata{NumOfNodes}_{ProcessId}_{r,c,v}
-       
+       %{
         if(pace == 1)               
         filePath = ([filePathPre '/mydata' num2str(NumOfNodes) '_' num2str(i) ]);
         else
         filePath = ([filePathPre '/mydata' num2str(NumOfNodes) '_' num2str(Np) 'proc_' num2str(i) ]);
         end
+                       %}
+        filePath = ([filePathPre '/mydata' num2str(NumOfNodes) '_' num2str(i) ]);
                  	%% Create the following three objects for writing strings
         myobject_r = AlluxioWriteRead(['alluxio://n117.bluewave.umbc.edu:19998|' filePath '_r' '|CACHE|CACHE_THROUGH']);
         myobject_c = AlluxioWriteRead(['alluxio://n117.bluewave.umbc.edu:19998|' filePath '_c' '|CACHE|CACHE_THROUGH']);

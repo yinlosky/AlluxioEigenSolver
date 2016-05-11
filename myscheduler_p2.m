@@ -22,8 +22,10 @@ cut = DB(['Cut' num2str(NumOfNodes)]);
 %[tr,tc,tv]=thisout(:,:);
 %TotalEn = sum(str2num(tv));
 
-TotalEn = 0;
+TotalEn = 289000000;
+       
 
+%{
 step = 50000;
 totalIndex = floor(NumOfNodes / step);
 
@@ -41,7 +43,7 @@ for i = 1:totalIndex
         TotalEn = TotalEn+sum(str2num(tv));
     end
 end
-
+%}
 
 disp(['Total entries are: ' num2str(TotalEn)]);
 load = TotalEn/(Np-1); % process 0 is just waiting
@@ -67,7 +69,9 @@ for ticks = 1 : Np-2
  % disp(['Current load is ' num2str(CurrentLoad)]);
 	if CurrentLoad > load
  		while CurrentLoad > load
-	      		CurrentLoad = CurrentLoad - str2num(Val(thisout(sprintf('%d,',endCol),:)));
+                [tr,tc,tv] = thisout(sprintf('%d,',endCol-my_step:endCol),:);
+                sum_gap = sum(str2num(tv));
+	      		CurrentLoad = CurrentLoad - sum_gap;
             % comment below to set the step so the scheduler will converge
             % faster
             %    endCol = endCol - 1;
@@ -81,8 +85,11 @@ for ticks = 1 : Np-2
 	%	disp(['Executing the else part!']); 
 		while CurrentLoad < load
 			%endCol = endCol + 1;
+            [tr,tc,tv] = thisout(sprintf('%d,',endCol:endCol+my_step),:);
+            sum_gap = sum(str2num(tv));
+            
              endCol = endCol + my_step;
-			CurrentLoad = CurrentLoad + str2num(Val(thisout(sprintf('%d,',endCol),:)));
+			CurrentLoad = CurrentLoad + sum_gap;
 		end
 	end
 	startCol = endCol+1;

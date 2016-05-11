@@ -82,7 +82,7 @@ end
         start_col = str2num(Val(cut_t(sprintf('%d,',(i-2)*pace),:)))+1;
         end_col = NumOfNodes;
         end
-         pause(900*(i-2));
+         pause(200*(i-2));
         disp(['Start_col : end_col ' num2str(start_col) ' : ' num2str(end_col)]);
         fwrite(flog, ['Start_col : end_col ' num2str(start_col) ' : ' num2str(end_col)]);      
 	

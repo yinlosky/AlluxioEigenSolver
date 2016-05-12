@@ -66,6 +66,7 @@ myMachine = global_ind(w);
 
 for i = myMachine
 	if (i>1)
+        pause((i-2)*60);
 	%% Proc 1 is not working
 	DebugFileName = ([ DebugPath '/'  'machine_' num2str(i) '_savingVectorGolbalToLocal.txt']);
 	fstat = fopen(DebugFileName, 'w+');

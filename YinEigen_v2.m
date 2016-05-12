@@ -353,7 +353,7 @@ for it = 1:max_iteration
 	if (it == 1) 
         disp('Now saving vector to the global alluxio file');
         this = tic;
-	    saveVectorToGTFS();
+	    %saveVectorToGTFS();
         saveT = toc(this);
         str=([ 'Saving vector to global file costs ' num2str(saveT) 's' sprintf('\n')]);
         disp(str); fwrite(fstat, str);

@@ -46,6 +46,7 @@ str = ['Now start reading from Accumulo to get vector...' sprintf('\n')];
 disp(str); fwrite(fstat,str);
 this = tic;
 [vecr, vecc, vecv] = v(:,:);
+clear vecr; clear vecc;
 readv = toc(this);
 str = ['Read vector: ' num2str(readv) 's' sprintf('\n')];
 disp(str); fwrite(fstat,str);
@@ -59,7 +60,7 @@ saveTime = toc(this);
 str= ['Saving vector to global vector file takes: ' num2str(saveTime) 's' sprintf('\n')];
 disp(str); fwrite(fstat,str);
 
-clear vecr; clear vecc; clear vecv; 
+ clear vecv; 
 fclose(fstat);
 
 

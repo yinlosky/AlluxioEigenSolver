@@ -163,7 +163,8 @@ if(my_rank == leader)
 	inputFilePath=[inputFilePathPre '/' num2str(it+1) 'v_' num2str(NumOfNodes) 'nodes_' num2str(NumOfProcessors) 'proc_global'];
     %inputobject_v = AlluxioWriteRead(['alluxio://n117.bluewave.umbc.edu:19998|' inputFilePath '_v' '|CACHE|CACHE_THROUGH']);
     inputobject_v = AlluxioWriteRead(['alluxio://n117.bluewave.umbc.edu:19998|' inputFilePath '_v' '|CACHE|THROUGH']);
-    system(['alluxio fs load ' inputFilePath]);
+    ALLUXIO_HOME = getenv('ALLUXIO_HOME');
+    system(['alluxio fs load ' ALLUXIO_HOME '/underFSStorage' inputFilePath]);
     
     javaMethod('writeFile',inputobject_v, result_string);
     

@@ -39,7 +39,7 @@ for i = myMachine
     %disp(['scp n117:' ALLUXIO_HOME '/underFSStorage/mytest/' input_filename ' ' ALLUXIO_HOME '/underFSStorage/mytest/' output_filename])
     system(['scp n117:' ALLUXIO_HOME '/underFSStorage/mytest/' input_filename ' ' ALLUXIO_HOME '/underFSStorage/mytest/' output_filename]);
     
-    system(['alluxio fs copyFromLocal ' ALLUXIO_HOME '/mytest/' output_filename '/mytest']);
+    system(['alluxio fs copyFromLocal ' ALLUXIO_HOME '/mytest/' output_filename ' /mytest']);
         
     else
         disp('Leader process idle');

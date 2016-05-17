@@ -29,7 +29,7 @@ myMachine = global_ind(w);
 
 for i = myMachine
     if i > 1
-    ALLUXIO_home = getenv('ACCUMULO_HOME');
+    ALLUXIO_HOME = getenv('ACCUMULO_HOME');
     [~,mymachine] = system('hostname');
     
     input_filename = [num2str(it) 'v_' num2str(NumOfNodes) 'nodes_' num2str(NumOfProcessors) 'proc_global_v'];

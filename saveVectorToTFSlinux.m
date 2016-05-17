@@ -31,11 +31,12 @@ for i = myMachine
     if i > 1
     ALLUXIO_HOME = getenv('ALLUXIO_HOME');
     [~,mymachine] = system('hostname');
+    mymachine = strtrim(mymachine)
     
     input_filename = [num2str(it) 'v_' num2str(NumOfNodes) 'nodes_' num2str(NumOfProcessors) 'proc_global_v'];
     output_filename = [num2str(it) 'v_' num2str(NumOfNodes) 'nodes_' num2str(NumOfProcessors) 'proc_' mymachine '_v'] ;
-    disp(output_filename);
-    disp(['scp n117:' ALLUXIO_HOME '/underFSStorage/mytest/' input_filename ' ' ALLUXIO_HOME '/underFSStorage/mytest/' output_filename])
+    %disp(output_filename);
+    %disp(['scp n117:' ALLUXIO_HOME '/underFSStorage/mytest/' input_filename ' ' ALLUXIO_HOME '/underFSStorage/mytest/' output_filename])
     system(['scp n117:' ALLUXIO_HOME '/underFSStorage/mytest/' input_filename ' ' ALLUXIO_HOME '/underFSStorage/mytest/' output_filename]);
     
     system(['alluxio fs load /mytest/' output_filename]);

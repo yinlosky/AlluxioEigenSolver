@@ -345,6 +345,8 @@ end
  
     str = (['Now saving the updatedQ to local machine ...' sprintf('\n')]); disp(str); fwrite(fstat, str);
     pause(2.0); %% add this 2 seconds to make sure the leader process has completed/ alluxio has completed the updated v_i+1
+   
+    
     this_total = tic;
     
   
@@ -352,7 +354,7 @@ end
     %%% *********** only the process with:
     %% my_rank mod (NumOfProcessors - 1)/(NumOfMachines -1) == 0
     %%% 
-   
+    %{
     if rem(my_rank, (NumOfProcessors-1)/(NumOfMachines-1)) == 0
       str='copying....';disp(str); fwrite(fstat, str);
        
@@ -379,6 +381,30 @@ end
 	writeTime = toc(this_total);
 	str = (['It takes: ' num2str(writeTime) 's to save to local machine' sprintf('\n')]);disp(str); fwrite(fstat,str);
     %****************
+    %}
+       %%% *********** only the process with:
+    %% my_rank mod (NumOfProcessors - 1)/(NumOfMachines -1) == 0
+    %%% 
+   
+    if rem(my_rank, (NumOfProcessors-1)/(NumOfMachines-1)) == 0
+      str='copying....';disp(str); fwrite(fstat, str);
+       
+    ALLUXIO_HOME = getenv('ALLUXIO_HOME');
+    [~,mymachine] = system('hostname');
+    mymachine = strtrim(mymachine);
+    
+    input_filename = [num2str(it) 'v_' num2str(NumOfNodes) 'nodes_' num2str(NumOfProcessors) 'proc_global_v'];
+    output_filename = [num2str(it) 'v_' num2str(NumOfNodes) 'nodes_' num2str(NumOfProcessors) 'proc_' mymachine '_v'] ;
+    %disp(output_filename);
+    %disp(['scp n117:' ALLUXIO_HOME '/underFSStorage/mytest/' input_filename ' ' ALLUXIO_HOME '/underFSStorage/mytest/' output_filename])
+    system(['scp n117:' ALLUXIO_HOME '/underFSStorage/mytest/' input_filename ' ' ALLUXIO_HOME '/underFSStorage/mytest/' output_filename]);
+    system(['alluxio fs copyFromLocal ' ALLUXIO_HOME '/underFSStorage/mytest/' output_filename ' /mytest']);
+    end %% end for writing to local machine
+	writeTime = toc(this_total);
+	str = (['It takes: ' num2str(writeTime) 's to save to local machine' sprintf('\n')]);disp(str); fwrite(fstat,str);
+    %****************
+    
+    
     
      %% Done with saving v_i+1    
     mytic = tic;

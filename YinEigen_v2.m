@@ -370,8 +370,9 @@ for it = 1:max_iteration
     %%          2. Output:
     %%   outputFilePath = [outputFilePathPre '/' num2str(it) 'v_' num2str(NumOfNodes) 'nodes_' num2str(NumOfProcessors) 'proc_' mymachine];
     %%
-    
-        eval(pRUN('saveVectorToTFS', NumOfMachines,machines));
+        
+        eval(pRUN('saveVectorToTFSlinux', NumOfMachines,machines));
+        %eval(pRUN('saveVectorToTFS', NumOfMachines,machines));
         savelocal = toc(this);
         str = (['Machine copy vector costs ' num2str(savelocal) 's' sprintf('\n')]);
         disp(str); fwrite(fstat, str);	

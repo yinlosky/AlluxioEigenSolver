@@ -282,7 +282,8 @@ end
                %% rank 0 is leader process; i ranges from 1 to comm_size-1;
         if(i==2)
         start_col = 1;
-        end_col = str2num(Val(cut_t(sprintf('%d,',i-1),:))); before using
+        end_col = str2num(Val(cut_t(sprintf('%d,',i-1),:))); 
+        %before using
         %pace
         %end_col = str2num(Val(cut_t(sprintf('%d,',(i-1)*pace),:)));
        

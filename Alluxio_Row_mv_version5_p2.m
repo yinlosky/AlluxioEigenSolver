@@ -397,13 +397,14 @@ end
     [~,mymachine] = system('hostname');
     mymachine = strtrim(mymachine);
     
-    input_filename = [num2str(it) 'v_' num2str(NumOfNodes) 'nodes_' num2str(NumOfProcessors) 'proc_global_v'];
-    output_filename = [num2str(it) 'v_' num2str(NumOfNodes) 'nodes_' num2str(NumOfProcessors) 'proc_' mymachine '_v'] ;
+    input_filename = [num2str(it+1) 'v_' num2str(NumOfNodes) 'nodes_' num2str(NumOfProcessors) 'proc_global_v'];
+    output_filename = [num2str(it+1) 'v_' num2str(NumOfNodes) 'nodes_' num2str(NumOfProcessors) 'proc_' mymachine '_v'] ;
     %disp(output_filename);
     %disp(['scp n117:' ALLUXIO_HOME '/underFSStorage/mytest/' input_filename ' ' ALLUXIO_HOME '/underFSStorage/mytest/' output_filename])
     system(['scp n117:' ALLUXIO_HOME '/underFSStorage/mytest/' input_filename ' ' ALLUXIO_HOME '/underFSStorage/mytest/' output_filename]);
     system(['alluxio fs copyFromLocal ' ALLUXIO_HOME '/underFSStorage/mytest/' output_filename ' /mytest']);
     end %% end for writing to local machine
+    
 	writeTime = toc(this_total);
 	str = (['It takes: ' num2str(writeTime) 's to save to local machine' sprintf('\n')]);disp(str); fwrite(fstat,str);
     %****************

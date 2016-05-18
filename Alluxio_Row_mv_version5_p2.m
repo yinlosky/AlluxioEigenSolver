@@ -167,7 +167,7 @@ if(my_rank == leader)
     
     javaMethod('writeFile',inputobject_v, result_string);
     
-    system(['alluxio fs load ' ALLUXIO_HOME '/underFSStorage' inputFilePath]);
+    system(['alluxio fs load ' inputFilePath]);
     
 	writeTime = toc(this);
 	str = (['*****************saving updatedv_i+1 begin*************************' sprintf('\n')...

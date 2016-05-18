@@ -166,8 +166,8 @@ if(my_rank == leader)
     ALLUXIO_HOME = getenv('ALLUXIO_HOME');
     
     javaMethod('writeFile',inputobject_v, result_string);
-    
-    system(['alluxio fs load ' inputFilePath]);
+    pause(2.0);
+    system(['alluxio fs load ' inputFilePath '_v']);
     
 	writeTime = toc(this);
 	str = (['*****************saving updatedv_i+1 begin*************************' sprintf('\n')...
